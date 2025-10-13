@@ -1,0 +1,139 @@
+{
+  "nav": {
+    "home": "Home",
+    "apis": "APIs",
+    "documentation": "Documentation",
+    "login": "Login",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "All the images you need, in one API.",
+    "subtitle": "Buy tokens, connect to our APIs, and centralize your images with PicNode.",
+    "buyTokens": "Buy Tokens",
+    "exploreApis": "Explore APIs"
+  },
+  "about": {
+    "title": "What is PicNode",
+    "unified": {
+      "title": "Unified hub of visual APIs",
+      "description": "Access icons, flags, logos, and place images in a single centralized endpoint."
+    },
+    "tokens": {
+      "title": "Configurable and secure tokens",
+      "description": "Configure validity, rate limit, and total requests according to your needs."
+    },
+    "integration": {
+      "title": "Simple integration via REST",
+      "description": "RESTful APIs easy to integrate in any language or framework."
+    }
+  },
+  "apis": {
+    "title": "Available APIs",
+    "flags": {
+      "title": "Flags API",
+      "description": "High-resolution country flags, updated and consistent."
+    },
+    "places": {
+      "title": "Places API",
+      "description": "Images of tourist spots and famous places around the world."
+    },
+    "logos": {
+      "title": "Logos API",
+      "description": "Company, brand, and organization logos in vector format."
+    },
+    "icons": {
+      "title": "Icons API",
+      "description": "Library with thousands of icons for any type of interface."
+    }
+  },
+  "calculator": {
+    "title": "Token Calculator",
+    "validity": "Validity (days)",
+    "rateLimit": "Rate Limit (req/min)",
+    "totalRequests": "Total Requests",
+    "estimatedPrice": "Estimated Price",
+    "proceed": "Proceed to purchase"
+  },
+  "benefits": {
+    "title": "Why choose PicNode?",
+    "security": {
+      "title": "Sanctum Security",
+      "description": "Robust authentication with Laravel Sanctum for maximum security."
+    },
+    "flexibility": {
+      "title": "Flexible configuration",
+      "description": "Adjust your tokens according to your project's demand."
+    },
+    "dashboard": {
+      "title": "Dashboard with statistics",
+      "description": "Track usage, consumption, and performance in real-time."
+    },
+    "pricing": {
+      "title": "Usage-based pricing",
+      "description": "Pay only for what you use, with no fixed monthly fees."
+    }
+  },
+  "cta": {
+    "title": "Start centralizing your visual assets now.",
+    "button": "Generate Free Beta Token"
+  },
+  "footer": {
+    "allRights": "All rights reserved."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "myTokens": "My Tokens",
+    "availableApis": "Available APIs",
+    "payments": "Payments",
+    "docs": "Documentation",
+    "newToken": "New Token",
+    "overview": {
+      "activeTokens": "Active Tokens",
+      "totalRequests": "Total Requests",
+      "rateLimit": "Rate Limit",
+      "expiringSoon": "Expiring Soon"
+    },
+    "tokens": {
+      "table": {
+        "token": "Token",
+        "scope": "Scope",
+        "expiration": "Expiration",
+        "usage": "Usage",
+        "status": "Status"
+      },
+      "actions": {
+        "copy": "Copy Token",
+        "details": "View Details",
+        "renew": "Renew",
+        "revoke": "Revoke"
+      },
+      "status": {
+        "active": "Active",
+        "expired": "Expired",
+        "revoked": "Revoked"
+      }
+    },
+    "tokenDetails": {
+      "title": "Token Details",
+      "includedApis": "Included APIs",
+      "rateLimit": "Rate Limit",
+      "totalRequests": "Total Requests",
+      "expiration": "Expiration",
+      "paidAmount": "Paid Amount",
+      "dailyUsage": "Daily Usage"
+    },
+    "apisTable": {
+      "api": "API",
+      "type": "Type",
+      "basePrice": "Base Price",
+      "availability": "Availability"
+    },
+    "paymentsTable": {
+      "date": "Date",
+      "token": "Token",
+      "amount": "Amount",
+      "method": "Method",
+      "status": "Status"
+    }
+  }
+}

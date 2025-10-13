@@ -1,0 +1,139 @@
+{
+  "nav": {
+    "home": "Início",
+    "apis": "APIs",
+    "documentation": "Documentação",
+    "login": "Login",
+    "contact": "Contato"
+  },
+  "hero": {
+    "title": "Todas as imagens que você precisa, em uma única API.",
+    "subtitle": "Compre tokens, conecte-se às nossas APIs e centralize suas imagens com o PicNode.",
+    "buyTokens": "Comprar Tokens",
+    "exploreApis": "Explorar APIs"
+  },
+  "about": {
+    "title": "O que é o PicNode",
+    "unified": {
+      "title": "Hub unificado de APIs visuais",
+      "description": "Acesse ícones, bandeiras, logos e imagens de lugares em um único endpoint centralizado."
+    },
+    "tokens": {
+      "title": "Tokens configuráveis e seguros",
+      "description": "Configure validade, rate limit e total de requisições de acordo com suas necessidades."
+    },
+    "integration": {
+      "title": "Integração simples via REST",
+      "description": "APIs RESTful fáceis de integrar em qualquer linguagem ou framework."
+    }
+  },
+  "apis": {
+    "title": "APIs Disponíveis",
+    "flags": {
+      "title": "Flags API",
+      "description": "Bandeiras de países em alta resolução, atualizadas e consistentes."
+    },
+    "places": {
+      "title": "Places API",
+      "description": "Imagens de pontos turísticos e lugares famosos ao redor do mundo."
+    },
+    "logos": {
+      "title": "Logos API",
+      "description": "Logos de empresas, marcas e organizações em formato vetorial."
+    },
+    "icons": {
+      "title": "Icons API",
+      "description": "Biblioteca com milhares de ícones para qualquer tipo de interface."
+    }
+  },
+  "calculator": {
+    "title": "Calculadora de Token",
+    "validity": "Validade (dias)",
+    "rateLimit": "Rate Limit (req/min)",
+    "totalRequests": "Total de Requisições",
+    "estimatedPrice": "Valor Estimado",
+    "proceed": "Prosseguir para compra"
+  },
+  "benefits": {
+    "title": "Por que escolher o PicNode?",
+    "security": {
+      "title": "Segurança Sanctum",
+      "description": "Autenticação robusta com Laravel Sanctum para máxima segurança."
+    },
+    "flexibility": {
+      "title": "Configuração flexível",
+      "description": "Ajuste seus tokens conforme a demanda do seu projeto."
+    },
+    "dashboard": {
+      "title": "Painel com estatísticas",
+      "description": "Acompanhe o uso, consumo e performance em tempo real."
+    },
+    "pricing": {
+      "title": "Preço baseado em uso",
+      "description": "Pague apenas pelo que você usa, sem mensalidades fixas."
+    }
+  },
+  "cta": {
+    "title": "Comece agora a centralizar seus assets visuais.",
+    "button": "Gerar Token Beta Grátis"
+  },
+  "footer": {
+    "allRights": "Todos os direitos reservados."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "myTokens": "Meus Tokens",
+    "availableApis": "APIs Disponíveis",
+    "payments": "Pagamentos",
+    "docs": "Documentação",
+    "newToken": "Novo Token",
+    "overview": {
+      "activeTokens": "Tokens Ativos",
+      "totalRequests": "Requisições Totais",
+      "rateLimit": "Limite de Rate",
+      "expiringSoon": "Próximos a Expirar"
+    },
+    "tokens": {
+      "table": {
+        "token": "Token",
+        "scope": "Escopo",
+        "expiration": "Expiração",
+        "usage": "Uso",
+        "status": "Status"
+      },
+      "actions": {
+        "copy": "Copiar Token",
+        "details": "Ver Detalhes",
+        "renew": "Renovar",
+        "revoke": "Revogar"
+      },
+      "status": {
+        "active": "Ativo",
+        "expired": "Expirado",
+        "revoked": "Revogado"
+      }
+    },
+    "tokenDetails": {
+      "title": "Detalhes do Token",
+      "includedApis": "APIs Incluídas",
+      "rateLimit": "Rate Limit",
+      "totalRequests": "Total de Requisições",
+      "expiration": "Expiração",
+      "paidAmount": "Valor Pago",
+      "dailyUsage": "Consumo Diário"
+    },
+    "apisTable": {
+      "api": "API",
+      "type": "Tipo",
+      "basePrice": "Valor Base",
+      "availability": "Disponibilidade"
+    },
+    "paymentsTable": {
+      "date": "Data",
+      "token": "Token",
+      "amount": "Valor",
+      "method": "Método",
+      "status": "Status"
+    }
+  }
+}
