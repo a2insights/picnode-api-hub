@@ -49,6 +49,7 @@
   "calculator": {
     "title": "Token Calculator",
     "validity": "Validity (days)",
+    "limitType": "Limit Type",
     "rateLimit": "Rate Limit (req/min)",
     "totalRequests": "Total Requests",
     "estimatedPrice": "Estimated Price",

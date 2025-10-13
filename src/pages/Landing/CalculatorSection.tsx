@@ -4,21 +4,25 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { ArrowRight } from 'lucide-react';
 
 export const CalculatorSection = () => {
   const { t } = useTranslation();
   const [validity, setValidity] = useState([30]);
+  const [limitType, setLimitType] = useState<'rateLimit' | 'totalRequests'>('rateLimit');
   const [rateLimit, setRateLimit] = useState([60]);
   const [totalRequests, setTotalRequests] = useState([10000]);
 
   const calculatePrice = () => {
     const basePrice = 0.01;
     const validityFactor = validity[0] / 30;
-    const rateFactor = rateLimit[0] / 60;
-    const requestsFactor = totalRequests[0] / 10000;
+    const limitFactor = limitType === 'rateLimit' 
+      ? rateLimit[0] / 60 
+      : totalRequests[0] / 10000;
     
-    return (basePrice * validityFactor * rateFactor * requestsFactor * 100).toFixed(2);
+    return (basePrice * validityFactor * limitFactor * 100).toFixed(2);
   };
 
   return (
@@ -54,36 +58,54 @@ export const CalculatorSection = () => {
               </div>
 
               <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <label className="text-sm font-medium">{t('calculator.rateLimit')}</label>
-                  <span className="text-sm text-muted-foreground">{rateLimit[0]} req/min</span>
-                </div>
-                <Slider
-                  value={rateLimit}
-                  onValueChange={setRateLimit}
-                  min={10}
-                  max={1000}
-                  step={10}
-                  className="w-full"
-                />
+                <label className="text-sm font-medium">{t('calculator.limitType')}</label>
+                <RadioGroup value={limitType} onValueChange={(value) => setLimitType(value as 'rateLimit' | 'totalRequests')}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="rateLimit" id="rateLimit" />
+                    <Label htmlFor="rateLimit" className="cursor-pointer">{t('calculator.rateLimit')}</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="totalRequests" id="totalRequests" />
+                    <Label htmlFor="totalRequests" className="cursor-pointer">{t('calculator.totalRequests')}</Label>
+                  </div>
+                </RadioGroup>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <label className="text-sm font-medium">{t('calculator.totalRequests')}</label>
-                  <span className="text-sm text-muted-foreground">
-                    {totalRequests[0].toLocaleString()}
-                  </span>
+              {limitType === 'rateLimit' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-sm font-medium">{t('calculator.rateLimit')}</label>
+                    <span className="text-sm text-muted-foreground">{rateLimit[0]} req/min</span>
+                  </div>
+                  <Slider
+                    value={rateLimit}
+                    onValueChange={setRateLimit}
+                    min={10}
+                    max={1000}
+                    step={10}
+                    className="w-full"
+                  />
                 </div>
-                <Slider
-                  value={totalRequests}
-                  onValueChange={setTotalRequests}
-                  min={1000}
-                  max={1000000}
-                  step={1000}
-                  className="w-full"
-                />
-              </div>
+              )}
+
+              {limitType === 'totalRequests' && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-sm font-medium">{t('calculator.totalRequests')}</label>
+                    <span className="text-sm text-muted-foreground">
+                      {totalRequests[0].toLocaleString()}
+                    </span>
+                  </div>
+                  <Slider
+                    value={totalRequests}
+                    onValueChange={setTotalRequests}
+                    min={1000}
+                    max={1000000}
+                    step={1000}
+                    className="w-full"
+                  />
+                </div>
+              )}
 
               <div className="pt-6 border-t border-border">
                 <div className="flex justify-between items-center mb-6">
