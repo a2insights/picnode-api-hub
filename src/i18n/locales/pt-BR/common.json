@@ -55,6 +55,59 @@
     "estimatedPrice": "Valor Estimado",
     "proceed": "Prosseguir para compra"
   },
+  "checkout": {
+    "auth": {
+      "login": "Login",
+      "signup": "Criar Conta",
+      "loginTitle": "Entre na sua conta",
+      "loginDescription": "Use suas credenciais para continuar",
+      "signupTitle": "Crie sua conta",
+      "signupDescription": "Preencha os dados para começar",
+      "email": "E-mail",
+      "password": "Senha",
+      "name": "Nome",
+      "loginButton": "Entrar",
+      "signupButton": "Criar Conta"
+    },
+    "payment": {
+      "title": "Escolha o método de pagamento",
+      "card": "Cartão de Crédito",
+      "cardDescription": "Pagamento instantâneo",
+      "cardInfo": "Pague com cartão de crédito e receba seu token imediatamente",
+      "pix": "PIX",
+      "pixDescription": "Pagamento via QR Code",
+      "pixInfo": "Escaneie o QR Code e confirme o pagamento no seu banco"
+    },
+    "card": {
+      "title": "Pagamento com Cartão",
+      "number": "Número do Cartão",
+      "name": "Nome no Cartão",
+      "expiry": "Validade",
+      "cvv": "CVV",
+      "pay": "Pagar Agora",
+      "processing": "Processando...",
+      "back": "Voltar"
+    },
+    "pix": {
+      "title": "Pagamento via PIX",
+      "expiresIn": "Expira em",
+      "scanQR": "Escaneie o QR Code com o app do seu banco",
+      "instructions": "O pagamento será confirmado automaticamente após a leitura do QR Code",
+      "copied": "Código PIX copiado!",
+      "confirmed": "Pagamento Confirmado!",
+      "processing": "Processando seu token...",
+      "back": "Voltar"
+    },
+    "success": {
+      "title": "Pagamento Confirmado!",
+      "subtitle": "Seu token foi gerado com sucesso",
+      "yourToken": "Seu Token de Acesso",
+      "copy": "Copiar",
+      "download": "Baixar Token",
+      "dashboard": "Ir para Dashboard",
+      "days": "dias"
+    }
+  },
   "benefits": {
     "title": "Por que escolher o PicNode?",
     "security": {

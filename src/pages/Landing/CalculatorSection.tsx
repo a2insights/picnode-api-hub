@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { ArrowRight } from 'lucide-react';
+import { CheckoutModal } from './CheckoutModal';
 
 export const CalculatorSection = () => {
   const { t } = useTranslation();
@@ -14,6 +15,7 @@ export const CalculatorSection = () => {
   const [limitType, setLimitType] = useState<'rateLimit' | 'totalRequests'>('rateLimit');
   const [rateLimit, setRateLimit] = useState([60]);
   const [totalRequests, setTotalRequests] = useState([10000]);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const calculatePrice = () => {
     const basePrice = 0.01;
@@ -114,7 +116,7 @@ export const CalculatorSection = () => {
                     ${calculatePrice()}
                   </span>
                 </div>
-                <Button className="w-full gap-2 group" size="lg">
+                <Button className="w-full gap-2 group" size="lg" onClick={() => setCheckoutOpen(true)}>
                   {t('calculator.proceed')}
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
@@ -123,6 +125,18 @@ export const CalculatorSection = () => {
           </Card>
         </motion.div>
       </div>
+
+      <CheckoutModal
+        open={checkoutOpen}
+        onOpenChange={setCheckoutOpen}
+        tokenConfig={{
+          validity: validity[0],
+          limitType,
+          rateLimit: rateLimit[0],
+          totalRequests: totalRequests[0],
+        }}
+        price={calculatePrice()}
+      />
     </section>
   );
 };

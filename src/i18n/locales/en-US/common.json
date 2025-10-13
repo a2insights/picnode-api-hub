@@ -55,6 +55,59 @@
     "estimatedPrice": "Estimated Price",
     "proceed": "Proceed to purchase"
   },
+  "checkout": {
+    "auth": {
+      "login": "Login",
+      "signup": "Sign Up",
+      "loginTitle": "Sign in to your account",
+      "loginDescription": "Use your credentials to continue",
+      "signupTitle": "Create your account",
+      "signupDescription": "Fill in the details to get started",
+      "email": "Email",
+      "password": "Password",
+      "name": "Name",
+      "loginButton": "Sign In",
+      "signupButton": "Create Account"
+    },
+    "payment": {
+      "title": "Choose payment method",
+      "card": "Credit Card",
+      "cardDescription": "Instant payment",
+      "cardInfo": "Pay with credit card and receive your token immediately",
+      "pix": "PIX",
+      "pixDescription": "QR Code payment",
+      "pixInfo": "Scan the QR Code and confirm payment in your bank app"
+    },
+    "card": {
+      "title": "Card Payment",
+      "number": "Card Number",
+      "name": "Name on Card",
+      "expiry": "Expiry",
+      "cvv": "CVV",
+      "pay": "Pay Now",
+      "processing": "Processing...",
+      "back": "Back"
+    },
+    "pix": {
+      "title": "PIX Payment",
+      "expiresIn": "Expires in",
+      "scanQR": "Scan the QR Code with your bank app",
+      "instructions": "Payment will be confirmed automatically after scanning the QR Code",
+      "copied": "PIX code copied!",
+      "confirmed": "Payment Confirmed!",
+      "processing": "Processing your token...",
+      "back": "Back"
+    },
+    "success": {
+      "title": "Payment Confirmed!",
+      "subtitle": "Your token has been generated successfully",
+      "yourToken": "Your Access Token",
+      "copy": "Copy",
+      "download": "Download Token",
+      "dashboard": "Go to Dashboard",
+      "days": "days"
+    }
+  },
   "benefits": {
     "title": "Why choose PicNode?",
     "security": {
