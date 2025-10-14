@@ -14,6 +14,7 @@ interface CheckoutModalProps {
     limitType: 'rateLimit' | 'totalRequests';
     rateLimit: number;
     totalRequests: number;
+    apis: string[];
   };
   price: string;
 }

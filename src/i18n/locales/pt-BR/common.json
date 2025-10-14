@@ -48,6 +48,7 @@
   },
   "calculator": {
     "title": "Calculadora de Token",
+    "apis": "Selecionar APIs",
     "validity": "Validade (dias)",
     "limitType": "Tipo de Limite",
     "rateLimit": "Rate Limit (req/min)",

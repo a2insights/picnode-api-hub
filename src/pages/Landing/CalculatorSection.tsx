@@ -4,9 +4,11 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { ArrowRight } from 'lucide-react';
+import { availableApis } from '@/lib/apis';
 import { CheckoutModal } from './CheckoutModal';
 
 export const CalculatorSection = () => {
@@ -15,7 +17,14 @@ export const CalculatorSection = () => {
   const [limitType, setLimitType] = useState<'rateLimit' | 'totalRequests'>('rateLimit');
   const [rateLimit, setRateLimit] = useState([60]);
   const [totalRequests, setTotalRequests] = useState([10000]);
+  const [selectedApis, setSelectedApis] = useState<string[]>([]);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+
+  const handleApiChange = (apiId: string) => {
+    setSelectedApis(prev =>
+      prev.includes(apiId) ? prev.filter(id => id !== apiId) : [...prev, apiId]
+    );
+  };
 
   const calculatePrice = () => {
     const basePrice = 0.01;
@@ -24,7 +33,12 @@ export const CalculatorSection = () => {
       ? rateLimit[0] / 60 
       : totalRequests[0] / 10000;
     
-    return (basePrice * validityFactor * limitFactor * 100).toFixed(2);
+    const apiFactor = selectedApis.reduce((acc, apiId) => {
+      const api = availableApis.find(a => a.id === apiId);
+      return acc * (api ? api.priceFactor : 1);
+    }, 1);
+
+    return (basePrice * validityFactor * limitFactor * apiFactor * 100).toFixed(2);
   };
 
   return (
@@ -44,6 +58,22 @@ export const CalculatorSection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
+            <div className="space-y-4">
+                <label className="text-sm font-medium">{t('calculator.apis')}</label>
+                <div className="grid grid-cols-2 gap-4">
+                  {availableApis.map(api => (
+                    <div key={api.id} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={api.id}
+                        checked={selectedApis.includes(api.id)}
+                        onCheckedChange={() => handleApiChange(api.id)}
+                      />
+                      <Label htmlFor={api.id} className="cursor-pointer">{api.name}</Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-medium">{t('calculator.validity')}</label>
@@ -134,6 +164,7 @@ export const CalculatorSection = () => {
           limitType,
           rateLimit: rateLimit[0],
           totalRequests: totalRequests[0],
+          apis: selectedApis,
         }}
         price={calculatePrice()}
       />
