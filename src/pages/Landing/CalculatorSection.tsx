@@ -6,10 +6,20 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Label } from '@/components/ui/label';
 import { ArrowRight } from 'lucide-react';
 import { availableApis } from '@/lib/apis';
 import { CheckoutModal } from './CheckoutModal';
+
+type Currency = 'USD' | 'EUR' | 'GBP' | 'BRL';
+
+const currencyConfig = {
+  USD: { rate: 1, symbol: '$' },
+  EUR: { rate: 0.93, symbol: '€' },
+  GBP: { rate: 0.79, symbol: '£' },
+  BRL: { rate: 5.40, symbol: 'R$' },
+};
 
 export const CalculatorSection = () => {
   const { t } = useTranslation();
@@ -18,6 +28,7 @@ export const CalculatorSection = () => {
   const [rateLimit, setRateLimit] = useState([60]);
   const [totalRequests, setTotalRequests] = useState([10000]);
   const [selectedApis, setSelectedApis] = useState<string[]>([]);
+  const [currency, setCurrency] = useState<Currency>('USD');
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const handleApiChange = (apiId: string) => {
@@ -27,7 +38,7 @@ export const CalculatorSection = () => {
   };
 
   const calculatePrice = () => {
-    const basePrice = 0.01;
+    const basePrice = 0.01; // Base price in USD
     const validityFactor = validity[0] / 30;
     const limitFactor = limitType === 'rateLimit' 
       ? rateLimit[0] / 60 
@@ -38,7 +49,14 @@ export const CalculatorSection = () => {
       return acc * (api ? api.priceFactor : 1);
     }, 1);
 
-    return (basePrice * validityFactor * limitFactor * apiFactor * 100).toFixed(2);
+    const priceInUsd = basePrice * validityFactor * limitFactor * apiFactor * 100;
+    const finalPrice = priceInUsd * currencyConfig[currency].rate;
+    
+    const formattedPrice = finalPrice.toFixed(2);
+    if (currency === 'BRL') {
+      return formattedPrice.replace('.', ',');
+    }
+    return formattedPrice;
   };
 
   return (
@@ -58,7 +76,22 @@ export const CalculatorSection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
-            <div className="space-y-4">
+              <div className="space-y-4">
+                <label className="text-sm font-medium">{t('calculator.currency')}</label>
+                <ToggleGroup 
+                  type="single" 
+                  value={currency} 
+                  onValueChange={(value: Currency) => value && setCurrency(value)}
+                  className="justify-start"
+                >
+                  <ToggleGroupItem value="USD">USD</ToggleGroupItem>
+                  <ToggleGroupItem value="EUR">EUR</ToggleGroupItem>
+                  <ToggleGroupItem value="GBP">GBP</ToggleGroupItem>
+                  <ToggleGroupItem value="BRL">BRL</ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+
+              <div className="space-y-4">
                 <label className="text-sm font-medium">{t('calculator.apis')}</label>
                 <div className="grid grid-cols-2 gap-4">
                   {availableApis.map(api => (
@@ -143,7 +176,7 @@ export const CalculatorSection = () => {
                 <div className="flex justify-between items-center mb-6">
                   <span className="text-lg font-medium">{t('calculator.estimatedPrice')}</span>
                   <span className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    ${calculatePrice()}
+                    {currencyConfig[currency].symbol}{calculatePrice()}
                   </span>
                 </div>
                 <Button className="w-full gap-2 group" size="lg" onClick={() => setCheckoutOpen(true)}>
@@ -167,6 +200,7 @@ export const CalculatorSection = () => {
           apis: selectedApis,
         }}
         price={calculatePrice()}
+        currency={currency}
       />
     </section>
   );

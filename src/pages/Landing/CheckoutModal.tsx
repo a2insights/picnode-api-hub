@@ -17,11 +17,12 @@ interface CheckoutModalProps {
     apis: string[];
   };
   price: string;
+  currency?: 'USD' | 'EUR' | 'GBP' | 'BRL';
 }
 
 type CheckoutStep = 'auth' | 'payment' | 'card' | 'pix' | 'success';
 
-export const CheckoutModal = ({ open, onOpenChange, tokenConfig, price }: CheckoutModalProps) => {
+export const CheckoutModal = ({ open, onOpenChange, tokenConfig, price, currency }: CheckoutModalProps) => {
   const [step, setStep] = useState<CheckoutStep>('auth');
   const [user, setUser] = useState<{ email: string; name: string } | null>(null);
 
@@ -73,7 +74,11 @@ export const CheckoutModal = ({ open, onOpenChange, tokenConfig, price }: Checko
         <div className="py-6">
           {step === 'auth' && <AuthStep onAuth={handleAuth} />}
           {step === 'payment' && (
-            <PaymentMethodStep onSelectMethod={handlePaymentMethod} price={price} />
+            <PaymentMethodStep 
+              onSelectMethod={handlePaymentMethod} 
+              price={price} 
+              currency={currency}
+            />
           )}
           {step === 'card' && (
             <CardCheckout
