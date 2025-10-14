@@ -5,6 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { login as apiLogin, register as apiRegister } from '@/services/apiService';
+import { useAuth } from '@/contexts/AuthContext';
+import axios from 'axios';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface AuthStepProps {
   onAuth: (user: { email: string; name: string }) => void;
@@ -12,24 +16,53 @@ interface AuthStepProps {
 
 export const AuthStep = ({ onAuth }: AuthStepProps) => {
   const { t } = useTranslation();
+  const { login } = useAuth();
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [signupName, setSignupName] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
+  const [signupPasswordConfirmation, setSignupPasswordConfirmation] = useState('');
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [signupErrors, setSignupErrors] = useState<{ [key: string]: string[] }>({});
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const user = { email: loginEmail, name: loginEmail.split('@')[0] };
-    localStorage.setItem('picnode_user', JSON.stringify(user));
-    onAuth(user);
+    setLoginError(null);
+    try {
+      await apiLogin({ email: loginEmail, password: loginPassword });
+      await login({ email: loginEmail, password: loginPassword });
+      onAuth({ email: loginEmail, name: '' }); // Name is fetched in context
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data?.error) {
+        setLoginError(error.response.data.error);
+      } else {
+        console.error('Login failed:', error);
+        setLoginError('An unexpected error occurred.');
+      }
+    }
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    const user = { email: signupEmail, name: signupName };
-    localStorage.setItem('picnode_user', JSON.stringify(user));
-    onAuth(user);
+    setSignupErrors({});
+    try {
+      const user = {
+        name: signupName,
+        email: signupEmail,
+        password: signupPassword,
+        password_confirmation: signupPasswordConfirmation,
+      };
+      await apiRegister(user);
+      await login({ email: signupEmail, password: signupPassword });
+      onAuth({ name: signupName, email: signupEmail });
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data?.errors) {
+        setSignupErrors(error.response.data.errors);
+      } else {
+        console.error('Signup failed:', error);
+      }
+    }
   };
 
   return (
@@ -47,6 +80,12 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
               <CardDescription>{t('checkout.auth.loginDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
+              {loginError && (
+                <Alert variant="destructive" className="mb-4">
+                  <AlertTitle>Login Failed</AlertTitle>
+                  <AlertDescription>{loginError}</AlertDescription>
+                </Alert>
+              )}
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="login-email">{t('checkout.auth.email')}</Label>
@@ -93,6 +132,7 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
                     onChange={(e) => setSignupName(e.target.value)}
                     required
                   />
+                  {signupErrors.name && <p className="text-red-500 text-sm mt-1">{signupErrors.name[0]}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">{t('checkout.auth.email')}</Label>
@@ -103,6 +143,7 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
                     onChange={(e) => setSignupEmail(e.target.value)}
                     required
                   />
+                  {signupErrors.email && <p className="text-red-500 text-sm mt-1">{signupErrors.email[0]}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">{t('checkout.auth.password')}</Label>
@@ -111,6 +152,17 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
                     type="password"
                     value={signupPassword}
                     onChange={(e) => setSignupPassword(e.target.value)}
+                    required
+                  />
+                  {signupErrors.password && <p className="text-red-500 text-sm mt-1">{signupErrors.password[0]}</p>}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signup-password-confirmation">Confirm Password</Label>
+                  <Input
+                    id="signup-password-confirmation"
+                    type="password"
+                    value={signupPasswordConfirmation}
+                    onChange={(e) => setSignupPasswordConfirmation(e.target.value)}
                     required
                   />
                 </div>

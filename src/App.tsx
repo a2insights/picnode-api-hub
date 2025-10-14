@@ -11,6 +11,10 @@ import { ApisPage } from "./pages/Dashboard/ApisPage";
 import { PaymentsPage } from "./pages/Dashboard/PaymentsPage";
 import { DocsPage } from "./pages/Dashboard/DocsPage";
 import NotFound from "./pages/NotFound";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import Register from "./pages/Register";
+import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/Dashboard/ProfilePage";
 
 const queryClient = new QueryClient();
 
@@ -22,12 +26,17 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<DashboardOverview />} />
-            <Route path="tokens" element={<TokensPage />} />
-            <Route path="apis" element={<ApisPage />} />
-            <Route path="payments" element={<PaymentsPage />} />
-            <Route path="docs" element={<DocsPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route index element={<DashboardOverview />} />
+              <Route path="tokens" element={<TokensPage />} />
+              <Route path="apis" element={<ApisPage />} />
+              <Route path="payments" element={<PaymentsPage />} />
+              <Route path="docs" element={<DocsPage />} />
+              <Route path="profile" element={<ProfilePage />} />
+            </Route>
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

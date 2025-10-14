@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { Button } from './ui/button';
 import { Code2 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const Navbar = () => {
   const { t } = useTranslation();
+  const { isAuthenticated, logout } = useAuth();
 
   return (
     <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-lg">
@@ -36,9 +38,25 @@ export const Navbar = () => {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/dashboard">{t('nav.login')}</Link>
-          </Button>
+          {isAuthenticated ? (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/dashboard">Dashboard</Link>
+              </Button>
+              <Button variant="ghost" size="sm" onClick={logout}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/login">{t('nav.login')}</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/register">Register</Link>
+              </Button>
+            </>
+          )}
           <Button size="sm" className="hidden sm:flex" asChild>
             <Link to="/#calculator">{t('hero.buyTokens')}</Link>
           </Button>

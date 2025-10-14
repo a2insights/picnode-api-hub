@@ -2,10 +2,12 @@ import { useTranslation } from 'react-i18next';
 import { Link, Outlet } from 'react-router-dom';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Button } from '@/components/ui/button';
-import { Code2, LayoutDashboard, Key, Database, CreditCard, FileText, Plus } from 'lucide-react';
+import { Code2, LayoutDashboard, Key, Database, CreditCard, FileText, Plus, User, LogOut } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Dashboard = () => {
   const { t } = useTranslation();
+  const { user, logout } = useAuth();
 
   const menuItems = [
     { icon: LayoutDashboard, label: t('dashboard.title'), path: '/dashboard' },
@@ -13,6 +15,7 @@ const Dashboard = () => {
     { icon: Database, label: t('dashboard.availableApis'), path: '/dashboard/apis' },
     { icon: CreditCard, label: t('dashboard.payments'), path: '/dashboard/payments' },
     { icon: FileText, label: t('dashboard.docs'), path: '/dashboard/docs' },
+    { icon: User, label: 'Profile', path: '/dashboard/profile' },
   ];
 
   return (
@@ -47,9 +50,9 @@ const Dashboard = () => {
         </nav>
 
         <div className="p-4 border-t border-sidebar-border">
-          <Link to="/" className="text-sm text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors">
-            ← {t('nav.home')}
-          </Link>
+          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+            <Link to="/">← {t('nav.home')}</Link>
+          </Button>
         </div>
       </aside>
 
@@ -57,12 +60,19 @@ const Dashboard = () => {
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <header className="h-16 border-b border-border bg-card px-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">{t('dashboard.title')}</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold">{t('dashboard.title')}</h1>
+            {user && <span className="text-sm text-muted-foreground">Welcome, {user.name}!</span>}
+          </div>
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
             <Button size="sm" className="gap-2">
               <Plus className="h-4 w-4" />
               {t('dashboard.newToken')}
+            </Button>
+            <Button variant="outline" size="sm" onClick={logout} className="gap-2">
+              <LogOut className="h-4 w-4" />
+              Logout
             </Button>
           </div>
         </header>

@@ -53,6 +53,7 @@
     "limitType": "Limit Type",
     "rateLimit": "Rate Limit (req/min)",
     "totalRequests": "Total Requests",
+    "currency": "Currency",
     "estimatedPrice": "Estimated Price",
     "proceed": "Proceed to purchase"
   },
