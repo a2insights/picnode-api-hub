@@ -1,13 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
-import { Shield, Settings, BarChart3, DollarSign } from 'lucide-react';
+import { Settings, BarChart3, DollarSign } from 'lucide-react';
 
 const benefits = [
-  {
-    icon: Shield,
-    key: 'security',
-  },
   {
     icon: Settings,
     key: 'flexibility',
@@ -40,7 +36,7 @@ export const BenefitsSection = () => {
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
             return (

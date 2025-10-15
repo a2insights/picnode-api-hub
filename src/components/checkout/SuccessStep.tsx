@@ -13,9 +13,10 @@ interface SuccessStepProps {
     rateLimit: number;
     totalRequests: number;
   };
+  isFree?: boolean;
 }
 
-export const SuccessStep = ({ onClose, tokenConfig }: SuccessStepProps) => {
+export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessStepProps) => {
   const { t } = useTranslation();
   const generatedToken = `picnode_${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
 
@@ -64,10 +65,10 @@ export const SuccessStep = ({ onClose, tokenConfig }: SuccessStepProps) => {
             <CheckCircle2 className="h-20 w-20 text-green-500 mx-auto animate-scale-in" />
             <div>
               <h2 className="text-3xl font-bold text-green-500 mb-2">
-                {t('checkout.success.title')}
+                {t(isFree ? 'checkout.success.titleFree' : 'checkout.success.title')}
               </h2>
               <p className="text-muted-foreground">
-                {t('checkout.success.subtitle')}
+                {t(isFree ? 'checkout.success.subtitleFree' : 'checkout.success.subtitle')}
               </p>
             </div>
           </div>

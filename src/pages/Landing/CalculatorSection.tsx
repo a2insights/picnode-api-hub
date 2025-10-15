@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Label } from '@/components/ui/label';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { availableApis } from '@/lib/apis';
 import { CheckoutModal } from './CheckoutModal';
 
@@ -31,10 +31,18 @@ export const CalculatorSection = () => {
   const [currency, setCurrency] = useState<Currency>('USD');
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
+  const isFreeThier = validity[0] === 7 && totalRequests[0] === 500 && limitType === 'totalRequests';
+
   const handleApiChange = (apiId: string) => {
     setSelectedApis(prev =>
       prev.includes(apiId) ? prev.filter(id => id !== apiId) : [...prev, apiId]
     );
+  };
+
+  const setFreeThier = () => {
+    setValidity([7]);
+    setTotalRequests([500]);
+    setLimitType('totalRequests');
   };
 
   const calculatePrice = () => {
@@ -71,9 +79,14 @@ export const CalculatorSection = () => {
         >
           <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
             <CardHeader>
-              <CardTitle className="text-3xl text-center">
-                {t('calculator.title')}
-              </CardTitle>
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-3xl">
+                  {t('calculator.title')}
+                </CardTitle>
+                <Button variant="outline" size="sm" onClick={setFreeThier}>
+                  {t('calculator.freeTier')}
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="space-y-4">
@@ -110,7 +123,7 @@ export const CalculatorSection = () => {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-medium">{t('calculator.validity')}</label>
-                  <span className="text-sm text-muted-foreground">{validity[0]} dias</span>
+                  <span className="text-sm text-muted-foreground">{validity[0]} {t('checkout.success.days')}</span>
                 </div>
                 <Slider
                   value={validity}
@@ -173,16 +186,25 @@ export const CalculatorSection = () => {
               )}
 
               <div className="pt-6 border-t border-border">
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-lg font-medium">{t('calculator.estimatedPrice')}</span>
-                  <span className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    {currencyConfig[currency].symbol}{calculatePrice()}
-                  </span>
-                </div>
-                <Button className="w-full gap-2 group" size="lg" onClick={() => setCheckoutOpen(true)}>
-                  {t('calculator.proceed')}
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                {!isFreeThier && (
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-lg font-medium">{t('calculator.estimatedPrice')}</span>
+                    <span className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                      {currencyConfig[currency].symbol}{calculatePrice()}
+                    </span>
+                  </div>
+                )}
+                {isFreeThier ? (
+                  <Button className="w-full gap-2 group" size="lg" onClick={() => setCheckoutOpen(true)}>
+                    <Sparkles className="h-5 w-5" />
+                    {t('calculator.getFreeToken')}
+                  </Button>
+                ) : (
+                  <Button className="w-full gap-2 group" size="lg" onClick={() => setCheckoutOpen(true)}>
+                    {t('calculator.proceed')}
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -201,6 +223,7 @@ export const CalculatorSection = () => {
         }}
         price={calculatePrice()}
         currency={currency}
+        isFree={isFreeThier}
       />
     </section>
   );

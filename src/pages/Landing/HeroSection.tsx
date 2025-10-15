@@ -69,12 +69,15 @@ export const HeroSection = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button size="lg" className="gap-2 group" asChild>
               <Link to="/#calculator">
+                <Sparkles className="h-4 w-4" />
+                {t('hero.freeToken')}
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="gap-2 group" asChild>
+              <Link to="/#calculator">
                 {t('hero.buyTokens')}
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link to="/#apis">{t('hero.exploreApis')}</Link>
             </Button>
           </div>
 

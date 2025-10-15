@@ -18,11 +18,12 @@ interface CheckoutModalProps {
   };
   price: string;
   currency?: 'USD' | 'EUR' | 'GBP' | 'BRL';
+  isFree?: boolean;
 }
 
 type CheckoutStep = 'auth' | 'payment' | 'card' | 'pix' | 'success';
 
-export const CheckoutModal = ({ open, onOpenChange, tokenConfig, price, currency }: CheckoutModalProps) => {
+export const CheckoutModal = ({ open, onOpenChange, tokenConfig, price, currency, isFree = false }: CheckoutModalProps) => {
   const [step, setStep] = useState<CheckoutStep>('auth');
   const [user, setUser] = useState<{ email: string; name: string } | null>(null);
 
@@ -31,16 +32,18 @@ export const CheckoutModal = ({ open, onOpenChange, tokenConfig, price, currency
       const storedUser = localStorage.getItem('picnode_user');
       if (storedUser) {
         setUser(JSON.parse(storedUser));
-        setStep('payment');
+        // If free tier, skip directly to success
+        setStep(isFree ? 'success' : 'payment');
       } else {
         setStep('auth');
       }
     }
-  }, [open]);
+  }, [open, isFree]);
 
   const handleAuth = (userData: { email: string; name: string }) => {
     setUser(userData);
-    setStep('payment');
+    // If free tier, skip payment and go to success
+    setStep(isFree ? 'success' : 'payment');
   };
 
   const handlePaymentMethod = (method: 'card' | 'pix') => {
@@ -63,11 +66,11 @@ export const CheckoutModal = ({ open, onOpenChange, tokenConfig, price, currency
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl">
-            {step === 'auth' && 'Autenticação'}
+            {step === 'auth' && (isFree ? 'Criar Conta Grátis' : 'Autenticação')}
             {step === 'payment' && 'Método de Pagamento'}
             {step === 'card' && 'Pagamento com Cartão'}
             {step === 'pix' && 'Pagamento com PIX'}
-            {step === 'success' && 'Compra Concluída'}
+            {step === 'success' && (isFree ? 'Parabéns!' : 'Compra Concluída')}
           </DialogTitle>
         </DialogHeader>
 
@@ -95,7 +98,7 @@ export const CheckoutModal = ({ open, onOpenChange, tokenConfig, price, currency
             />
           )}
           {step === 'success' && (
-            <SuccessStep onClose={handleClose} tokenConfig={tokenConfig} />
+            <SuccessStep onClose={handleClose} tokenConfig={tokenConfig} isFree={isFree} />
           )}
         </div>
       </DialogContent>

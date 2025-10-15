@@ -9,6 +9,7 @@
   "hero": {
     "title": "Todas as imagens que você precisa, em uma única API.",
     "subtitle": "Compre tokens, conecte-se às nossas APIs e centralize suas imagens com o PicNode.",
+    "freeToken": "Gerar Token Beta Grátis",
     "buyTokens": "Comprar Tokens",
     "exploreApis": "Explorar APIs"
   },
@@ -48,6 +49,8 @@
   },
   "calculator": {
     "title": "Calculadora de Token",
+    "freeTier": "Nível Gratuito",
+    "getFreeToken": "Adquirir Token Grátis",
     "apis": "Selecionar APIs",
     "validity": "Validade (dias)",
     "limitType": "Tipo de Limite",
@@ -102,7 +105,9 @@
     },
     "success": {
       "title": "Pagamento Confirmado!",
+      "titleFree": "Parabéns! 🎉",
       "subtitle": "Seu token foi gerado com sucesso",
+      "subtitleFree": "Sua conta gratuita foi criada com sucesso! Aproveite seus 7 dias de acesso.",
       "yourToken": "Seu Token de Acesso",
       "copy": "Copiar",
       "download": "Baixar Token",

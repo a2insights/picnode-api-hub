@@ -9,6 +9,7 @@
   "hero": {
     "title": "All the images you need, in one API.",
     "subtitle": "Buy tokens, connect to our APIs, and centralize your images with PicNode.",
+    "freeToken": "Generate Free Beta Token",
     "buyTokens": "Buy Tokens",
     "exploreApis": "Explore APIs"
   },
@@ -48,6 +49,8 @@
   },
   "calculator": {
     "title": "Token Calculator",
+    "freeTier": "Free Tier",
+    "getFreeToken": "Get Free Token",
     "apis": "Select APIs",
     "validity": "Validity (days)",
     "limitType": "Limit Type",
@@ -102,7 +105,9 @@
     },
     "success": {
       "title": "Payment Confirmed!",
+      "titleFree": "Congratulations! 🎉",
       "subtitle": "Your token has been generated successfully",
+      "subtitleFree": "Your free account has been created successfully! Enjoy your 7 days of access.",
       "yourToken": "Your Access Token",
       "copy": "Copy",
       "download": "Download Token",
