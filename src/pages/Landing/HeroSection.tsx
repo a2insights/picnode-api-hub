@@ -7,6 +7,14 @@ import { Link } from 'react-router-dom';
 export const HeroSection = () => {
   const { t } = useTranslation();
 
+  const scrollToCalculator = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const calculatorSection = document.getElementById('calculator');
+    if (calculatorSection) {
+      calculatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
       {/* Animated Background */}
@@ -67,17 +75,13 @@ export const HeroSection = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button size="lg" className="gap-2 group" asChild>
-              <Link to="/#calculator">
-                <Sparkles className="h-4 w-4" />
-                {t('hero.freeToken')}
-              </Link>
+            <Button size="lg" className="gap-2 group" onClick={scrollToCalculator}>
+              <Sparkles className="h-4 w-4" />
+              {t('hero.freeToken')}
             </Button>
-            <Button size="lg" variant="outline" className="gap-2 group" asChild>
-              <Link to="/#calculator">
-                {t('hero.buyTokens')}
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+            <Button size="lg" variant="outline" className="gap-2 group" onClick={scrollToCalculator}>
+              {t('hero.buyTokens')}
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
 
