@@ -23,10 +23,10 @@ const currencyConfig = {
 
 export const CalculatorSection = () => {
   const { t } = useTranslation();
-  const [validity, setValidity] = useState([30]);
-  const [limitType, setLimitType] = useState<'rateLimit' | 'totalRequests'>('rateLimit');
+  const [validity, setValidity] = useState([7]);
+  const [limitType, setLimitType] = useState<'rateLimit' | 'totalRequests'>('totalRequests');
   const [rateLimit, setRateLimit] = useState([60]);
-  const [totalRequests, setTotalRequests] = useState([10000]);
+  const [totalRequests, setTotalRequests] = useState([500]);
   const [selectedApis, setSelectedApis] = useState<string[]>([]);
   const [currency, setCurrency] = useState<Currency>('USD');
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -37,12 +37,6 @@ export const CalculatorSection = () => {
     setSelectedApis(prev =>
       prev.includes(apiId) ? prev.filter(id => id !== apiId) : [...prev, apiId]
     );
-  };
-
-  const setFreeThier = () => {
-    setValidity([7]);
-    setTotalRequests([500]);
-    setLimitType('totalRequests');
   };
 
   const calculatePrice = () => {
@@ -79,14 +73,9 @@ export const CalculatorSection = () => {
         >
           <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
             <CardHeader>
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-3xl">
-                  {t('calculator.title')}
-                </CardTitle>
-                <Button variant="outline" size="sm" onClick={setFreeThier}>
-                  {t('calculator.freeTier')}
-                </Button>
-              </div>
+              <CardTitle className="text-3xl text-center">
+                {t('calculator.title')}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="space-y-4">
