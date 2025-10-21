@@ -4,7 +4,7 @@ const getBaseUrl = () => {
   if (window.location.hostname === 'localhost') {
     return 'http://localhost/api/picnode';
   }
-  return 'http://a2insights.com.br/api/picnode';
+  return 'https://a2insights.com.br/api/picnode';
 };
 
 const apiService = axios.create({
