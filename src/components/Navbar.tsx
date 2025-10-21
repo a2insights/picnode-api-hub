@@ -9,6 +9,13 @@ export const Navbar = () => {
   const { t } = useTranslation();
   const { isAuthenticated, logout } = useAuth();
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-lg">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -25,15 +32,15 @@ export const Navbar = () => {
           <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t('nav.home')}
           </Link>
-          <Link to="/#apis" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <button onClick={() => scrollToSection('apis')} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t('nav.apis')}
-          </Link>
-          <Link to="/#docs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          </button>
+          <button onClick={() => scrollToSection('docs')} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t('nav.documentation')}
-          </Link>
-          <Link to="/#contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          </button>
+          <button onClick={() => scrollToSection('contact')} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t('nav.contact')}
-          </Link>
+          </button>
         </div>
 
         <div className="flex items-center gap-2">
@@ -57,8 +64,8 @@ export const Navbar = () => {
               </Button>
             </>
           )}
-          <Button size="sm" className="hidden sm:flex" asChild>
-            <Link to="/#calculator">{t('hero.buyTokens')}</Link>
+          <Button size="sm" className="hidden sm:flex" onClick={() => scrollToSection('calculator')}>
+            {t('hero.buyTokens')}
           </Button>
         </div>
       </div>
