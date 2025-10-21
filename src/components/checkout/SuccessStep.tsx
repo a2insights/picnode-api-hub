@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { CheckCircle2, Download } from 'lucide-react';
+import { CheckCircle2, Download, Loader2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { createToken } from '@/services/apiService';
+import { useToast } from '@/hooks/use-toast';
 
 interface SuccessStepProps {
   onClose: () => void;
@@ -12,15 +14,60 @@ interface SuccessStepProps {
     limitType: 'rateLimit' | 'totalRequests';
     rateLimit: number;
     totalRequests: number;
+    apis: string[];
   };
   isFree?: boolean;
 }
 
 export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessStepProps) => {
   const { t } = useTranslation();
-  const generatedToken = `picnode_${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+  const { toast } = useToast();
+  const [generatedToken, setGeneratedToken] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  const mapApiIds = (apiIds: string[]): string[] => {
+    const apiMap: Record<string, string> = {
+      'flags': 'api.thing-icos',
+      'places': 'api.places',
+      'logos': 'api.places.types',
+      'icons': 'api.thing-icos'
+    };
+    return apiIds.map(id => apiMap[id] || 'api.places');
+  };
 
   useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        setIsLoading(true);
+        const tokenData = {
+          name: `Token ${new Date().toLocaleString()}`,
+          expires_in_days: tokenConfig.validity,
+          allowed_apis: mapApiIds(tokenConfig.apis),
+          limit_type: tokenConfig.limitType === 'rateLimit' ? 'rate_limit' as const : 'total' as const,
+          limit_value: tokenConfig.limitType === 'rateLimit' ? tokenConfig.rateLimit : tokenConfig.totalRequests,
+        };
+
+        const response = await createToken(tokenData);
+        setGeneratedToken(response.token);
+        
+        // Trigger confetti after token is created
+        triggerConfetti();
+      } catch (error: any) {
+        console.error('Error creating token:', error);
+        toast({
+          title: 'Erro ao criar token',
+          description: error.response?.data?.message || 'Não foi possível criar o token. Tente novamente.',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchToken();
+  }, [tokenConfig, toast]);
+
+  const triggerConfetti = () => {
     const duration = 3000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
@@ -50,12 +97,39 @@ export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessSte
       });
     }, 250);
 
-    return () => clearInterval(interval);
-  }, []);
+    setTimeout(() => clearInterval(interval), duration);
+  };
 
   const copyToken = () => {
+    if (!generatedToken) return;
     navigator.clipboard.writeText(generatedToken);
+    toast({
+      title: 'Token copiado!',
+      description: 'O token foi copiado para a área de transferência.',
+    });
   };
+
+  if (isLoading) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <Card>
+          <CardContent className="pt-6 space-y-6">
+            <div className="text-center space-y-4">
+              <Loader2 className="h-20 w-20 text-primary mx-auto animate-spin" />
+              <div>
+                <h2 className="text-2xl font-bold mb-2">
+                  {t('checkout.success.creating')}
+                </h2>
+                <p className="text-muted-foreground">
+                  Gerando seu token de acesso...
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -82,7 +156,7 @@ export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessSte
                 readOnly
                 className="flex-1 font-mono text-sm px-3 py-2 bg-background border rounded-md"
               />
-              <Button onClick={copyToken} variant="outline">
+              <Button onClick={copyToken} variant="outline" disabled={!generatedToken}>
                 {t('checkout.success.copy')}
               </Button>
             </div>

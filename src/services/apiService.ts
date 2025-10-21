@@ -84,4 +84,30 @@ export const getMe = async () => {
   }
 };
 
+export const createToken = async (tokenData: {
+  name: string;
+  expires_in_days?: number;
+  allowed_apis: string[];
+  limit_type: 'total' | 'rate_limit';
+  limit_value: number;
+}) => {
+  try {
+    const response = await apiService.post('/tokens', tokenData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating token:', error);
+    throw error;
+  }
+};
+
+export const getTokens = async () => {
+  try {
+    const response = await apiService.get('/tokens');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching tokens:', error);
+    throw error;
+  }
+};
+
 export default apiService;
