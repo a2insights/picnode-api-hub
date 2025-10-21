@@ -9,6 +9,10 @@ export const Navbar = () => {
   const { t } = useTranslation();
   const { isAuthenticated, logout } = useAuth();
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -29,18 +33,15 @@ export const Navbar = () => {
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <button onClick={scrollToTop} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t('nav.home')}
-          </Link>
+          </button>
           <button onClick={() => scrollToSection('apis')} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t('nav.apis')}
           </button>
-          <button onClick={() => scrollToSection('docs')} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <a href="https://a2insights.com.br/docs/api#/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t('nav.documentation')}
-          </button>
-          <button onClick={() => scrollToSection('contact')} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            {t('nav.contact')}
-          </button>
+          </a>
         </div>
 
         <div className="flex items-center gap-2">
