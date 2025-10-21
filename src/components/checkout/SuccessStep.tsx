@@ -25,15 +25,6 @@ export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessSte
   const [generatedToken, setGeneratedToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
 
-  const mapApiIds = (apiIds: string[]): string[] => {
-    const apiMap: Record<string, string> = {
-      'flags': 'api.thing-icos',
-      'places': 'api.places',
-      'logos': 'api.places.types',
-      'icons': 'api.thing-icos'
-    };
-    return apiIds.map(id => apiMap[id] || 'api.places');
-  };
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -42,7 +33,7 @@ export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessSte
         const tokenData = {
           name: `Token ${new Date().toLocaleString()}`,
           expires_in_days: tokenConfig.validity,
-          allowed_apis: mapApiIds(tokenConfig.apis),
+          allowed_apis: tokenConfig.apis,
           limit_type: tokenConfig.limitType === 'rateLimit' ? 'rate_limit' as const : 'total' as const,
           limit_value: tokenConfig.limitType === 'rateLimit' ? tokenConfig.rateLimit : tokenConfig.totalRequests,
         };
