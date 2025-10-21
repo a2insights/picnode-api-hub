@@ -107,6 +107,11 @@ export const CalculatorSection = () => {
                     </div>
                   ))}
                 </div>
+                {selectedApis.length === 0 && (
+                  <p className="text-sm text-destructive">
+                    {t('calculator.selectAtLeastOneApi')}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -184,12 +189,22 @@ export const CalculatorSection = () => {
                   </div>
                 )}
                 {isFreeThier ? (
-                  <Button className="w-full gap-2 group" size="lg" onClick={() => setCheckoutOpen(true)}>
+                  <Button 
+                    className="w-full gap-2 group" 
+                    size="lg" 
+                    onClick={() => setCheckoutOpen(true)}
+                    disabled={selectedApis.length === 0}
+                  >
                     <Sparkles className="h-5 w-5" />
                     {t('calculator.getFreeToken')}
                   </Button>
                 ) : (
-                  <Button className="w-full gap-2 group" size="lg" onClick={() => setCheckoutOpen(true)}>
+                  <Button 
+                    className="w-full gap-2 group" 
+                    size="lg" 
+                    onClick={() => setCheckoutOpen(true)}
+                    disabled={selectedApis.length === 0}
+                  >
                     {t('calculator.proceed')}
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>

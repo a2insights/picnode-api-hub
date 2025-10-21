@@ -58,7 +58,8 @@
     "totalRequests": "Total de Requisições",
     "currency": "Moeda",
     "estimatedPrice": "Valor Estimado",
-    "proceed": "Prosseguir para compra"
+    "proceed": "Prosseguir para compra",
+    "selectAtLeastOneApi": "Selecione pelo menos uma API"
   },
   "checkout": {
     "auth": {
