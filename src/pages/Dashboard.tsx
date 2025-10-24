@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, Outlet } from 'react-router-dom';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Button } from '@/components/ui/button';
-import { Code2, LayoutDashboard, Key, Database, CreditCard, FileText, Plus, User, LogOut } from 'lucide-react';
+import { Code2, LayoutDashboard, Key, Database, CreditCard, FileText, User, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const Dashboard = () => {
@@ -66,10 +66,6 @@ const Dashboard = () => {
           </div>
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
-            <Button size="sm" className="gap-2">
-              <Plus className="h-4 w-4" />
-              {t('dashboard.newToken')}
-            </Button>
             <Button variant="outline" size="sm" onClick={logout} className="gap-2">
               <LogOut className="h-4 w-4" />
               Logout
