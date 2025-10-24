@@ -2,11 +2,12 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Copy, Eye } from 'lucide-react';
+import { Copy, Eye, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getTokens } from '@/services/apiService';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
+import { TokenCalculator } from '@/components/TokenCalculator';
 
 interface Token {
   id: number | string;
@@ -31,6 +32,7 @@ export const TokensPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [newTokenDialogOpen, setNewTokenDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -75,11 +77,35 @@ export const TokensPage = () => {
     setDialogOpen(true);
   };
 
+  const handleNewTokenComplete = () => {
+    setNewTokenDialogOpen(false);
+    // Refresh tokens list
+    const fetchTokens = async () => {
+      try {
+        const response = await getTokens();
+        if (Array.isArray(response)) {
+          setTokens(response);
+        } else if (response && Array.isArray(response.data)) {
+          setTokens(response.data);
+        }
+      } catch (err) {
+        console.error('Error refreshing tokens:', err);
+      }
+    };
+    fetchTokens();
+  };
+
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>{t('dashboard.myTokens')}</CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle>{t('dashboard.myTokens')}</CardTitle>
+            <Button onClick={() => setNewTokenDialogOpen(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              {t('dashboard.tokens.newToken')}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
@@ -191,6 +217,15 @@ export const TokensPage = () => {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={newTokenDialogOpen} onOpenChange={setNewTokenDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{t('dashboard.tokens.newToken')}</DialogTitle>
+          </DialogHeader>
+          <TokenCalculator showTitle={false} onComplete={handleNewTokenComplete} />
         </DialogContent>
       </Dialog>
     </div>
