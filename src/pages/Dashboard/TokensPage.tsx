@@ -3,28 +3,59 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Copy, Eye, RefreshCw, XCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { getTokens } from '@/services/apiService';
+
+interface Token {
+  id: number | string;
+  name: string;
+  abilities: string[];
+  plain_text_token: string;
+  expires_at: string | null;
+  usage: {
+    limit_type: string;
+    limit_value: number;
+    usage: number;
+  } | null;
+  created_at: string;
+  updated_at: string;
+}
 
 export const TokensPage = () => {
   const { t } = useTranslation();
+  const [tokens, setTokens] = useState<Token[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const tokens = [
-    {
-      id: '1',
-      token: 'pk_live_51234567890',
-      scope: 'Flags, Icons',
-      expiration: '2025-12-31',
-      usage: '12.5K / 50K',
-      status: 'active',
-    },
-    {
-      id: '2',
-      token: 'pk_live_98765432101',
-      scope: 'Places, Logos',
-      expiration: '2025-06-15',
-      usage: '3.2K / 20K',
-      status: 'active',
-    },
-  ];
+  useEffect(() => {
+    const fetchTokens = async () => {
+      try {
+        const response = await getTokens();
+        if (Array.isArray(response)) {
+          setTokens(response);
+        } else if (response && Array.isArray(response.data)) {
+          setTokens(response.data);
+        } else {
+          console.error('Unexpected response structure for tokens:', response);
+          setTokens([]);
+        }
+      } catch (err) {
+        setError(t('dashboard.tokens.table.errors.fetch'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTokens();
+  }, [t]);
+
+  if (loading) {
+    return <div>{t('dashboard.tokens.table.loading')}</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -62,15 +93,15 @@ export const TokensPage = () => {
                   <tr key={token.id} className="border-b border-border">
                     <td className="py-3 px-4">
                       <code className="text-sm bg-muted px-2 py-1 rounded">
-                        {token.token}
+                        {token.plain_text_token}
                       </code>
                     </td>
-                    <td className="py-3 px-4 text-sm">{token.scope}</td>
-                    <td className="py-3 px-4 text-sm">{token.expiration}</td>
-                    <td className="py-3 px-4 text-sm">{token.usage}</td>
+                    <td className="py-3 px-4 text-sm">{token.abilities.join(', ')}</td>
+                    <td className="py-3 px-4 text-sm">{token.expires_at ? new Date(token.expires_at).toLocaleDateString() : t('dashboard.tokens.table.never')}</td>
+                    <td className="py-3 px-4 text-sm">{token.usage ? `${token.usage.usage} / ${token.usage.limit_value}` : 'N/A'}</td>
                     <td className="py-3 px-4">
-                      <Badge variant={token.status === 'active' ? 'default' : 'secondary'}>
-                        {t(`dashboard.tokens.status.${token.status}`)}
+                      <Badge variant={token.expires_at && new Date(token.expires_at) < new Date() ? 'secondary' : 'default'}>
+                        {token.expires_at && new Date(token.expires_at) < new Date() ? t('dashboard.tokens.status.expired') : t('dashboard.tokens.status.active')}
                       </Badge>
                     </td>
                     <td className="py-3 px-4">

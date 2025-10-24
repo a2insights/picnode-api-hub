@@ -161,7 +161,12 @@
         "scope": "Escopo",
         "expiration": "Expiração",
         "usage": "Uso",
-        "status": "Status"
+        "status": "Status",
+        "never": "Nunca",
+        "loading": "Carregando tokens...",
+        "errors": {
+          "fetch": "Erro ao buscar tokens. Por favor, tente novamente mais tarde."
+        }
       },
       "actions": {
         "copy": "Copiar Token",

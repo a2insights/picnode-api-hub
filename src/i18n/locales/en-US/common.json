@@ -161,7 +161,12 @@
         "scope": "Scope",
         "expiration": "Expiration",
         "usage": "Usage",
-        "status": "Status"
+        "status": "Status",
+        "never": "Never",
+        "loading": "Loading tokens...",
+        "errors": {
+          "fetch": "Error fetching tokens. Please try again later."
+        }
       },
       "actions": {
         "copy": "Copy Token",
