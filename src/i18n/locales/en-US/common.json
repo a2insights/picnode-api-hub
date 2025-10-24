@@ -168,6 +168,12 @@
           "fetch": "Error fetching tokens. Please try again later."
         }
       },
+      "viewDialog": {
+        "title": "Token Information",
+        "used": "Used",
+        "limit": "Limit",
+        "type": "Type"
+      },
       "actions": {
         "copy": "Copy Token",
         "details": "View Details",

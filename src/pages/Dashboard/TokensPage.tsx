@@ -2,9 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Copy, Eye, RefreshCw, XCircle } from 'lucide-react';
+import { Copy, Eye } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getTokens } from '@/services/apiService';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
 
 interface Token {
   id: number | string;
@@ -23,9 +25,12 @@ interface Token {
 
 export const TokensPage = () => {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const [tokens, setTokens] = useState<Token[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedToken, setSelectedToken] = useState<Token | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -56,6 +61,19 @@ export const TokensPage = () => {
   if (error) {
     return <div>{error}</div>;
   }
+
+  const copyToken = (token: string) => {
+    navigator.clipboard.writeText(token);
+    toast({
+      title: t('dashboard.tokens.actions.copy'),
+      description: 'Token copiado para a área de transferência',
+    });
+  };
+
+  const handleViewToken = (token: Token) => {
+    setSelectedToken(token);
+    setDialogOpen(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -106,17 +124,11 @@ export const TokensPage = () => {
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => copyToken(token.plain_text_token)}>
                           <Copy className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => handleViewToken(token)}>
                           <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <RefreshCw className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <XCircle className="h-4 w-4" />
                         </Button>
                       </div>
                     </td>
@@ -127,6 +139,60 @@ export const TokensPage = () => {
           </div>
         </CardContent>
       </Card>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('dashboard.tokens.viewDialog.title')}</DialogTitle>
+          </DialogHeader>
+          {selectedToken && (
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">{t('dashboard.tokens.table.token')}</p>
+                <code className="text-sm bg-muted px-2 py-1 rounded block break-all">
+                  {selectedToken.plain_text_token}
+                </code>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">{t('dashboard.tokens.table.scope')}</p>
+                <p className="text-sm font-medium">{selectedToken.abilities.join(', ')}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">{t('dashboard.tokens.table.expiration')}</p>
+                <p className="text-sm font-medium">
+                  {selectedToken.expires_at ? new Date(selectedToken.expires_at).toLocaleDateString() : t('dashboard.tokens.table.never')}
+                </p>
+              </div>
+              {selectedToken.usage && (
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">{t('dashboard.tokens.table.usage')}</p>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>{t('dashboard.tokens.viewDialog.used')}: {selectedToken.usage.usage}</span>
+                      <span>{t('dashboard.tokens.viewDialog.limit')}: {selectedToken.usage.limit_value}</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-primary rounded-full h-2 transition-all" 
+                        style={{ width: `${Math.min((selectedToken.usage.usage / selectedToken.usage.limit_value) * 100, 100)}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {t('dashboard.tokens.viewDialog.type')}: {selectedToken.usage.limit_type}
+                    </p>
+                  </div>
+                </div>
+              )}
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">{t('dashboard.tokens.table.status')}</p>
+                <Badge variant={selectedToken.expires_at && new Date(selectedToken.expires_at) < new Date() ? 'secondary' : 'default'}>
+                  {selectedToken.expires_at && new Date(selectedToken.expires_at) < new Date() ? t('dashboard.tokens.status.expired') : t('dashboard.tokens.status.active')}
+                </Badge>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

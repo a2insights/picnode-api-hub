@@ -168,6 +168,12 @@
           "fetch": "Erro ao buscar tokens. Por favor, tente novamente mais tarde."
         }
       },
+      "viewDialog": {
+        "title": "Informações do Token",
+        "used": "Usado",
+        "limit": "Limite",
+        "type": "Tipo"
+      },
       "actions": {
         "copy": "Copiar Token",
         "details": "Ver Detalhes",

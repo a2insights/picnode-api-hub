@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle2, Download, Loader2 } from 'lucide-react';
@@ -22,12 +23,16 @@ interface SuccessStepProps {
 export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessStepProps) => {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [generatedToken, setGeneratedToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
-
+  const hasCreatedToken = useRef(false);
 
   useEffect(() => {
     const fetchToken = async () => {
+      if (hasCreatedToken.current) return;
+      hasCreatedToken.current = true;
+
       try {
         setIsLoading(true);
         const tokenData = {
@@ -176,7 +181,10 @@ export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessSte
               <Download className="h-4 w-4 mr-2" />
               {t('checkout.success.download')}
             </Button>
-            <Button className="flex-1" onClick={onClose}>
+            <Button className="flex-1" onClick={() => {
+              onClose();
+              navigate('/dashboard/tokens');
+            }}>
               {t('checkout.success.dashboard')}
             </Button>
           </div>
