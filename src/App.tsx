@@ -8,7 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import { DashboardOverview } from "./pages/Dashboard/DashboardOverview";
 import { TokensPage } from "./pages/Dashboard/TokensPage";
 import { ApisPage } from "./pages/Dashboard/ApisPage";
-import { PaymentsPage } from "./pages/Dashboard/PaymentsPage";
+import { OrdersPage } from "./pages/Dashboard/OrdersPage";
 import { DocsPage } from "./pages/Dashboard/DocsPage";
 import NotFound from "./pages/NotFound";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -33,7 +33,7 @@ const App = () => (
               <Route index element={<DashboardOverview />} />
               <Route path="tokens" element={<TokensPage />} />
               <Route path="apis" element={<ApisPage />} />
-              <Route path="payments" element={<PaymentsPage />} />
+              <Route path="orders" element={<OrdersPage />} />
               <Route path="docs" element={<DocsPage />} />
               <Route path="profile" element={<ProfilePage />} />
             </Route>

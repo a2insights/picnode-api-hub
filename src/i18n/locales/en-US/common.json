@@ -153,6 +153,7 @@
     "myTokens": "My Tokens",
     "availableApis": "Available APIs",
     "payments": "Payments",
+    "orders": "Orders",
     "docs": "Documentation",
     "newToken": "New Token",
     "overview": {
@@ -214,6 +215,22 @@
       "amount": "Amount",
       "method": "Method",
       "status": "Status"
+    },
+    "orders": {
+      "errorTitle": "Error loading orders",
+      "errorDescription": "Could not load the orders list.",
+      "noOrders": "No orders found"
+    },
+    "ordersTable": {
+      "date": "Date",
+      "apis": "APIs",
+      "limit": "Limit",
+      "total": "Total",
+      "status": "Status",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page",
+      "of": "of"
     }
   }
 }

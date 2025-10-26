@@ -13,7 +13,7 @@ const Dashboard = () => {
     { icon: LayoutDashboard, label: t('dashboard.title'), path: '/dashboard' },
     { icon: Key, label: t('dashboard.myTokens'), path: '/dashboard/tokens' },
     { icon: Database, label: t('dashboard.availableApis'), path: '/dashboard/apis' },
-    { icon: CreditCard, label: t('dashboard.payments'), path: '/dashboard/payments' },
+    { icon: CreditCard, label: t('dashboard.orders'), path: '/dashboard/orders' },
     { icon: FileText, label: t('dashboard.docs'), path: '/dashboard/docs' },
     { icon: User, label: 'Profile', path: '/dashboard/profile' },
   ];

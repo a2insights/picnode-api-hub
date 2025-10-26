@@ -153,6 +153,7 @@
     "myTokens": "Meus Tokens",
     "availableApis": "APIs Disponíveis",
     "payments": "Pagamentos",
+    "orders": "Pedidos",
     "docs": "Documentação",
     "newToken": "Novo Token",
     "overview": {
@@ -214,6 +215,22 @@
       "amount": "Valor",
       "method": "Método",
       "status": "Status"
+    },
+    "orders": {
+      "errorTitle": "Erro ao carregar pedidos",
+      "errorDescription": "Não foi possível carregar a lista de pedidos.",
+      "noOrders": "Nenhum pedido encontrado"
+    },
+    "ordersTable": {
+      "date": "Data",
+      "apis": "APIs",
+      "limit": "Limite",
+      "total": "Total",
+      "status": "Status",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "page": "Página",
+      "of": "de"
     }
   }
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
@@ -7,9 +7,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Label } from '@/components/ui/label';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Loader2 } from 'lucide-react';
 import { availableApis } from '@/lib/apis';
 import { CheckoutModal } from '@/pages/Landing/CheckoutModal';
+import { calculateTotal } from '@/services/apiService';
 
 type Currency = 'USD' | 'EUR' | 'GBP' | 'BRL';
 
@@ -34,6 +35,8 @@ export const TokenCalculator = ({ showTitle = true, onComplete }: TokenCalculato
   const [selectedApis, setSelectedApis] = useState<string[]>([]);
   const [currency, setCurrency] = useState<Currency>('USD');
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [calculatedPrice, setCalculatedPrice] = useState<string>('0.00');
+  const [isCalculating, setIsCalculating] = useState(false);
 
   const isFreeThier = validity[0] === 7 && totalRequests[0] === 500 && limitType === 'totalRequests';
 
@@ -43,27 +46,35 @@ export const TokenCalculator = ({ showTitle = true, onComplete }: TokenCalculato
     );
   };
 
-  const calculatePrice = () => {
-    const basePrice = 0.01; // Base price in USD
-    const validityFactor = validity[0] / 30;
-    const limitFactor = limitType === 'rateLimit' 
-      ? rateLimit[0] / 60 
-      : totalRequests[0] / 10000;
-    
-    const apiFactor = selectedApis.reduce((acc, apiId) => {
-      const api = availableApis.find(a => a.id === apiId);
-      return acc * (api ? api.priceFactor : 1);
-    }, 1);
+  useEffect(() => {
+    const fetchPrice = async () => {
+      if (selectedApis.length === 0) {
+        setCalculatedPrice('0.00');
+        return;
+      }
 
-    const priceInUsd = basePrice * validityFactor * limitFactor * apiFactor * 100;
-    const finalPrice = priceInUsd * currencyConfig[currency].rate;
-    
-    const formattedPrice = finalPrice.toFixed(2);
-    if (currency === 'BRL') {
-      return formattedPrice.replace('.', ',');
-    }
-    return formattedPrice;
-  };
+      setIsCalculating(true);
+      try {
+        const response = await calculateTotal({
+          allowed_apis: selectedApis,
+          limit_type: limitType === 'rateLimit' ? 'rate_limit' : 'total',
+          limit_value: limitType === 'rateLimit' ? rateLimit[0] : totalRequests[0],
+          expires_in_days: validity[0],
+          currency: currency.toLowerCase() as 'usd' | 'eur' | 'gbp' | 'brl',
+        });
+
+        const price = parseFloat(response.total).toFixed(2);
+        setCalculatedPrice(currency === 'BRL' ? price.replace('.', ',') : price);
+      } catch (error) {
+        console.error('Error calculating price:', error);
+        setCalculatedPrice('0.00');
+      } finally {
+        setIsCalculating(false);
+      }
+    };
+
+    fetchPrice();
+  }, [selectedApis, limitType, rateLimit, totalRequests, validity, currency]);
 
   const handleCheckoutClose = (open: boolean) => {
     setCheckoutOpen(open);
@@ -188,9 +199,13 @@ export const TokenCalculator = ({ showTitle = true, onComplete }: TokenCalculato
             {!isFreeThier && (
               <div className="flex justify-between items-center mb-6">
                 <span className="text-lg font-medium">{t('calculator.estimatedPrice')}</span>
-                <span className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  {currencyConfig[currency].symbol}{calculatePrice()}
-                </span>
+                {isCalculating ? (
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                ) : (
+                  <span className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    {currencyConfig[currency].symbol}{calculatedPrice}
+                  </span>
+                )}
               </div>
             )}
             {isFreeThier ? (
@@ -208,7 +223,7 @@ export const TokenCalculator = ({ showTitle = true, onComplete }: TokenCalculato
                 className="w-full gap-2 group" 
                 size="lg" 
                 onClick={() => setCheckoutOpen(true)}
-                disabled={selectedApis.length === 0}
+                disabled={selectedApis.length === 0 || isCalculating}
               >
                 {t('calculator.proceed')}
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -228,7 +243,7 @@ export const TokenCalculator = ({ showTitle = true, onComplete }: TokenCalculato
           totalRequests: totalRequests[0],
           apis: selectedApis,
         }}
-        price={calculatePrice()}
+        price={calculatedPrice}
         currency={currency}
         isFree={isFreeThier}
       />

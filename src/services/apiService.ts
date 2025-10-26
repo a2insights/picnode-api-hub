@@ -138,4 +138,30 @@ export const getOrder = async (orderId: string) => {
   }
 };
 
+export const getOrders = async (page: number = 1) => {
+  try {
+    const response = await apiService.get(`/orders?page=${page}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    throw error;
+  }
+};
+
+export const calculateTotal = async (data: {
+  allowed_apis: string[];
+  limit_type: 'total' | 'rate_limit';
+  limit_value: number;
+  expires_in_days?: number;
+  currency: 'usd' | 'eur' | 'gbp' | 'brl';
+}) => {
+  try {
+    const response = await apiService.post('/orders/calculate-total', data);
+    return response.data;
+  } catch (error) {
+    console.error('Error calculating total:', error);
+    throw error;
+  }
+};
+
 export default apiService;

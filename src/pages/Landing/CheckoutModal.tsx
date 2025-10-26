@@ -91,7 +91,7 @@ export const CheckoutModal = ({ open, onOpenChange, tokenConfig, price, currency
                 allowed_apis: tokenConfig.apis,
                 limit_type: 'total',
                 limit_value: tokenConfig.totalRequests.toString(),
-                currency: currency || 'usd',
+                currency: (currency || 'usd').toLowerCase() as 'brl' | 'usd',
               }}
               onBack={() => setStep('payment')}
             />
