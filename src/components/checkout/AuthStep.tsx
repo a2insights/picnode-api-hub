@@ -25,10 +25,13 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
   const [signupPasswordConfirmation, setSignupPasswordConfirmation] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [signupErrors, setSignupErrors] = useState<{ [key: string]: string[] }>({});
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [signupLoading, setSignupLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError(null);
+    setLoginLoading(true);
     try {
       await apiLogin({ email: loginEmail, password: loginPassword });
       await login({ email: loginEmail, password: loginPassword });
@@ -40,12 +43,15 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
         console.error('Login failed:', error);
         setLoginError('An unexpected error occurred.');
       }
+    } finally {
+      setLoginLoading(false);
     }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setSignupErrors({});
+    setSignupLoading(true);
     try {
       const user = {
         name: signupName,
@@ -62,6 +68,8 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
       } else {
         console.error('Signup failed:', error);
       }
+    } finally {
+      setSignupLoading(false);
     }
   };
 
@@ -107,8 +115,8 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  {t('checkout.auth.loginButton')}
+                <Button type="submit" className="w-full" disabled={loginLoading}>
+                  {loginLoading ? 'Loading...' : t('checkout.auth.loginButton')}
                 </Button>
               </form>
             </CardContent>
@@ -166,8 +174,8 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  {t('checkout.auth.signupButton')}
+                <Button type="submit" className="w-full" disabled={signupLoading}>
+                  {signupLoading ? 'Loading...' : t('checkout.auth.signupButton')}
                 </Button>
               </form>
             </CardContent>

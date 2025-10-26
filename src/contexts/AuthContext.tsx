@@ -15,6 +15,7 @@ interface AuthContextType {
   logout: () => void;
   isAuthenticated: boolean;
   loading: boolean;
+  logoutLoading: boolean;
   revalidateUser: () => Promise<void>;
 }
 
@@ -23,6 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
   const revalidateUser = async () => {
     try {
@@ -53,6 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
+    setLogoutLoading(true);
     try {
       await apiService.delete('/logout');
     } catch (error) {
@@ -61,13 +64,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(null);
       localStorage.removeItem('picnode_user');
       localStorage.removeItem('picnode_token');
+      setLogoutLoading(false);
     }
   };
 
   const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, loading, revalidateUser }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, loading, logoutLoading, revalidateUser }}>
       {children}
     </AuthContext.Provider>
   );

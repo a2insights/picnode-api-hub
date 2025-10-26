@@ -121,7 +121,8 @@
       "copy": "Copy",
       "days": "days",
       "dashboard": "Go to Dashboard",
-      "download": "Download .json"
+      "download": "Download .json",
+      "creating": "Creating your token..."
     }
   },
   "benefits": {

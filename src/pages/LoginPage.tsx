@@ -17,10 +17,12 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
     try {
       await apiLogin({ email, password });
       await login({ email, password });
@@ -32,6 +34,8 @@ const LoginPage = () => {
         console.error('Login failed:', error);
         setError('An unexpected error occurred.');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,8 +79,8 @@ const LoginPage = () => {
                 required
               />
             </div>
-            <Button type="submit" className="w-full">
-              {t('checkout.auth.loginButton')}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? 'Loading...' : t('checkout.auth.loginButton')}
             </Button>
           </form>
         </CardContent>

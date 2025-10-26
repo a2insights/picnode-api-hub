@@ -18,10 +18,12 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+    setLoading(true);
     try {
       const user = { name, email, password, password_confirmation: passwordConfirmation };
       await register(user);
@@ -33,6 +35,8 @@ const Register = () => {
       } else {
         console.error('Signup failed:', error);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,8 +92,8 @@ const Register = () => {
                 required
               />
             </div>
-            <Button type="submit" className="w-full">
-              {t('checkout.auth.signupButton')}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? 'Loading...' : t('checkout.auth.signupButton')}
             </Button>
           </form>
         </CardContent>

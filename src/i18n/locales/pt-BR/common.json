@@ -122,7 +122,8 @@
         "copy": "Copiar",
         "days": "dias",
         "dashboard": "Ir para o Painel",
-        "download": "Baixar .json"
+        "download": "Baixar .json",
+        "creating": "Criando seu token..."
     }
   },
   "benefits": {

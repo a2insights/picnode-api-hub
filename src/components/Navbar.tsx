@@ -2,17 +2,17 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { Button } from './ui/button';
-import { Code2 } from 'lucide-react';
+import { Code2, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 export const Navbar = () => {
   const { t } = useTranslation();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, logoutLoading } = useAuth();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
+  
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -51,8 +51,9 @@ export const Navbar = () => {
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/dashboard">Dashboard</Link>
               </Button>
-              <Button variant="ghost" size="sm" onClick={logout}>
-                Logout
+              <Button variant="ghost" size="sm" onClick={logout} disabled={logoutLoading}>
+                {logoutLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {logoutLoading ? 'Logging out...' : 'Logout'}
               </Button>
             </>
           ) : (
