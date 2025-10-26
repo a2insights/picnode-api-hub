@@ -173,6 +173,7 @@
         "status": "Status",
         "never": "Never",
         "loading": "Loading tokens...",
+        "noTokens": "No tokens found",
         "errors": {
           "fetch": "Error fetching tokens. Please try again later."
         }
