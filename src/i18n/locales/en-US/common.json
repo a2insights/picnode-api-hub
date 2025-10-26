@@ -221,7 +221,7 @@
       "method": "Method",
       "status": "Status"
     },
-    "orders": {
+    "ordersPage": {
       "errorTitle": "Error loading orders",
       "errorDescription": "Could not load the orders list.",
       "noOrders": "No orders found"

@@ -115,7 +115,7 @@ export const OrdersPage = () => {
             </div>
           ) : orders.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
-              {t("dashboard.orders.noOrders")}
+              {t('dashboard.ordersPage.noOrders')}
             </div>
           ) : (
             <>
