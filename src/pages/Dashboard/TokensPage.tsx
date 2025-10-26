@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Copy, Eye, Plus, Loader2 } from 'lucide-react';
+import { Copy, Eye, Plus, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getTokens, getOrder } from '@/services/apiService';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -15,9 +15,9 @@ interface Token {
   id: number | string;
   name: string;
   abilities: string[];
-  plain_text_token: string;
   expires_at: string | null;
   usage: {
+    plain_text_token: string;
     limit_type: string;
     limit_value: number;
     usage: number;
@@ -36,15 +36,18 @@ export const TokensPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newTokenDialogOpen, setNewTokenDialogOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
 
   useEffect(() => {
-    const fetchTokens = async () => {
+    const fetchTokens = async (page: number) => {
       try {
-        const response = await getTokens();
-        if (Array.isArray(response)) {
-          setTokens(response);
-        } else if (response && Array.isArray(response.data)) {
+        setLoading(true);
+        const response = await getTokens(page);
+        if (response && Array.isArray(response.data)) {
           setTokens(response.data);
+          setCurrentPage(response.meta.current_page);
+          setLastPage(response.meta.last_page);
         } else {
           console.error('Unexpected response structure for tokens:', response);
           setTokens([]);
@@ -56,8 +59,27 @@ export const TokensPage = () => {
       }
     };
 
-    fetchTokens();
+    fetchTokens(1);
   }, [t]);
+
+  const fetchTokens = async (page: number) => {
+    try {
+      setLoading(true);
+      const response = await getTokens(page);
+      if (response && Array.isArray(response.data)) {
+        setTokens(response.data);
+        setCurrentPage(response.meta.current_page);
+        setLastPage(response.meta.last_page);
+      } else {
+        console.error('Unexpected response structure for tokens:', response);
+        setTokens([]);
+      }
+    } catch (err) {
+      setError(t('dashboard.tokens.table.errors.fetch'));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const checkOrderStatus = async () => {
@@ -199,7 +221,7 @@ export const TokensPage = () => {
                     <tr key={token.id} className="border-b border-border">
                       <td className="py-3 px-4">
                         <code className="text-sm bg-muted px-2 py-1 rounded">
-                          {token.plain_text_token}
+                          {token.usage.plain_text_token}
                         </code>
                       </td>
                       <td className="py-3 px-4 text-sm">{token.abilities.join(', ')}</td>
@@ -212,7 +234,7 @@ export const TokensPage = () => {
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex items-center justify-end gap-2">
-                          <Button variant="ghost" size="sm" onClick={() => copyToken(token.plain_text_token)}>
+                          <Button variant="ghost" size="sm" onClick={() => copyToken(token.usage.plain_text_token)}>
                             <Copy className="h-4 w-4" />
                           </Button>
                           <Button variant="ghost" size="sm" onClick={() => handleViewToken(token)}>
@@ -224,6 +246,31 @@ export const TokensPage = () => {
                   ))}
                 </tbody>
               </table>
+              {lastPage > 1 && (
+                <div className="flex items-center justify-between mt-6">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fetchTokens(currentPage - 1)}
+                    disabled={currentPage === 1 || loading}
+                  >
+                    <ChevronLeft className="h-4 w-4 mr-1" />
+                    {t('dashboard.ordersTable.previous')}
+                  </Button>
+                  <span className="text-sm text-muted-foreground">
+                    {t('dashboard.ordersTable.page')} {currentPage} {t('dashboard.ordersTable.of')} {lastPage}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fetchTokens(currentPage + 1)}
+                    disabled={currentPage === lastPage || loading}
+                  >
+                    {t('dashboard.ordersTable.next')}
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </CardContent>
@@ -239,7 +286,7 @@ export const TokensPage = () => {
               <div>
                 <p className="text-sm text-muted-foreground mb-1">{t('dashboard.tokens.table.token')}</p>
                 <code className="text-sm bg-muted px-2 py-1 rounded block break-all">
-                  {selectedToken.plain_text_token}
+                  {selectedToken.usage.plain_text_token}
                 </code>
               </div>
               <div>

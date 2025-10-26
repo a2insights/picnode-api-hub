@@ -195,7 +195,8 @@
         "active": "Active",
         "expired": "Expired",
         "revoked": "Revoked"
-      }
+      },
+      "noTokens": "You don't have any tokens yet. Create one to get started!"
     },
     "tokenDetails": {
       "title": "Token Details",
@@ -225,6 +226,7 @@
       "noOrders": "No orders found"
     },
     "ordersTable": {
+      "actions": "Actions",
       "date": "Date",
       "apis": "APIs",
       "limit": "Limit",
@@ -233,7 +235,8 @@
       "previous": "Previous",
       "next": "Next",
       "page": "Page",
-      "of": "of"
+      "of": "of",
+      "view": "View"
     }
   }
 }

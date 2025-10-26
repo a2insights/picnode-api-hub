@@ -1,16 +1,17 @@
-import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
-import { getOrders } from '@/services/apiService';
-import { toast } from '@/components/ui/use-toast';
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { getOrders } from "@/services/apiService";
+import { toast } from "@/components/ui/use-toast";
 
 interface Order {
   id: number;
   user_id: number;
   stripe_checkout_session_id: string;
+  stripe_session_url: string;
   status: string;
   total: string;
   currency: string;
@@ -30,19 +31,26 @@ interface OrdersResponse {
   total: number;
 }
 
-const statusVariants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  pending: 'outline',
-  paid: 'default',
-  failed: 'destructive',
-  cancelled: 'secondary',
+const statusVariants: Record<
+  string,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
+  pending: "outline",
+  paid: "default",
+  failed: "destructive",
+  cancelled: "secondary",
 };
 
 const statusColors: Record<string, string> = {
-  pending: 'bg-yellow-500/10 text-yellow-500',
-  paid: 'bg-green-500/10 text-green-500',
-  failed: 'bg-red-500/10 text-red-500',
-  cancelled: 'bg-gray-500/10 text-gray-500',
+  pending: "bg-yellow-500/10 text-yellow-500",
+  paid: "bg-green-500/10 text-green-500",
+  failed: "bg-red-500/10 text-red-500",
+  cancelled: "bg-gray-500/10 text-gray-500",
 };
+
+const handleOrderClick = (url: string) => {
+  window.open(url, "_blank");
+}
 
 export const OrdersPage = () => {
   const { t } = useTranslation();
@@ -59,11 +67,11 @@ export const OrdersPage = () => {
       setCurrentPage(response.current_page);
       setLastPage(response.last_page);
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error("Error fetching orders:", error);
       toast({
-        title: t('dashboard.orders.errorTitle'),
-        description: t('dashboard.orders.errorDescription'),
-        variant: 'destructive',
+        title: t("dashboard.orders.errorTitle"),
+        description: t("dashboard.orders.errorDescription"),
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -76,35 +84,38 @@ export const OrdersPage = () => {
 
   const formatCurrency = (amount: string, currency: string) => {
     const symbols: Record<string, string> = {
-      usd: '$',
-      eur: '€',
-      gbp: '£',
-      brl: 'R$',
+      usd: "$",
+      eur: "€",
+      gbp: "£",
+      brl: "R$",
     };
-    return `${symbols[currency.toLowerCase()] || '$'}${parseFloat(amount).toFixed(2)}`;
+    return `${symbols[currency.toLowerCase()] || "$"}${parseFloat(
+      amount
+    ).toFixed(2)}`;
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
+    return new Date(dateString).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     });
   };
 
   return (
     <div className="space-y-6">
       <Card>
-                    <CardHeader>
-                      <CardTitle>{t('dashboard.ordersTitle')}</CardTitle>
-                    </CardHeader>        <CardContent>
+        <CardHeader>
+          <CardTitle>{t("dashboard.ordersTitle")}</CardTitle>
+        </CardHeader>{" "}
+        <CardContent>
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : orders.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
-              {t('dashboard.orders.noOrders')}
+              {t("dashboard.orders.noOrders")}
             </div>
           ) : (
             <>
@@ -113,29 +124,34 @@ export const OrdersPage = () => {
                   <thead>
                     <tr className="border-b border-border">
                       <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">
-                        {t('dashboard.ordersTable.date')}
+                        {t("dashboard.ordersTable.date")}
                       </th>
                       <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">
                         ID
                       </th>
                       <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">
-                        {t('dashboard.ordersTable.apis')}
+                        {t("dashboard.ordersTable.apis")}
                       </th>
                       <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">
-                        {t('dashboard.ordersTable.limit')}
+                        {t("dashboard.ordersTable.limit")}
                       </th>
                       <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">
-                        {t('dashboard.ordersTable.total')}
+                        {t("dashboard.ordersTable.total")}
                       </th>
                       <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">
-                        {t('dashboard.ordersTable.status')}
+                        {t("dashboard.ordersTable.status")}
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">
+                        {t("dashboard.ordersTable.actions")}
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {orders.map((order) => (
                       <tr key={order.id} className="border-b border-border">
-                        <td className="py-3 px-4 text-sm">{formatDate(order.created_at)}</td>
+                        <td className="py-3 px-4 text-sm">
+                          {formatDate(order.created_at)}
+                        </td>
                         <td className="py-3 px-4">
                           <code className="text-sm bg-muted px-2 py-1 rounded">
                             #{order.id}
@@ -144,24 +160,42 @@ export const OrdersPage = () => {
                         <td className="py-3 px-4 text-sm">
                           <div className="flex flex-wrap gap-1">
                             {order.allowed_apis.map((api, idx) => (
-                              <span key={idx} className="text-xs bg-muted px-2 py-1 rounded">
+                              <span
+                                key={idx}
+                                className="text-xs bg-muted px-2 py-1 rounded"
+                              >
                                 {api}
                               </span>
                             ))}
                           </div>
                         </td>
                         <td className="py-3 px-4 text-sm">
-                          {order.limit_type === 'total' 
-                            ? `${order.limit_value.toLocaleString()} total` 
+                          {order.limit_type === "total"
+                            ? `${order.limit_value.toLocaleString()} total`
                             : `${order.limit_value}/min`}
                         </td>
                         <td className="py-3 px-4 text-sm font-medium">
                           {formatCurrency(order.total, order.currency)}
                         </td>
                         <td className="py-3 px-4">
-                          <Badge variant="default" className={statusColors[order.status] || statusColors.pending}>
+                          <Badge
+                            variant="default"
+                            className={
+                              statusColors[order.status] || statusColors.pending
+                            }
+                          >
                             {order.status}
                           </Badge>
+                        </td>
+                        <td className="py-3 px-4">
+                          <Button
+                            variant="outline"
+                            disabled={loading}
+                            size="sm"
+                            onClick={() => handleOrderClick(order.stripe_session_url)}
+                          >
+                            {t("dashboard.ordersTable.view")}
+                          </Button>
                         </td>
                       </tr>
                     ))}
@@ -178,10 +212,11 @@ export const OrdersPage = () => {
                     disabled={currentPage === 1 || loading}
                   >
                     <ChevronLeft className="h-4 w-4 mr-1" />
-                    {t('dashboard.ordersTable.previous')}
+                    {t("dashboard.ordersTable.previous")}
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    {t('dashboard.ordersTable.page')} {currentPage} {t('dashboard.ordersTable.of')} {lastPage}
+                    {t("dashboard.ordersTable.page")} {currentPage}{" "}
+                    {t("dashboard.ordersTable.of")} {lastPage}
                   </span>
                   <Button
                     variant="outline"
@@ -189,7 +224,7 @@ export const OrdersPage = () => {
                     onClick={() => fetchOrders(currentPage + 1)}
                     disabled={currentPage === lastPage || loading}
                   >
-                    {t('dashboard.ordersTable.next')}
+                    {t("dashboard.ordersTable.next")}
                     <ChevronRight className="h-4 w-4 ml-1" />
                   </Button>
                 </div>

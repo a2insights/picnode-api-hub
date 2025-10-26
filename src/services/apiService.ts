@@ -100,9 +100,9 @@ export const createToken = async (tokenData: {
   }
 };
 
-export const getTokens = async () => {
+export const getTokens = async (page: number = 1) => {
   try {
-    const response = await apiService.get('/tokens');
+    const response = await apiService.get(`/tokens?page=${page}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching tokens:', error);
