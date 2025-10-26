@@ -20,12 +20,11 @@ interface CardCheckoutProps {
 
 export const CardCheckout = ({ price, tokenData, onBack }: CardCheckoutProps) => {
   const { t } = useTranslation();
-  const [processing, setProcessing] = useState(false);
+  const [processing, setProcessing] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleCheckout = async () => {
-      setProcessing(true);
       setError(null);
 
       try {
@@ -45,6 +44,8 @@ export const CardCheckout = ({ price, tokenData, onBack }: CardCheckoutProps) =>
         }
       } catch (err) {
         setError(t('checkout.card.checkoutError'));
+        console.log(err);
+        setError(err.response.data.message);
         toast({
           title: t('checkout.card.checkoutErrorTitle'),
           description: t('checkout.card.checkoutErrorDescription'),
@@ -55,7 +56,8 @@ export const CardCheckout = ({ price, tokenData, onBack }: CardCheckoutProps) =>
     };
 
     handleCheckout();
-  }, [tokenData, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="max-w-md mx-auto">

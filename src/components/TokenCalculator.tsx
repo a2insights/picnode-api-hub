@@ -11,6 +11,7 @@ import { ArrowRight, Sparkles, Loader2 } from 'lucide-react';
 import { availableApis } from '@/lib/apis';
 import { CheckoutModal } from '@/pages/Landing/CheckoutModal';
 import { calculateTotal } from '@/services/apiService';
+import { useDebounce } from '@/hooks/use-debounce';
 
 type Currency = 'USD' | 'EUR' | 'GBP' | 'BRL';
 
@@ -37,6 +38,13 @@ export const TokenCalculator = ({ showTitle = true, onComplete }: TokenCalculato
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [calculatedPrice, setCalculatedPrice] = useState<string>('0.00');
   const [isCalculating, setIsCalculating] = useState(false);
+
+  const debouncedValidity = useDebounce(validity, 500);
+  const debouncedLimitType = useDebounce(limitType, 500);
+  const debouncedRateLimit = useDebounce(rateLimit, 500);
+  const debouncedTotalRequests = useDebounce(totalRequests, 500);
+  const debouncedSelectedApis = useDebounce(selectedApis, 500);
+  const debouncedCurrency = useDebounce(currency, 500);
 
   const isFreeThier = validity[0] === 7 && totalRequests[0] === 500 && limitType === 'totalRequests';
 
@@ -74,7 +82,14 @@ export const TokenCalculator = ({ showTitle = true, onComplete }: TokenCalculato
     };
 
     fetchPrice();
-  }, [selectedApis, limitType, rateLimit, totalRequests, validity, currency]);
+  }, [
+    debouncedSelectedApis, 
+    debouncedLimitType, 
+    debouncedRateLimit, 
+    debouncedTotalRequests, 
+    debouncedValidity, 
+    debouncedCurrency
+  ]);
 
   const handleCheckoutClose = (open: boolean) => {
     setCheckoutOpen(open);
