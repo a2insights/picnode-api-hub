@@ -112,14 +112,16 @@
     },
     "success": {
       "title": "Payment Confirmed!",
+      "subtitle": "Your token is ready to use. Copy it and start integrating.",
       "titleFree": "Congratulations! 🎉",
-      "subtitle": "Your token has been generated successfully",
       "subtitleFree": "Your free account has been created successfully! Enjoy your 7 days of access.",
-      "yourToken": "Your Access Token",
+      "alreadyClaimedTitle": "Token Already Claimed",
+      "alreadyClaimedSubtitle": "You have already claimed your free token. You can manage your tokens in the dashboard.",
+      "yourToken": "Your Token",
       "copy": "Copy",
-      "download": "Download Token",
+      "days": "days",
       "dashboard": "Go to Dashboard",
-      "days": "days"
+      "download": "Download .json"
     }
   },
   "benefits": {
@@ -153,7 +155,7 @@
     "myTokens": "My Tokens",
     "availableApis": "Available APIs",
     "payments": "Payments",
-    "orders": "Orders",
+    "ordersTitle": "Orders",
     "docs": "Documentation",
     "newToken": "New Token",
     "overview": {

@@ -113,13 +113,16 @@
     "success": {
       "title": "Pagamento Confirmado!",
       "titleFree": "Parabéns! 🎉",
-      "subtitle": "Seu token foi gerado com sucesso",
-      "subtitleFree": "Sua conta gratuita foi criada com sucesso! Aproveite seus 7 dias de acesso.",
-      "yourToken": "Seu Token de Acesso",
-      "copy": "Copiar",
-      "download": "Baixar Token",
-      "dashboard": "Ir para Dashboard",
-      "days": "dias"
+        "subtitle": "Seu token está pronto para uso. Copie e comece a integrar.",
+        "titleFree": "Parabéns! 🎉",
+        "subtitleFree": "Sua conta gratuita foi criada com sucesso! Aproveite seus 7 dias de acesso.",
+        "alreadyClaimedTitle": "Token Já Resgatado",
+        "alreadyClaimedSubtitle": "Você já resgatou seu token gratuito. Você pode gerenciar seus tokens no painel.",
+        "yourToken": "Seu Token",
+        "copy": "Copiar",
+        "days": "dias",
+        "dashboard": "Ir para o Painel",
+        "download": "Baixar .json"
     }
   },
   "benefits": {
@@ -153,7 +156,7 @@
     "myTokens": "Meus Tokens",
     "availableApis": "APIs Disponíveis",
     "payments": "Pagamentos",
-    "orders": "Pedidos",
+    "ordersTitle": "Pedidos",
     "docs": "Documentação",
     "newToken": "Novo Token",
     "overview": {

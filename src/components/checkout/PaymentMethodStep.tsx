@@ -31,8 +31,9 @@ export const PaymentMethodStep = ({ onSelectMethod, price, currency = 'USD' }: P
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
+        {/* === Card: Cartão de Crédito === */}
         <Card
-          className="cursor-pointer hover:border-primary transition-all hover:shadow-lg"
+          className="cursor-pointer border border-muted bg-background hover:border-primary hover:bg-accent/5 transition-all duration-200 hover:shadow-lg"
           onClick={() => onSelectMethod('card')}
         >
           <CardHeader>
@@ -53,8 +54,9 @@ export const PaymentMethodStep = ({ onSelectMethod, price, currency = 'USD' }: P
           </CardContent>
         </Card>
 
+        {/* === Card: PayPal === */}
         <Card
-          className="cursor-not-allowed bg-gray-100 dark:bg-gray-800 opacity-50"
+          className="cursor-not-allowed border border-muted bg-muted/40 text-muted-foreground opacity-70 dark:bg-muted/30"
         >
           <CardHeader>
             <div className="flex items-center gap-3">
@@ -74,9 +76,10 @@ export const PaymentMethodStep = ({ onSelectMethod, price, currency = 'USD' }: P
           </CardContent>
         </Card>
 
+        {/* === Card: Pix === */}
         {currency === 'BRL' && (
           <Card
-            className="cursor-not-allowed bg-gray-100 dark:bg-gray-800 opacity-50"
+            className="cursor-not-allowed border border-muted bg-muted/40 text-muted-foreground opacity-70 dark:bg-muted/30"
           >
             <CardHeader>
               <div className="flex items-center gap-3">

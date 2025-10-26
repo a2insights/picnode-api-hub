@@ -7,7 +7,6 @@ import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import { DashboardOverview } from "./pages/Dashboard/DashboardOverview";
 import { TokensPage } from "./pages/Dashboard/TokensPage";
-import { ApisPage } from "./pages/Dashboard/ApisPage";
 import { OrdersPage } from "./pages/Dashboard/OrdersPage";
 import { DocsPage } from "./pages/Dashboard/DocsPage";
 import NotFound from "./pages/NotFound";
@@ -32,7 +31,6 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />}>
               <Route index element={<DashboardOverview />} />
               <Route path="tokens" element={<TokensPage />} />
-              <Route path="apis" element={<ApisPage />} />
               <Route path="orders" element={<OrdersPage />} />
               <Route path="docs" element={<DocsPage />} />
               <Route path="profile" element={<ProfilePage />} />

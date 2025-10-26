@@ -48,14 +48,26 @@ const ProfilePage = () => {
     }
   };
 
+  const isDevelopment = true; // <-- use isso para ativar/desativar o overlay facilmente
+
   return (
-    <div>
+    <div className="relative">
+      {isDevelopment && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm text-white text-center p-4 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-2">🚧 Em desenvolvimento</h2>
+          <p className="text-sm opacity-90 max-w-md">
+            Esta funcionalidade ainda está em fase de implementação. Em breve estará disponível.
+          </p>
+        </div>
+      )}
+
       {successMessage && (
         <Alert className="mb-4">
           <AlertTitle>Success!</AlertTitle>
           <AlertDescription>{successMessage}</AlertDescription>
         </Alert>
       )}
+
       <Card className="mb-6">
         <CardHeader>
           <CardTitle>Profile</CardTitle>

@@ -195,7 +195,7 @@ export const TokensPage = () => {
                       </code>
                     </td>
                     <td className="py-3 px-4 text-sm">{token.abilities.join(', ')}</td>
-                    <td className="py-3 px-4 text-sm">{token.expires_at ? new Date(token.expires_at).toLocaleDateString() : t('dashboard.tokens.table.never')}</td>
+                    <td className="py-3 px-4 text-sm">{token.expires_at ? new Date(token.expires_at).toISOString().split('T')[0] : t('dashboard.tokens.table.never')}</td>
                     <td className="py-3 px-4 text-sm">{token.usage ? `${token.usage.usage} / ${token.usage.limit_value}` : 'N/A'}</td>
                     <td className="py-3 px-4">
                       <Badge variant={token.expires_at && new Date(token.expires_at) < new Date() ? 'secondary' : 'default'}>
@@ -240,7 +240,7 @@ export const TokensPage = () => {
               <div>
                 <p className="text-sm text-muted-foreground mb-1">{t('dashboard.tokens.table.expiration')}</p>
                 <p className="text-sm font-medium">
-                  {selectedToken.expires_at ? new Date(selectedToken.expires_at).toLocaleDateString() : t('dashboard.tokens.table.never')}
+                  {selectedToken.expires_at ? new Date(selectedToken.expires_at).toISOString().split('T')[0] : t('dashboard.tokens.table.never')}
                 </p>
               </div>
               {selectedToken.usage && (

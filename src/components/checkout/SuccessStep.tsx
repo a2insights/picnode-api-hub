@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { CheckCircle2, Download, Loader2 } from 'lucide-react';
+import { CheckCircle2, Download, Loader2, XCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { createToken } from '@/services/apiService';
 import { useToast } from '@/hooks/use-toast';
@@ -26,6 +26,7 @@ export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessSte
   const navigate = useNavigate();
   const [generatedToken, setGeneratedToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isExistingFree, setIsExistingFree] = useState(false);
   const hasCreatedToken = useRef(false);
 
   useEffect(() => {
@@ -50,11 +51,15 @@ export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessSte
         triggerConfetti();
       } catch (error: any) {
         console.error('Error creating token:', error);
-        toast({
-          title: 'Erro ao criar token',
-          description: error.response?.data?.message || 'Não foi possível criar o token. Tente novamente.',
-          variant: 'destructive',
-        });
+        if (error.response?.data?.message === 'You have already taken a free order before.') {
+          setIsExistingFree(true);
+        } else {
+          toast({
+            title: 'Erro ao criar token',
+            description: error.response?.data?.message || 'Não foi possível criar o token. Tente novamente.',
+            variant: 'destructive',
+          });
+        }
       } finally {
         setIsLoading(false);
       }
@@ -121,6 +126,34 @@ export const SuccessStep = ({ onClose, tokenConfig, isFree = false }: SuccessSte
                 </p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isExistingFree) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <Card className="border-yellow-500/50">
+          <CardContent className="pt-6 space-y-6">
+            <div className="text-center space-y-4">
+              <XCircle className="h-20 w-20 text-yellow-500 mx-auto animate-scale-in" />
+              <div>
+                <h2 className="text-3xl font-bold text-yellow-500 mb-2">
+                  {t('checkout.success.alreadyClaimedTitle')}
+                </h2>
+                <p className="text-muted-foreground">
+                  {t('checkout.success.alreadyClaimedSubtitle')}
+                </p>
+              </div>
+            </div>
+            <Button className="w-full" onClick={() => {
+              onClose();
+              navigate('/dashboard/tokens');
+            }}>
+              {t('checkout.success.dashboard')}
+            </Button>
           </CardContent>
         </Card>
       </div>

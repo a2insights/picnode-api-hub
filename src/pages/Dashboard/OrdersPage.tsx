@@ -95,10 +95,9 @@ export const OrdersPage = () => {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader>
-          <CardTitle>{t('dashboard.orders')}</CardTitle>
-        </CardHeader>
-        <CardContent>
+                    <CardHeader>
+                      <CardTitle>{t('dashboard.ordersTitle')}</CardTitle>
+                    </CardHeader>        <CardContent>
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
