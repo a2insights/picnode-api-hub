@@ -82,7 +82,9 @@
       "cardInfo": "Pay with credit card and receive your token immediately",
       "pix": "PIX",
       "pixDescription": "QR Code payment",
-      "pixInfo": "Scan the QR Code and confirm payment in your bank app"
+      "pixInfo": "Scan the QR Code and confirm payment in your bank app",
+      "paypalDescription": "Pay with your PayPal account",
+      "comingSoon": "Coming soon"
     },
     "card": {
       "title": "Card Payment",
@@ -92,7 +94,11 @@
       "cvv": "CVV",
       "pay": "Pay Now",
       "processing": "Processing...",
-      "back": "Back"
+      "back": "Back",
+      "checkoutError": "An error occurred while creating the checkout session.",
+      "checkoutErrorTitle": "Checkout Error",
+      "checkoutErrorDescription": "We couldn't redirect you to the payment page. Please try again.",
+      "redirecting": "Redirecting to payment..."
     },
     "pix": {
       "title": "PIX Payment",

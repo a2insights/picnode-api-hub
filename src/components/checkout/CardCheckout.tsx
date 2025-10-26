@@ -1,46 +1,61 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CreditCard } from 'lucide-react';
+import { CreditCard, Loader2 } from 'lucide-react';
+import { createCheckoutSession } from '@/services/apiService';
+import { toast } from '@/components/ui/use-toast';
 
 interface CardCheckoutProps {
   price: string;
-  onSuccess: () => void;
+  tokenData: {
+    name: string;
+    allowed_apis: string[];
+    limit_type: 'total';
+    limit_value: string;
+    currency: 'brl' | 'usd';
+  };
   onBack: () => void;
 }
 
-export const CardCheckout = ({ price, onSuccess, onBack }: CardCheckoutProps) => {
+export const CardCheckout = ({ price, tokenData, onBack }: CardCheckoutProps) => {
   const { t } = useTranslation();
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardName, setCardName] = useState('');
-  const [expiry, setExpiry] = useState('');
-  const [cvv, setCvv] = useState('');
   const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const formatCardNumber = (value: string) => {
-    const numbers = value.replace(/\s/g, '');
-    const formatted = numbers.match(/.{1,4}/g)?.join(' ') || numbers;
-    return formatted.slice(0, 19);
-  };
+  useEffect(() => {
+    const handleCheckout = async () => {
+      setProcessing(true);
+      setError(null);
 
-  const formatExpiry = (value: string) => {
-    const numbers = value.replace(/\D/g, '');
-    if (numbers.length >= 2) {
-      return numbers.slice(0, 2) + '/' + numbers.slice(2, 4);
-    }
-    return numbers;
-  };
+      try {
+        const success_url = `${window.location.origin}/dashboard/tokens`;
+        const cancel_url = `${window.location.origin}/dashboard/tokens`;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setProcessing(true);
-    setTimeout(() => {
-      onSuccess();
-    }, 2000);
-  };
+        const response = await createCheckoutSession({
+          ...tokenData,
+          success_url,
+          cancel_url,
+        });
+
+        if (response.checkout_url) {
+          window.location.href = response.checkout_url;
+        } else {
+          throw new Error('No checkout URL returned');
+        }
+      } catch (err) {
+        setError(t('checkout.card.checkoutError'));
+        toast({
+          title: t('checkout.card.checkoutErrorTitle'),
+          description: t('checkout.card.checkoutErrorDescription'),
+          variant: 'destructive',
+        });
+        setProcessing(false);
+      }
+    };
+
+    handleCheckout();
+  }, [tokenData, t]);
 
   return (
     <div className="max-w-md mx-auto">
@@ -58,59 +73,18 @@ export const CardCheckout = ({ price, onSuccess, onBack }: CardCheckoutProps) =>
             <span className="text-2xl font-bold">${price}</span>
           </div>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="card-number">{t('checkout.card.number')}</Label>
-              <Input
-                id="card-number"
-                placeholder="1234 5678 9012 3456"
-                value={cardNumber}
-                onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
-                required
-              />
+        <CardContent className="text-center">
+          {processing && (
+            <div className="flex flex-col items-center gap-4">
+              <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              <p>{t('checkout.card.redirecting')}</p>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="card-name">{t('checkout.card.name')}</Label>
-              <Input
-                id="card-name"
-                placeholder="John Doe"
-                value={cardName}
-                onChange={(e) => setCardName(e.target.value)}
-                required
-              />
+          )}
+          {error && (
+            <div className="text-red-500">
+              <p>{error}</p>
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="expiry">{t('checkout.card.expiry')}</Label>
-                <Input
-                  id="expiry"
-                  placeholder="MM/YY"
-                  value={expiry}
-                  onChange={(e) => setExpiry(formatExpiry(e.target.value))}
-                  maxLength={5}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="cvv">{t('checkout.card.cvv')}</Label>
-                <Input
-                  id="cvv"
-                  placeholder="123"
-                  value={cvv}
-                  onChange={(e) => setCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                  maxLength={4}
-                  required
-                />
-              </div>
-            </div>
-
-            <Button type="submit" className="w-full" disabled={processing}>
-              {processing ? t('checkout.card.processing') : t('checkout.card.pay')}
-            </Button>
-          </form>
+          )}
         </CardContent>
       </Card>
     </div>

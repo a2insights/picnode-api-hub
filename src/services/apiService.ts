@@ -110,4 +110,32 @@ export const getTokens = async () => {
   }
 };
 
+export const createCheckoutSession = async (checkoutData: {
+  name: string;
+  allowed_apis: string[];
+  limit_type: 'total';
+  limit_value: string;
+  currency: 'brl' | 'usd';
+  success_url: string;
+  cancel_url: string;
+}) => {
+  try {
+    const response = await apiService.post('/checkout', checkoutData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating checkout session:', error);
+    throw error;
+  }
+};
+
+export const getOrder = async (orderId: string) => {
+  try {
+    const response = await apiService.get(`/orders/${orderId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching order:', error);
+    throw error;
+  }
+};
+
 export default apiService;

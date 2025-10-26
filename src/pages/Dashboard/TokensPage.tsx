@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Copy, Eye, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { getTokens } from '@/services/apiService';
+import { getTokens, getOrder } from '@/services/apiService';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { TokenCalculator } from '@/components/TokenCalculator';
+import { useSearchParams } from 'react-router-dom';
+import confetti from 'canvas-confetti';
 
 interface Token {
   id: number | string;
@@ -33,6 +35,7 @@ export const TokensPage = () => {
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newTokenDialogOpen, setNewTokenDialogOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -55,6 +58,57 @@ export const TokensPage = () => {
 
     fetchTokens();
   }, [t]);
+
+  useEffect(() => {
+    const checkOrderStatus = async () => {
+      const orderId = searchParams.get('order_id');
+      const success = searchParams.get('success');
+      const cancel = searchParams.get('cancel');
+
+      if (success && orderId) {
+        try {
+          const order = await getOrder(orderId);
+          if (order.status === 'paid') {
+            confetti({
+              particleCount: 100,
+              spread: 70,
+              origin: { y: 0.6 },
+            });
+            toast({
+              title: 'Payment Successful!',
+              description: 'Your new token has been added to your account.',
+            });
+          } else {
+            toast({
+              title: 'Payment Processing',
+              description: 'Your payment is being processed. We will update you shortly.',
+            });
+          }
+        } catch (err) {
+          toast({
+            title: 'Error',
+            description: 'Could not verify your order status.',
+            variant: 'destructive',
+          });
+        }
+        searchParams.delete('order_id');
+        searchParams.delete('success');
+        setSearchParams(searchParams);
+      } else if (cancel) {
+        toast({
+          title: 'Payment Cancelled',
+          description: 'Your payment was cancelled. You can try again anytime.',
+          variant: 'destructive',
+        });
+        searchParams.delete('order_id');
+        searchParams.delete('cancel');
+        setSearchParams(searchParams);
+      }
+    };
+
+    checkOrderStatus();
+  }, [searchParams, setSearchParams, toast]);
+
 
   if (loading) {
     return <div>{t('dashboard.tokens.table.loading')}</div>;
@@ -195,7 +249,7 @@ export const TokensPage = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>{t('dashboard.tokens.viewDialog.used')}: {selectedToken.usage.usage}</span>
-                      <span>{t('dashboard.tokens.viewDialog.limit')}: {selectedToken.usage.limit_value}</span>
+                      <span>{t('dashboard.thanks for the help')}: {selectedToken.usage.limit_value}</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-2">
                       <div 

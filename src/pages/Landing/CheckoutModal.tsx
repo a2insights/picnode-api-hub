@@ -86,7 +86,13 @@ export const CheckoutModal = ({ open, onOpenChange, tokenConfig, price, currency
           {step === 'card' && (
             <CardCheckout
               price={price}
-              onSuccess={handleSuccess}
+              tokenData={{
+                name: 'Token via Checkout',
+                allowed_apis: tokenConfig.apis,
+                limit_type: 'total',
+                limit_value: tokenConfig.totalRequests.toString(),
+                currency: currency || 'usd',
+              }}
               onBack={() => setStep('payment')}
             />
           )}
