@@ -216,7 +216,7 @@
       "method": "Método",
       "status": "Status"
     },
-    "orders": {
+    "ordersPage": {
       "errorTitle": "Erro ao carregar pedidos",
       "errorDescription": "Não foi possível carregar a lista de pedidos.",
       "noOrders": "Nenhum pedido encontrado"

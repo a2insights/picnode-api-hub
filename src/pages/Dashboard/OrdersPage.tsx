@@ -61,8 +61,8 @@ export const OrdersPage = () => {
     } catch (error) {
       console.error('Error fetching orders:', error);
       toast({
-        title: t('dashboard.orders.errorTitle'),
-        description: t('dashboard.orders.errorDescription'),
+        title: t('dashboard.ordersPage.errorTitle'),
+        description: t('dashboard.ordersPage.errorDescription'),
         variant: 'destructive',
       });
     } finally {
@@ -105,7 +105,7 @@ export const OrdersPage = () => {
             </div>
           ) : orders.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
-              {t('dashboard.orders.noOrders')}
+              {t('dashboard.ordersPage.noOrders')}
             </div>
           ) : (
             <>
