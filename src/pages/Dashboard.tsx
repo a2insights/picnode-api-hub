@@ -2,12 +2,12 @@ import { useTranslation } from 'react-i18next';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Button } from '@/components/ui/button';
-import { Code2, LayoutDashboard, Key, Database, CreditCard, FileText, User, LogOut } from 'lucide-react';
+import { Code2, LayoutDashboard, Key, Database, CreditCard, FileText, User, LogOut, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const { user, logout } = useAuth();
+  const { user, logout, logoutLoading } = useAuth();
 
   const menuItems = [
     { icon: LayoutDashboard, label: t('dashboard.title'), path: '/dashboard' },
@@ -72,9 +72,13 @@ const Dashboard = () => {
           </div>
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
-            <Button variant="outline" size="sm" onClick={logout} className="gap-2">
-              <LogOut className="h-4 w-4" />
-              Logout
+            <Button variant="outline" size="sm" onClick={logout} disabled={logoutLoading} className="gap-2">
+              {logoutLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <LogOut className="h-4 w-4" />
+              )}
+              {logoutLoading ? 'Logging out...' : 'Logout'}
             </Button>
           </div>
         </header>

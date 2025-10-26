@@ -14,6 +14,7 @@ interface CardCheckoutProps {
     limit_type: 'total';
     limit_value: string;
     currency: 'brl' | 'usd';
+    expires_in_days: number;
   };
   onBack: () => void;
 }

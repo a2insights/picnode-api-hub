@@ -31,19 +31,19 @@
   "apis": {
     "title": "APIs Disponíveis",
     "flags": {
-      "title": "Flags API",
-      "description": "Bandeiras de países em alta resolução, atualizadas e consistentes."
+      "title": "FootBall Clubs API",
+      "description": "Escudos e brasões de clubes de futebol ao redor do mundo."
     },
     "places": {
       "title": "Places API",
-      "description": "Imagens de pontos turísticos e lugares famosos ao redor do mundo."
+      "description": "Bandeiras e brasões de lugares ao redor do mundo."
     },
     "logos": {
       "title": "Logos API",
-      "description": "Logos de empresas, marcas e organizações em formato vetorial."
+      "description": "Logotipos de empresas, marcas e organizações em formato vetorial."
     },
     "icons": {
-      "title": "Icons API",
+      "title": "ThingIco API",
       "description": "Biblioteca com milhares de ícones para qualquer tipo de interface."
     }
   },
@@ -113,17 +113,16 @@
     "success": {
       "title": "Pagamento Confirmado!",
       "titleFree": "Parabéns! 🎉",
-        "subtitle": "Seu token está pronto para uso. Copie e comece a integrar.",
-        "titleFree": "Parabéns! 🎉",
-        "subtitleFree": "Sua conta gratuita foi criada com sucesso! Aproveite seus 7 dias de acesso.",
-        "alreadyClaimedTitle": "Token Já Resgatado",
-        "alreadyClaimedSubtitle": "Você já resgatou seu token gratuito. Você pode gerenciar seus tokens no painel.",
-        "yourToken": "Seu Token",
-        "copy": "Copiar",
-        "days": "dias",
-        "dashboard": "Ir para o Painel",
-        "download": "Baixar .json",
-        "creating": "Criando seu token..."
+      "subtitle": "Seu token está pronto para uso. Copie e comece a integrar.",
+      "subtitleFree": "Sua conta gratuita foi criada com sucesso! Aproveite seus 7 dias de acesso.",
+      "alreadyClaimedTitle": "Token Já Resgatado",
+      "alreadyClaimedSubtitle": "Você já resgatou seu token gratuito. Você pode gerenciar seus tokens no painel.",
+      "yourToken": "Seu Token",
+      "copy": "Copiar",
+      "days": "dias",
+      "dashboard": "Ir para o Painel",
+      "download": "Baixar .json",
+      "creating": "Criando seu token..."
     }
   },
   "benefits": {

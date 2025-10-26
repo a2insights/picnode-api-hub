@@ -31,19 +31,19 @@
   "apis": {
     "title": "Available APIs",
     "flags": {
-      "title": "Flags API",
-      "description": "High-resolution country flags, updated and consistent."
+      "title": "FootBall Clubs API",
+      "description": "Shield and Coat of Arms of football clubs around the world."
     },
     "places": {
       "title": "Places API",
-      "description": "Images of tourist spots and famous places around the world."
+      "description": "Flags and Coat of Arms of places around the world."
     },
     "logos": {
       "title": "Logos API",
       "description": "Company, brand, and organization logos in vector format."
     },
     "icons": {
-      "title": "Icons API",
+      "title": "ThingIco API",
       "description": "Library with thousands of icons for any type of interface."
     }
   },

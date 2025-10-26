@@ -3,7 +3,7 @@ import { Flag, MapPin, Box, Sparkles } from 'lucide-react';
 export const availableApis = [
   {
     id: 'api.thing-icos',
-    name: 'Thing Icons API',
+    name: 'Thing ThingIco API',
     description: 'Biblioteca com milhares de ícones para qualquer tipo de interface.',
     type: 'Vectors',
     icon: Sparkles,
