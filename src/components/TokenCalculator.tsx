@@ -36,9 +36,11 @@ export const TokenCalculator = ({
   const [limitType, setLimitType] = useState<"rateLimit" | "totalRequests">(
     "totalRequests"
   );
-  const [rateLimit, setRateLimit] = useState([60]);
-  const [totalRequests, setTotalRequests] = useState([500]);
-  const [selectedApis, setSelectedApis] = useState<string[]>(availableApis.map((api) => api.id));
+  const [rateLimit, setRateLimit] = useState([20]);
+  const [totalRequests, setTotalRequests] = useState([1000]);
+  const [selectedApis, setSelectedApis] = useState<string[]>(
+    availableApis.map((api) => api.id)
+  );
   const [currency, setCurrency] = useState<Currency>("USD");
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [calculatedPrice, setCalculatedPrice] = useState<string>("0.00");
@@ -52,9 +54,9 @@ export const TokenCalculator = ({
   const debouncedCurrency = useDebounce(currency, 500);
 
   const isFreeThier =
-    validity[0] === 7 &&
-    totalRequests[0] === 500 &&
-    limitType === "totalRequests";
+    validity[0] <= 7 &&
+    ((totalRequests[0] <= 1000 && limitType === "totalRequests") ||
+      (rateLimit[0] <= 20 && limitType === "rateLimit"));
 
   const handleApiChange = (apiId: string) => {
     setSelectedApis((prev) =>
@@ -244,7 +246,7 @@ export const TokenCalculator = ({
                 onValueChange={setTotalRequests}
                 min={1000}
                 max={1000000}
-                step={1000}
+                step={5000}
                 className="w-full"
               />
             </div>
