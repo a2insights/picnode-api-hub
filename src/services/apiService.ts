@@ -116,9 +116,10 @@ export const getTokens = async (page: number = 1) => {
 export const createCheckoutSession = async (checkoutData: {
   name: string;
   allowed_apis: string[];
-  limit_type: "total";
+  limit_type: "total" | "rate_limit";
   limit_value: string;
   currency: "brl" | "usd";
+  expires_in_days?: number;
   success_url: string;
   cancel_url: string;
 }) => {

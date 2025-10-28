@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import apiService, { getMe, login as apiLogin } from '@/services/apiService';
+import { getMe, login as apiLogin, logout as apiLogout } from '@/services/apiService';
 
 interface User {
   id: number;
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setLogoutLoading(true);
     try {
-      await apiService.delete('/logout');
+      await apiLogout();
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {

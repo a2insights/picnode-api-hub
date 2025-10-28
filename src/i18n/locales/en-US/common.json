@@ -222,7 +222,7 @@
       "status": "Status"
     },
     "ordersPage": {
-      "errorTitle": "Error loading orders",
+      "errorTitle": "Error Loading Orders",
       "errorDescription": "Could not load the orders list.",
       "noOrders": "No orders found"
     },

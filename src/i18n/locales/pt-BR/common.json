@@ -222,7 +222,7 @@
       "status": "Status"
     },
     "ordersPage": {
-      "errorTitle": "Erro ao carregar pedidos",
+      "errorTitle": "Erro ao Carregar Pedidos",
       "errorDescription": "Não foi possível carregar a lista de pedidos.",
       "noOrders": "Nenhum pedido encontrado"
     },
