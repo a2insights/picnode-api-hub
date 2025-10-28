@@ -151,6 +151,11 @@
   "footer": {
     "allRights": "Todos os direitos reservados."
   },
+  "theme": {
+    "light": "Claro",
+    "dark": "Escuro",
+    "crystal": "Crystal"
+  },
   "dashboard": {
     "title": "Dashboard",
     "myTokens": "Meus Tokens",
