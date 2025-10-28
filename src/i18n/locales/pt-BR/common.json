@@ -156,6 +156,14 @@
     "dark": "Escuro",
     "crystal": "Crystal"
   },
+  "network": {
+    "title": "Ecossistema de APIs Conectadas",
+    "description": "Todas as nossas APIs trabalham em harmonia para fornecer a você acesso instantâneo a milhares de recursos digitais.",
+    "api1": "Milhares de ícones vetoriais em alta qualidade, prontos para uso em qualquer interface.",
+    "api2": "Imagens de pontos turísticos e lugares famosos do mundo todo em alta definição.",
+    "api3": "Logos oficiais e dados atualizados de clubes de futebol de todo o mundo.",
+    "footer": "Uma única plataforma, múltiplas possibilidades. Conecte-se ao futuro das APIs."
+  },
   "dashboard": {
     "title": "Dashboard",
     "myTokens": "Meus Tokens",
