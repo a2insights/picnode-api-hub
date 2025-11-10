@@ -156,13 +156,11 @@
     "dark": "Dark",
     "crystal": "Crystal"
   },
-  "network": {
-    "title": "Connected APIs Ecosystem",
-    "description": "All our APIs work in harmony to provide you with instant access to thousands of digital resources.",
-    "api1": "Thousands of high-quality vector icons, ready to use in any interface.",
-    "api2": "Images of tourist attractions and famous places from around the world in high definition.",
-    "api3": "Official logos and updated data from football clubs worldwide.",
-    "footer": "One platform, multiple possibilities. Connect to the future of APIs."
+  "playground": {
+    "title": "Explore Our APIs in Action",
+    "description": "See real examples of resources available in our APIs. Select an API and browse through the assets gallery.",
+    "info": "Drag to navigate • Demo data • Real API available with authentication",
+    "basePrice": "Base price"
   },
   "dashboard": {
     "title": "Dashboard",
