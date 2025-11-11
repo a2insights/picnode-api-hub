@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { MapPin, Flag, Sparkles, Search, Loader2 } from 'lucide-react';
+import { MapPin, Flag, Sparkles, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { availableApis } from '@/lib/apis';
 import { 
   picnodeService, 
@@ -178,12 +179,16 @@ const ApiPlayground = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 blur-3xl -z-10" />
           
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+              {Array.from({ length: 15 }).map((_, index) => (
+                <Card key={index} className="overflow-hidden border-border">
+                  <Skeleton className="aspect-square w-full" />
+                </Card>
+              ))}
             </div>
           ) : assets.length > 0 ? (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
                 {assets.map((asset, index) => (
                   <motion.div
                     key={asset.id}
