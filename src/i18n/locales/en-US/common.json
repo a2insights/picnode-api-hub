@@ -157,10 +157,14 @@
     "crystal": "Crystal"
   },
   "playground": {
-    "title": "Explore Our APIs in Action",
-    "description": "See real examples of resources available in our APIs. Select an API and browse through the assets gallery.",
-    "info": "Drag to navigate • Demo data • Real API available with authentication",
-    "basePrice": "Base price"
+    "title": "Try Our APIs",
+    "description": "Explore our gallery of available assets through the APIs. Select an API and browse the resources.",
+    "info": "Browse the gallery and explore thousands of available assets",
+    "basePrice": "Base Price",
+    "search": "Search assets...",
+    "previous": "Previous",
+    "next": "Next",
+    "noResults": "No results found"
   },
   "dashboard": {
     "title": "Dashboard",

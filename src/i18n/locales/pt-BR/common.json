@@ -157,10 +157,14 @@
     "crystal": "Crystal"
   },
   "playground": {
-    "title": "Explore Nossas APIs em Ação",
-    "description": "Veja exemplos reais dos recursos disponíveis em nossas APIs. Selecione uma API e navegue pela galeria de assets.",
-    "info": "Arraste para navegar • Dados de demonstração • API real disponível mediante autenticação",
-    "basePrice": "Preço base"
+    "title": "Experimente Nossas APIs",
+    "description": "Explore nossa galeria de assets disponíveis através das APIs. Selecione uma API e navegue pelos recursos.",
+    "info": "Navegue pela galeria e explore milhares de assets disponíveis",
+    "basePrice": "Preço Base",
+    "search": "Buscar assets...",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "noResults": "Nenhum resultado encontrado"
   },
   "dashboard": {
     "title": "Dashboard",
