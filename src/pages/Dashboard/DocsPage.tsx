@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Code, Book, Zap, Shield } from 'lucide-react';
 
@@ -10,22 +11,26 @@ export const DocsPage = () => {
       icon: Code,
       title: 'Getting Started',
       description: 'Quick start guide to integrate PicNode APIs in your project.',
+      url: '/docs/getting-started',
     },
     {
       icon: Book,
       title: 'API Reference',
       description: 'Complete documentation of all available endpoints and parameters.',
       url: 'https://a2insights.com.br/docs/api',
+      external: true,
     },
     {
       icon: Zap,
       title: 'Best Practices',
       description: 'Tips and recommendations for optimal API usage.',
+      url: '/docs/best-practices',
     },
     {
       icon: Shield,
       title: 'Authentication',
       description: 'Learn how to authenticate your requests securely.',
+      url: '/docs/authentication',
     },
   ];
 
@@ -40,41 +45,43 @@ export const DocsPage = () => {
           <div className="grid md:grid-cols-2 gap-6">
             {sections.map((section, index) => {
               const Icon = section.icon;
-              const Wrapper = section.url ? 'a' : 'div';
-              const wrapperProps = section.url
-                ? {
-                    href: section.url,
-                    target: '_blank',
-                    rel: 'noopener noreferrer',
-                  }
-                : {};
+              
+              const content = (
+                <Card className="cursor-pointer hover:border-primary/50 transition-colors hover:shadow-lg h-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-1">{section.title}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {section.description}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+
+              if (section.external) {
+                return (
+                  <a
+                    key={index}
+                    href={section.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    {content}
+                  </a>
+                );
+              }
 
               return (
-                <Wrapper
-                  key={index}
-                  {...wrapperProps}
-                  className="block"
-                >
-                  <Card
-                    className={`cursor-pointer hover:border-primary/50 transition-colors ${
-                      section.url ? 'hover:shadow-lg' : ''
-                    }`}
-                  >
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <Icon className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold mb-1">{section.title}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {section.description}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Wrapper>
+                <Link key={index} to={section.url!} className="block">
+                  {content}
+                </Link>
               );
             })}
           </div>

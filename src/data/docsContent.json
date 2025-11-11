@@ -1,0 +1,114 @@
+{
+  "gettingStarted": {
+    "title": "Getting Started",
+    "slug": "getting-started",
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Introduction",
+        "content": "PicNode API provides access to a vast collection of images from places, football clubs, and icons. This guide will help you get started with integrating our APIs into your application."
+      },
+      {
+        "id": "base-url",
+        "title": "Base URL",
+        "content": "All API requests should be made to: https://a2insights.com.br/api/picnode"
+      },
+      {
+        "id": "quick-start",
+        "title": "Quick Start",
+        "content": "To start using the API, you'll need an authentication token. Once you have your token, you can make requests to any of our available endpoints.",
+        "code": "curl -X GET \"https://a2insights.com.br/api/picnode/places\" \\\n  -H \"Authorization: Bearer YOUR_TOKEN\" \\\n  -H \"Content-Type: application/json\""
+      },
+      {
+        "id": "available-endpoints",
+        "title": "Available Endpoints",
+        "content": "We provide three main endpoints:\n- /places - Geographic locations with images\n- /football-clubs - Football club logos and images\n- /thing-icos - Icon collection"
+      },
+      {
+        "id": "response-format",
+        "title": "Response Format",
+        "content": "All responses are returned in JSON format with pagination support. Each response includes data, links for navigation, and metadata about the current page.",
+        "code": "{\n  \"data\": [...],\n  \"links\": {\n    \"first\": \"...\",\n    \"last\": \"...\",\n    \"prev\": null,\n    \"next\": \"...\"\n  },\n  \"meta\": {\n    \"current_page\": 1,\n    \"last_page\": 10,\n    \"per_page\": 15,\n    \"total\": 150\n  }\n}"
+      }
+    ]
+  },
+  "bestPractices": {
+    "title": "Best Practices",
+    "slug": "best-practices",
+    "sections": [
+      {
+        "id": "rate-limiting",
+        "title": "Rate Limiting",
+        "content": "To ensure fair usage and system stability, we implement rate limiting. We recommend implementing exponential backoff for retries and caching responses when possible."
+      },
+      {
+        "id": "error-handling",
+        "title": "Error Handling",
+        "content": "Always implement proper error handling in your application. Our API returns standard HTTP status codes and detailed error messages in the response body.",
+        "code": "try {\n  const response = await fetch(url, options);\n  if (!response.ok) {\n    throw new Error(`HTTP ${response.status}`);\n  }\n  const data = await response.json();\n} catch (error) {\n  console.error('API Error:', error);\n}"
+      },
+      {
+        "id": "pagination",
+        "title": "Efficient Pagination",
+        "content": "Use the page parameter to navigate through results. The API returns metadata including current_page, last_page, and total items to help you implement efficient pagination.",
+        "code": "// Request page 2\nfetch('https://a2insights.com.br/api/picnode/places?page=2', {\n  headers: {\n    'Authorization': 'Bearer YOUR_TOKEN'\n  }\n})"
+      },
+      {
+        "id": "media-optimization",
+        "title": "Media Optimization",
+        "content": "Request specific media conversions using the media_conversions parameter to get optimized image sizes for your use case. Available sizes: xs, sm, md, lg, preview, thumbnail, webp.",
+        "code": "// Request only small and medium conversions\nfetch('https://a2insights.com.br/api/picnode/places?media_conversions=sm,md&has_media=1')"
+      },
+      {
+        "id": "caching",
+        "title": "Implement Caching",
+        "content": "Cache API responses to reduce redundant requests and improve application performance. Set appropriate cache expiration times based on your data freshness requirements."
+      },
+      {
+        "id": "search-optimization",
+        "title": "Search Optimization",
+        "content": "Use the filter[search] parameter efficiently. Implement debouncing on the client side to avoid excessive API calls during user input.",
+        "code": "// Debounced search implementation\nconst debouncedSearch = useDebounce(searchTerm, 500);\n\nuseEffect(() => {\n  if (debouncedSearch) {\n    fetchResults(debouncedSearch);\n  }\n}, [debouncedSearch]);"
+      }
+    ]
+  },
+  "authentication": {
+    "title": "Authentication",
+    "slug": "authentication",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Authentication Overview",
+        "content": "PicNode API uses Bearer token authentication. You must include your authentication token in the Authorization header of every request."
+      },
+      {
+        "id": "obtaining-token",
+        "title": "Obtaining Your Token",
+        "content": "You can find your authentication token in your dashboard under the Tokens section. Keep your token secure and never expose it in client-side code or public repositories."
+      },
+      {
+        "id": "using-token",
+        "title": "Using Your Token",
+        "content": "Include your token in the Authorization header with the Bearer scheme for every API request.",
+        "code": "fetch('https://a2insights.com.br/api/picnode/places', {\n  headers: {\n    'Authorization': 'Bearer YOUR_TOKEN_HERE',\n    'Content-Type': 'application/json'\n  }\n})"
+      },
+      {
+        "id": "security-best-practices",
+        "title": "Security Best Practices",
+        "content": "• Never commit tokens to version control\n• Store tokens in environment variables\n• Rotate tokens periodically\n• Use different tokens for development and production\n• Implement token refresh mechanisms"
+      },
+      {
+        "id": "token-errors",
+        "title": "Handling Authentication Errors",
+        "content": "If your token is invalid or expired, the API will return a 401 Unauthorized response. Always check for this status code and handle it appropriately in your application.",
+        "code": "if (response.status === 401) {\n  // Token invalid or expired\n  // Redirect to login or refresh token\n  console.error('Authentication failed');\n}"
+      },
+      {
+        "id": "server-side",
+        "title": "Server-Side Requests",
+        "content": "For server-side applications, store your token in environment variables and never expose it to the client side. Make API calls from your backend to keep tokens secure.",
+        "code": "// Node.js example\nconst token = process.env.PICNODE_API_TOKEN;\n\nconst response = await fetch(url, {\n  headers: {\n    'Authorization': `Bearer ${token}`\n  }\n});"
+      }
+    ]
+  }
+}

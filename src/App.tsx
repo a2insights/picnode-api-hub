@@ -14,6 +14,9 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/Dashboard/ProfilePage";
+import { GettingStarted } from "./pages/GettingStarted";
+import { BestPractices } from "./pages/BestPractices";
+import { Authentication } from "./pages/Authentication";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +30,12 @@ const App = () => (
           <Route path="/" element={<Landing />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<LoginPage />} />
+          
+          {/* Public Documentation Routes */}
+          <Route path="/docs/getting-started" element={<GettingStarted />} />
+          <Route path="/docs/best-practices" element={<BestPractices />} />
+          <Route path="/docs/authentication" element={<Authentication />} />
+          
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />}>
               <Route index element={<DashboardOverview />} />
