@@ -16,7 +16,7 @@ const PlaceCard = ({ asset, onOpen }: { asset: Asset; onOpen?: () => void }) => 
       className="overflow-hidden cursor-pointer border-border hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 h-full"
       onClick={onOpen}
     >
-      <div className="relative w-full h-[240px]">
+      <div className="relative w-full h-[180px]">
         <img
           src={asset.image}
           alt={asset.name}

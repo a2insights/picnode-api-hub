@@ -228,10 +228,10 @@ const ApiPlayground = () => {
 
           {loading ? (
             <div className="overflow-hidden" ref={emblaRef}>
-              <div className="flex gap-3">
+              <div className="grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]">
                 {Array.from({ length: 15 }).map((_, index) => (
-                  <div key={index} className="flex-[0_0_180px]">
-                    <Card className="overflow-hidden border-border h-[240px]">
+                  <div key={index}>
+                    <Card className={`overflow-hidden border-border ${selectedApi === 'api.thing-icos' ? 'aspect-square' : 'h-[180px]'}`}>
                       <Skeleton className="w-full h-full" />
                     </Card>
                   </div>
@@ -261,18 +261,23 @@ const ApiPlayground = () => {
               )}
 
               <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
-                <div className="flex gap-3">
+                <div className="grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]">
                   {assets.map((asset, index) => (
                     <motion.div
                       key={asset.id}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, delay: index * 0.02 }}
-                      className="flex-[0_0_180px]"
                     >
                       {selectedApi === "api.places" ? (
                         <PlaceCard
                           asset={asset}
+                          onOpen={() => openModal(asset.image, asset.name)}
+                        />
+                      ) : selectedApi === "api.thing-icos" ? (
+                        <DefaultCard
+                          asset={asset}
+                          variant="square"
                           onOpen={() => openModal(asset.image, asset.name)}
                         />
                       ) : (

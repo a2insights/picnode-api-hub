@@ -9,14 +9,16 @@ interface Asset {
   raw?: any;
 }
 
-const DefaultCard = ({ asset, onOpen }: { asset: Asset; onOpen?: () => void }) => {
+const DefaultCard = ({ asset, onOpen, variant = 'default' }: { asset: Asset; onOpen?: () => void; variant?: 'default' | 'square' }) => {
+  const isSquare = variant === 'square';
+  
   return (
     <Card className="group cursor-pointer overflow-hidden border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 h-full" onClick={onOpen}>
-      <div className="relative h-[240px] overflow-hidden">
+      <div className={`relative overflow-hidden ${isSquare ? 'aspect-square' : 'h-[180px]'}`}>
         <img
           src={asset.image}
           alt={asset.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className={`w-full h-full transition-transform duration-500 group-hover:scale-110 ${isSquare ? 'object-contain p-4 bg-background/50' : 'object-contain'}`}
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
