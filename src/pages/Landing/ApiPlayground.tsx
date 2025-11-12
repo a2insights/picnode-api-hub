@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Flag, Sparkles, Search } from "lucide-react";
+import { MapPin, Flag, Sparkles, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -17,6 +17,7 @@ import {
 } from "@/services/picnodeService";
 import { useDebounce } from "@/hooks/use-debounce";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import useEmblaCarousel from "embla-carousel-react";
 
 import PlaceCard from "@/components/PlaceCard";
 import DefaultCard from "@/components/DefaultCard";
@@ -39,6 +40,12 @@ const ApiPlayground = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const debouncedSearch = useDebounce(searchTerm, 500);
+  
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: false, 
+    dragFree: true,
+    containScroll: "trimSnaps"
+  });
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState<{
@@ -144,7 +151,11 @@ const ApiPlayground = () => {
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
     fetchAssets(page);
+    emblaApi?.scrollTo(0);
   };
+
+  const scrollPrev = () => emblaApi?.scrollPrev();
+  const scrollNext = () => emblaApi?.scrollNext();
 
   const getApiIcon = (apiId: string) => {
     if (apiId === "api.thing-icos") return Sparkles;
@@ -216,86 +227,73 @@ const ApiPlayground = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 blur-3xl -z-10" />
 
           {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
-              {Array.from({ length: 15 }).map((_, index) => (
-                <Card key={index} className="overflow-hidden border-border">
-                  <Skeleton className="aspect-square w-full" />
-                </Card>
-              ))}
+            <div className="overflow-hidden" ref={emblaRef}>
+              <div className="flex gap-3">
+                {Array.from({ length: 15 }).map((_, index) => (
+                  <div key={index} className="flex-[0_0_180px]">
+                    <Card className="overflow-hidden border-border h-[240px]">
+                      <Skeleton className="w-full h-full" />
+                    </Card>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : assets.length > 0 ? (
-            <>
-              {selectedApi === "api.places" ? (
-                <div className="mb-8">
-                  <ResponsiveMasonry
-                    columnsCountBreakPoints={{
-                      350: 2,
-                      750: 3,
-                      900: 4,
-                      1200: 5,
-                    }}
-                  >
-                    <Masonry gutter="16px">
-                      {assets.map((asset) => (
-                        <motion.div
-                          key={asset.id}
-                          initial={{ opacity: 0, y: 12 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.35 }}
-                          viewport={{ once: true }}
-                        >
-                          <PlaceCard
-                            asset={asset}
-                            onOpen={() => openModal(asset.image, asset.name)}
-                          />
-                        </motion.div>
-                      ))}
-                    </Masonry>
-                  </ResponsiveMasonry>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+            <div className="relative group">
+              {totalPages > 1 && currentPage > 1 && (
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background/90 backdrop-blur-sm border-2 border-primary shadow-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100"
+                  aria-label="Previous page"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+              )}
+              
+              {totalPages > 1 && currentPage < totalPages && (
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background/90 backdrop-blur-sm border-2 border-primary shadow-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100"
+                  aria-label="Next page"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              )}
+
+              <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
+                <div className="flex gap-3">
                   {assets.map((asset, index) => (
                     <motion.div
                       key={asset.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: index * 0.02 }}
-                      viewport={{ once: true }}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3, delay: index * 0.02 }}
+                      className="flex-[0_0_180px]"
                     >
-                      <DefaultCard
-                        asset={asset}
-                        onOpen={() => openModal(asset.image, asset.name)}
-                      />
+                      {selectedApi === "api.places" ? (
+                        <PlaceCard
+                          asset={asset}
+                          onOpen={() => openModal(asset.image, asset.name)}
+                        />
+                      ) : (
+                        <DefaultCard
+                          asset={asset}
+                          onOpen={() => openModal(asset.image, asset.name)}
+                        />
+                      )}
                     </motion.div>
                   ))}
                 </div>
-              )}
+              </div>
 
               {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    {t("playground.previous")}
-                  </Button>
+                <div className="flex items-center justify-center gap-2 mt-6">
                   <span className="text-sm text-muted-foreground px-4">
                     {currentPage} / {totalPages}
                   </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    {t("playground.next")}
-                  </Button>
                 </div>
               )}
-            </>
+            </div>
           ) : (
             <div className="text-center py-20">
               <p className="text-muted-foreground">

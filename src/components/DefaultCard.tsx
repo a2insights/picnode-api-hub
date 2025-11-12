@@ -11,8 +11,8 @@ interface Asset {
 
 const DefaultCard = ({ asset, onOpen }: { asset: Asset; onOpen?: () => void }) => {
   return (
-    <Card className="group cursor-pointer overflow-hidden border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20" onClick={onOpen}>
-      <div className="relative aspect-square overflow-hidden">
+    <Card className="group cursor-pointer overflow-hidden border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 h-full" onClick={onOpen}>
+      <div className="relative h-[240px] overflow-hidden">
         <img
           src={asset.image}
           alt={asset.name}
@@ -20,11 +20,11 @@ const DefaultCard = ({ asset, onOpen }: { asset: Asset; onOpen?: () => void }) =
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-          <h3 className="text-foreground font-semibold text-sm truncate">
+        <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+          <h3 className="text-foreground font-semibold text-xs truncate">
             {asset.name}
           </h3>
-          <p className="text-muted-foreground text-xs">
+          <p className="text-muted-foreground text-[10px]">
             {asset.type}
           </p>
         </div>
