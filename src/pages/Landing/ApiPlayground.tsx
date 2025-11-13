@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Flag, Sparkles, Search, Loader2 } from "lucide-react";
+import { MapPin, Flag, Sparkles, Search, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -16,7 +16,7 @@ import {
   type MediaResource,
 } from "@/services/picnodeService";
 import { useDebounce } from "@/hooks/use-debounce";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import useEmblaCarousel from "embla-carousel-react";
 
 import PlaceCard from "@/components/PlaceCard";
 import DefaultCard from "@/components/DefaultCard";
@@ -41,7 +41,15 @@ const ApiPlayground = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const debouncedSearch = useDebounce(searchTerm, 500);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
+  
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: false, 
+    dragFree: true,
+    containScroll: "trimSnaps"
+  });
+
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState<{
@@ -151,6 +159,18 @@ const ApiPlayground = () => {
     }
   }, [loadingMore, hasMore, currentPage, totalPages]);
 
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+    
+    // Detectar quando está próximo do final para carregar mais
+    const scrollProgress = emblaApi.scrollProgress();
+    if (scrollProgress > 0.8 && hasMore && !loadingMore) {
+      loadMore();
+    }
+  }, [emblaApi, hasMore, loadingMore, loadMore]);
+
   useEffect(() => {
     setCurrentPage(1);
     setAssets([]);
@@ -160,26 +180,30 @@ const ApiPlayground = () => {
   }, [selectedApi, debouncedSearch]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loadingMore) {
-          loadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [hasMore, loadingMore, loadMore]);
+    if (!emblaApi) return;
+    
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("scroll", onSelect);
+    
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("scroll", onSelect);
+    };
+  }, [emblaApi, onSelect]);
 
   const handleApiChange = (apiId: string) => {
     setSelectedApi(apiId);
     setSearchTerm("");
   };
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
 
   const getApiIcon = (apiId: string) => {
     if (apiId === "api.thing-icos") return Sparkles;
@@ -251,40 +275,41 @@ const ApiPlayground = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 blur-3xl -z-10" />
 
           {loading ? (
-            <div className="flex justify-center">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 max-w-full">
-                {Array.from({ length: 12 }).map((_, index) => (
-                  <Card key={index} className="overflow-hidden border-border aspect-square">
-                    <Skeleton className="w-full h-full" />
-                  </Card>
+            <div className="overflow-hidden" ref={emblaRef}>
+              <div className="grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]">
+                {Array.from({ length: 18 }).map((_, index) => (
+                  <div key={index}>
+                    <Card className={`overflow-hidden border-border ${selectedApi === 'api.thing-icos' ? 'aspect-square' : 'h-[180px]'}`}>
+                      <Skeleton className="w-full h-full" />
+                    </Card>
+                  </div>
                 ))}
               </div>
             </div>
           ) : assets.length > 0 ? (
-            <div className="flex flex-col items-center">
-              {selectedApi === "api.places" ? (
-                <ResponsiveMasonry
-                  columnsCountBreakPoints={{ 350: 2, 640: 3, 768: 4, 1024: 5, 1280: 6 }}
-                  className="w-full"
+            <div className="relative group">
+              {canScrollPrev && (
+                <button
+                  onClick={scrollPrev}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-background/95 backdrop-blur-sm border-2 border-primary shadow-xl hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100"
+                  aria-label="Previous"
                 >
-                  <Masonry gutter="12px">
-                    {assets.map((asset, index) => (
-                      <motion.div
-                        key={asset.id}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3) }}
-                      >
-                        <PlaceCard
-                          asset={asset}
-                          onOpen={() => openModal(asset.image, asset.name)}
-                        />
-                      </motion.div>
-                    ))}
-                  </Masonry>
-                </ResponsiveMasonry>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 w-full">
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+              )}
+              
+              {canScrollNext && (
+                <button
+                  onClick={scrollNext}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-background/95 backdrop-blur-sm border-2 border-primary shadow-xl hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100"
+                  aria-label="Next"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              )}
+
+              <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
+                <div className="grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]">
                   {assets.map((asset, index) => (
                     <motion.div
                       key={asset.id}
@@ -292,7 +317,12 @@ const ApiPlayground = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3) }}
                     >
-                      {selectedApi === "api.thing-icos" ? (
+                      {selectedApi === "api.places" ? (
+                        <PlaceCard
+                          asset={asset}
+                          onOpen={() => openModal(asset.image, asset.name)}
+                        />
+                      ) : selectedApi === "api.thing-icos" ? (
                         <DefaultCard
                           asset={asset}
                           variant="square"
@@ -306,19 +336,14 @@ const ApiPlayground = () => {
                       )}
                     </motion.div>
                   ))}
+                  
+                  {loadingMore && (
+                    <div className="flex items-center justify-center col-span-1 row-span-3">
+                      <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                    </div>
+                  )}
                 </div>
-              )}
-
-              {loadingMore && (
-                <div className="flex items-center justify-center py-8">
-                  <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                  <span className="ml-2 text-sm text-muted-foreground">
-                    {t("playground.loadingMore", "Carregando mais...")}
-                  </span>
-                </div>
-              )}
-
-              <div ref={loadMoreRef} className="h-4 w-full" />
+              </div>
             </div>
           ) : (
             <div className="text-center py-20">

@@ -13,14 +13,14 @@ interface Asset {
 const PlaceCard = ({ asset, onOpen }: { asset: Asset; onOpen?: () => void }) => {
   return (
     <Card
-      className="overflow-hidden cursor-pointer border-border hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 group"
+      className="overflow-hidden cursor-pointer border-border hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 h-full group"
       onClick={onOpen}
     >
-      <div className="relative w-full">
+      <div className="relative w-full h-[180px]">
         <img
           src={asset.image}
           alt={asset.name}
-          className="w-full h-auto object-cover block transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-full object-cover block transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
         />
 
