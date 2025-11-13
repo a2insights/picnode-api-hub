@@ -78,7 +78,7 @@ export const picnodeService = {
         page: params?.page,
         has_media: params?.has_media ? 1 : undefined,
         media_conversions: params?.media_conversions || 'sm,md,lg',
-        include: 'media',
+        include: 'media'
       },
     });
     return response.data;

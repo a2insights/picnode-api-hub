@@ -22,7 +22,7 @@ const PlaceCard = ({ asset, onOpen }: { asset: Asset; onOpen?: () => void }) => 
           alt={asset.name}
           className="w-full h-auto object-cover block transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
-          style={{ maxHeight: '400px', minHeight: '200px' }}
+          style={{ height: '120px' }}
         />
 
         <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-background/95 via-background/60 to-transparent">

@@ -1,8 +1,16 @@
 // src/components/ApiPlayground.tsx
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Flag, Sparkles, Search, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  MapPin,
+  Flag,
+  Sparkles,
+  Search,
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -30,6 +38,45 @@ interface Asset {
   raw?: any;
 }
 
+const AssetSkeleton = ({ variant }: { variant: "place" | "default" }) => (
+  <Card className="overflow-hidden border-border">
+    <Skeleton
+      className={
+        variant === "place"
+          ? "h-[120px] w-auto min-w-[220px]"
+          : "aspect-square w-full h-[120px]"
+      }
+    />
+  </Card>
+);
+
+const SkeletonGrid = ({
+  variant,
+  count = 15,
+}: {
+  variant: "place" | "default";
+  count?: number;
+}) => (
+  <div className="flex gap-3">
+    {Array.from({ length: count }).map((_, i) => (
+      <div
+        key={i}
+        className={`flex-shrink-0 ${
+          variant === "place" ? "min-w-[220px]" : "w-[150px]"
+        }`}
+      >
+        <AssetSkeleton variant={variant} />
+      </div>
+    ))}
+  </div>
+);
+
+const InlineLoader = () => (
+  <div className="flex-shrink-0 w-[120px] flex items-center justify-center">
+    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+  </div>
+);
+
 const ApiPlayground = () => {
   const { t } = useTranslation();
   const [selectedApi, setSelectedApi] = useState<string>("api.places");
@@ -38,14 +85,13 @@ const ApiPlayground = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const debouncedSearch = useDebounce(searchTerm, 500);
-  
-  const [emblaRef, emblaApi] = useEmblaCarousel({ 
-    loop: false, 
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: false,
     dragFree: true,
-    containScroll: "trimSnaps"
+    containScroll: "trimSnaps",
   });
 
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -77,7 +123,6 @@ const ApiPlayground = () => {
     if (Array.isArray(media)) {
       if (media.length === 0) return fallback;
       const firstMedia = media[0];
-      // USAR preview conforme solicitado
       return (
         firstMedia.conversions?.preview ||
         firstMedia.conversions?.md ||
@@ -86,16 +131,18 @@ const ApiPlayground = () => {
       );
     }
 
-    return media.conversions?.preview || media.conversions?.md || media.url || fallback;
+    return (
+      media.conversions?.preview ||
+      media.conversions?.md ||
+      media.url ||
+      fallback
+    );
   };
 
   const fetchAssets = async (page = 1, append = false) => {
-    if (append) {
-      setLoadingMore(true);
-    } else {
-      setLoading(true);
-    }
-    
+    if (append) setLoadingMore(true);
+    else setLoading(true);
+
     try {
       const params = {
         search: debouncedSearch || undefined,
@@ -136,15 +183,12 @@ const ApiPlayground = () => {
         }));
       }
 
-      if (append) {
-        setAssets(prev => [...prev, ...transformedAssets]);
-      } else {
-        setAssets(transformedAssets);
-      }
-      
-      setTotalPages(response?.meta?.last_page || 1);
-      setCurrentPage(response?.meta?.current_page || 1);
-      setHasMore(response?.meta?.current_page < response?.meta?.last_page);
+      if (append) setAssets((prev) => [...prev, ...transformedAssets]);
+      else setAssets(transformedAssets);
+
+      const meta = response?.meta;
+      setCurrentPage(meta?.current_page || 1);
+      setHasMore((meta?.current_page || 1) < (meta?.last_page || 1));
     } catch (error) {
       console.error("Error fetching assets:", error);
     } finally {
@@ -154,56 +198,49 @@ const ApiPlayground = () => {
   };
 
   const loadMore = useCallback(() => {
-    if (!loadingMore && hasMore && currentPage < totalPages) {
-      fetchAssets(currentPage + 1, true);
-    }
-  }, [loadingMore, hasMore, currentPage, totalPages]);
+    if (!loadingMore && hasMore) fetchAssets(currentPage + 1, true);
+  }, [loadingMore, hasMore, currentPage]);
+
+  const onScroll = useCallback(() => {
+    if (!emblaApi) return;
+    const scrollProgress = emblaApi.scrollProgress();
+    if (scrollProgress > 0.8 && hasMore && !loadingMore) loadMore();
+  }, [emblaApi, hasMore, loadingMore, loadMore]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setCanScrollPrev(emblaApi.canScrollPrev());
     setCanScrollNext(emblaApi.canScrollNext());
-    
-    // Detectar quando está próximo do final para carregar mais
-    const scrollProgress = emblaApi.scrollProgress();
-    if (scrollProgress > 0.8 && hasMore && !loadingMore) {
-      loadMore();
-    }
-  }, [emblaApi, hasMore, loadingMore, loadMore]);
+  }, [emblaApi]);
 
   useEffect(() => {
     setCurrentPage(1);
     setAssets([]);
     setHasMore(true);
     fetchAssets(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedApi, debouncedSearch]);
 
   useEffect(() => {
     if (!emblaApi) return;
-    
     onSelect();
+    onScroll();
     emblaApi.on("select", onSelect);
-    emblaApi.on("scroll", onSelect);
-    
+    emblaApi.on("scroll", onScroll);
+    emblaApi.on("reInit", onSelect);
     return () => {
       emblaApi.off("select", onSelect);
-      emblaApi.off("scroll", onSelect);
+      emblaApi.off("scroll", onScroll);
+      emblaApi.off("reInit", onSelect);
     };
-  }, [emblaApi, onSelect]);
+  }, [emblaApi, onSelect, onScroll]);
 
   const handleApiChange = (apiId: string) => {
     setSelectedApi(apiId);
     setSearchTerm("");
   };
 
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
-
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   const getApiIcon = (apiId: string) => {
     if (apiId === "api.thing-icos") return Sparkles;
@@ -212,9 +249,23 @@ const ApiPlayground = () => {
     return MapPin;
   };
 
+  const getVariant = (): "place" | "default" => {
+    if (selectedApi === "api.places") return "place";
+    return "default";
+  };
+
+  const getCardWidth = (): string => {
+    if (selectedApi === "api.places") return "min-w-[220px]";
+    return "w-[150px]";
+  };
+
+  const variant = getVariant();
+  const cardWidth = getCardWidth();
+
   return (
     <section className="py-24 px-4 bg-gradient-to-b from-background via-accent/5 to-background overflow-hidden">
       <div className="container mx-auto max-w-7xl">
+        {/* Título e busca */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -253,7 +304,7 @@ const ApiPlayground = () => {
 
           <div className="max-w-md mx-auto mb-12">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder={t("playground.search")}
@@ -275,30 +326,11 @@ const ApiPlayground = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 blur-3xl -z-10" />
 
           {loading ? (
-            <div className="flex justify-center">
-              <div className="overflow-hidden" ref={emblaRef}>
-                <div className={selectedApi === "api.places" 
-                  ? "flex gap-3" 
-                  : "grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]"
-                }>
-                  {Array.from({ length: 18 }).map((_, index) => (
-                    <div key={index} className={selectedApi === "api.places" ? "w-[240px]" : ""}>
-                      <Card className={`overflow-hidden border-border ${
-                        selectedApi === 'api.thing-icos' 
-                          ? 'aspect-square' 
-                          : selectedApi === 'api.places'
-                          ? 'h-[300px]'
-                          : 'h-[180px]'
-                      }`}>
-                        <Skeleton className="w-full h-full" />
-                      </Card>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <div className="overflow-hidden" ref={emblaRef}>
+              <SkeletonGrid variant={variant} />
             </div>
           ) : assets.length > 0 ? (
-            <div className="relative group flex justify-center">
+            <div className="relative group">
               {canScrollPrev && (
                 <button
                   onClick={scrollPrev}
@@ -308,7 +340,6 @@ const ApiPlayground = () => {
                   <ChevronLeft className="w-6 h-6" />
                 </button>
               )}
-              
               {canScrollNext && (
                 <button
                   onClick={scrollNext}
@@ -319,61 +350,38 @@ const ApiPlayground = () => {
                 </button>
               )}
 
-              <div className="overflow-hidden cursor-grab active:cursor-grabbing max-w-full" ref={emblaRef}>
-                {selectedApi === "api.places" ? (
-                  <div className="flex gap-3">
-                    {assets.map((asset, index) => (
-                      <motion.div
-                        key={asset.id}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3) }}
-                        className="w-[240px] flex-shrink-0"
-                      >
+              <div
+                className="overflow-hidden cursor-grab active:cursor-grabbing"
+                ref={emblaRef}
+              >
+                <div className="flex gap-3">
+                  {assets.map((asset, index) => (
+                    <motion.div
+                      key={asset.id}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{
+                        duration: 0.3,
+                        delay: Math.min(index * 0.02, 0.3),
+                      }}
+                      className={`flex-shrink-0 ${cardWidth}`}
+                    >
+                      {variant === "place" ? (
                         <PlaceCard
                           asset={asset}
                           onOpen={() => openModal(asset.image, asset.name)}
                         />
-                      </motion.div>
-                    ))}
-                    
-                    {loadingMore && (
-                      <div className="w-[240px] flex-shrink-0 flex items-center justify-center">
-                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]">
-                    {assets.map((asset, index) => (
-                      <motion.div
-                        key={asset.id}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3) }}
-                      >
-                        {selectedApi === "api.thing-icos" ? (
-                          <DefaultCard
-                            asset={asset}
-                            variant="square"
-                            onOpen={() => openModal(asset.image, asset.name)}
-                          />
-                        ) : (
-                          <DefaultCard
-                            asset={asset}
-                            onOpen={() => openModal(asset.image, asset.name)}
-                          />
-                        )}
-                      </motion.div>
-                    ))}
-                    
-                    {loadingMore && (
-                      <div className="flex items-center justify-center col-span-1 row-span-3">
-                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                      </div>
-                    )}
-                  </div>
-                )}
+                      ) : (
+                        <DefaultCard
+                          asset={asset}
+                          variant={variant}
+                          onOpen={() => openModal(asset.image, asset.name)}
+                        />
+                      )}
+                    </motion.div>
+                  ))}
+                  {loadingMore && <InlineLoader />}
+                </div>
               </div>
             </div>
           ) : (
@@ -437,17 +445,17 @@ const ApiPlayground = () => {
             );
           })}
         </motion.div>
-      </div>
 
-      <AnimatePresence>
-        {modalOpen && modalImage && (
-          <ImageModal
-            src={modalImage.src}
-            alt={modalImage.alt}
-            onClose={closeModal}
-          />
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {modalOpen && modalImage && (
+            <ImageModal
+              src={modalImage.src}
+              alt={modalImage.alt}
+              onClose={closeModal}
+            />
+          )}
+        </AnimatePresence>
+      </div>
     </section>
   );
 };

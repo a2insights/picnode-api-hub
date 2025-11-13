@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getBaseUrl = () => {
   if (window.location.hostname === "localhost") {
-    return "http://localhost/api/picnode";
+    // return "http://localhost/api/picnode";
   }
   return "https://a2insights.com.br/api/picnode";
 };

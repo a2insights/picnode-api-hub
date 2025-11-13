@@ -1,5 +1,5 @@
 // src/components/DefaultCard.tsx
-import { Card } from '@/components/ui/card';
+import { Card } from "@/components/ui/card";
 
 interface Asset {
   id: string;
@@ -9,16 +9,23 @@ interface Asset {
   raw?: any;
 }
 
-const DefaultCard = ({ asset, onOpen, variant = 'default' }: { asset: Asset; onOpen?: () => void; variant?: 'default' | 'square' }) => {
-  const isSquare = variant === 'square';
-  
+const DefaultCard = ({
+  asset,
+  onOpen,
+}: {
+  asset: Asset;
+  onOpen?: () => void;
+}) => {
   return (
-    <Card className="group cursor-pointer overflow-hidden border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 h-full" onClick={onOpen}>
-      <div className={`relative overflow-hidden ${isSquare ? 'aspect-square' : 'h-[180px]'}`}>
+    <Card
+      className="group cursor-pointer overflow-hidden border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 h-full"
+      onClick={onOpen}
+    >
+      <div className="relative overflow-hidden h-[120px]">
         <img
           src={asset.image}
           alt={asset.name}
-          className={`w-full h-full transition-transform duration-500 group-hover:scale-110 ${isSquare ? 'object-contain p-4 bg-background/50' : 'object-contain'}`}
+          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -26,9 +33,7 @@ const DefaultCard = ({ asset, onOpen, variant = 'default' }: { asset: Asset; onO
           <h3 className="text-foreground font-semibold text-xs truncate">
             {asset.name}
           </h3>
-          <p className="text-muted-foreground text-[10px]">
-            {asset.type}
-          </p>
+          <p className="text-muted-foreground text-[10px]">{asset.type}</p>
         </div>
       </div>
     </Card>
