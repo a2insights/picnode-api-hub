@@ -275,19 +275,30 @@ const ApiPlayground = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 blur-3xl -z-10" />
 
           {loading ? (
-            <div className="overflow-hidden" ref={emblaRef}>
-              <div className="grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]">
-                {Array.from({ length: 18 }).map((_, index) => (
-                  <div key={index}>
-                    <Card className={`overflow-hidden border-border ${selectedApi === 'api.thing-icos' ? 'aspect-square' : 'h-[180px]'}`}>
-                      <Skeleton className="w-full h-full" />
-                    </Card>
-                  </div>
-                ))}
+            <div className="flex justify-center">
+              <div className="overflow-hidden" ref={emblaRef}>
+                <div className={selectedApi === "api.places" 
+                  ? "flex gap-3" 
+                  : "grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]"
+                }>
+                  {Array.from({ length: 18 }).map((_, index) => (
+                    <div key={index} className={selectedApi === "api.places" ? "w-[240px]" : ""}>
+                      <Card className={`overflow-hidden border-border ${
+                        selectedApi === 'api.thing-icos' 
+                          ? 'aspect-square' 
+                          : selectedApi === 'api.places'
+                          ? 'h-[300px]'
+                          : 'h-[180px]'
+                      }`}>
+                        <Skeleton className="w-full h-full" />
+                      </Card>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           ) : assets.length > 0 ? (
-            <div className="relative group">
+            <div className="relative group flex justify-center">
               {canScrollPrev && (
                 <button
                   onClick={scrollPrev}
@@ -308,41 +319,61 @@ const ApiPlayground = () => {
                 </button>
               )}
 
-              <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
-                <div className="grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]">
-                  {assets.map((asset, index) => (
-                    <motion.div
-                      key={asset.id}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3) }}
-                    >
-                      {selectedApi === "api.places" ? (
+              <div className="overflow-hidden cursor-grab active:cursor-grabbing max-w-full" ref={emblaRef}>
+                {selectedApi === "api.places" ? (
+                  <div className="flex gap-3">
+                    {assets.map((asset, index) => (
+                      <motion.div
+                        key={asset.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3) }}
+                        className="w-[240px] flex-shrink-0"
+                      >
                         <PlaceCard
                           asset={asset}
                           onOpen={() => openModal(asset.image, asset.name)}
                         />
-                      ) : selectedApi === "api.thing-icos" ? (
-                        <DefaultCard
-                          asset={asset}
-                          variant="square"
-                          onOpen={() => openModal(asset.image, asset.name)}
-                        />
-                      ) : (
-                        <DefaultCard
-                          asset={asset}
-                          onOpen={() => openModal(asset.image, asset.name)}
-                        />
-                      )}
-                    </motion.div>
-                  ))}
-                  
-                  {loadingMore && (
-                    <div className="flex items-center justify-center col-span-1 row-span-3">
-                      <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                    </div>
-                  )}
-                </div>
+                      </motion.div>
+                    ))}
+                    
+                    {loadingMore && (
+                      <div className="w-[240px] flex-shrink-0 flex items-center justify-center">
+                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]">
+                    {assets.map((asset, index) => (
+                      <motion.div
+                        key={asset.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3) }}
+                      >
+                        {selectedApi === "api.thing-icos" ? (
+                          <DefaultCard
+                            asset={asset}
+                            variant="square"
+                            onOpen={() => openModal(asset.image, asset.name)}
+                          />
+                        ) : (
+                          <DefaultCard
+                            asset={asset}
+                            onOpen={() => openModal(asset.image, asset.name)}
+                          />
+                        )}
+                      </motion.div>
+                    ))}
+                    
+                    {loadingMore && (
+                      <div className="flex items-center justify-center col-span-1 row-span-3">
+                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ) : (
