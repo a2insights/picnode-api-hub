@@ -1,8 +1,8 @@
 // src/components/ApiPlayground.tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Flag, Sparkles, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { MapPin, Flag, Sparkles, Search, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -17,7 +17,6 @@ import {
 } from "@/services/picnodeService";
 import { useDebounce } from "@/hooks/use-debounce";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import useEmblaCarousel from "embla-carousel-react";
 
 import PlaceCard from "@/components/PlaceCard";
 import DefaultCard from "@/components/DefaultCard";
@@ -36,16 +35,13 @@ const ApiPlayground = () => {
   const [selectedApi, setSelectedApi] = useState<string>("api.places");
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const debouncedSearch = useDebounce(searchTerm, 500);
-  
-  const [emblaRef, emblaApi] = useEmblaCarousel({ 
-    loop: false, 
-    dragFree: true,
-    containScroll: "trimSnaps"
-  });
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState<{
@@ -85,8 +81,13 @@ const ApiPlayground = () => {
     return media.conversions?.preview || media.conversions?.md || media.url || fallback;
   };
 
-  const fetchAssets = async (page = 1) => {
-    setLoading(true);
+  const fetchAssets = async (page = 1, append = false) => {
+    if (append) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+    }
+    
     try {
       const params = {
         search: debouncedSearch || undefined,
@@ -127,35 +128,58 @@ const ApiPlayground = () => {
         }));
       }
 
-      setAssets(transformedAssets);
+      if (append) {
+        setAssets(prev => [...prev, ...transformedAssets]);
+      } else {
+        setAssets(transformedAssets);
+      }
+      
       setTotalPages(response?.meta?.last_page || 1);
       setCurrentPage(response?.meta?.current_page || 1);
+      setHasMore(response?.meta?.current_page < response?.meta?.last_page);
     } catch (error) {
       console.error("Error fetching assets:", error);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
+  const loadMore = useCallback(() => {
+    if (!loadingMore && hasMore && currentPage < totalPages) {
+      fetchAssets(currentPage + 1, true);
+    }
+  }, [loadingMore, hasMore, currentPage, totalPages]);
+
   useEffect(() => {
     setCurrentPage(1);
+    setAssets([]);
+    setHasMore(true);
     fetchAssets(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedApi, debouncedSearch]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasMore, loadingMore, loadMore]);
 
   const handleApiChange = (apiId: string) => {
     setSelectedApi(apiId);
     setSearchTerm("");
   };
-
-  const handlePageChange = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    fetchAssets(page);
-    emblaApi?.scrollTo(0);
-  };
-
-  const scrollPrev = () => emblaApi?.scrollPrev();
-  const scrollNext = () => emblaApi?.scrollNext();
 
   const getApiIcon = (apiId: string) => {
     if (apiId === "api.thing-icos") return Sparkles;
@@ -227,54 +251,48 @@ const ApiPlayground = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 blur-3xl -z-10" />
 
           {loading ? (
-            <div className="overflow-hidden" ref={emblaRef}>
-              <div className="grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]">
-                {Array.from({ length: 15 }).map((_, index) => (
-                  <div key={index}>
-                    <Card className={`overflow-hidden border-border ${selectedApi === 'api.thing-icos' ? 'aspect-square' : 'h-[180px]'}`}>
-                      <Skeleton className="w-full h-full" />
-                    </Card>
-                  </div>
+            <div className="flex justify-center">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 max-w-full">
+                {Array.from({ length: 12 }).map((_, index) => (
+                  <Card key={index} className="overflow-hidden border-border aspect-square">
+                    <Skeleton className="w-full h-full" />
+                  </Card>
                 ))}
               </div>
             </div>
           ) : assets.length > 0 ? (
-            <div className="relative group">
-              {totalPages > 1 && currentPage > 1 && (
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background/90 backdrop-blur-sm border-2 border-primary shadow-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100"
-                  aria-label="Previous page"
+            <div className="flex flex-col items-center">
+              {selectedApi === "api.places" ? (
+                <ResponsiveMasonry
+                  columnsCountBreakPoints={{ 350: 2, 640: 3, 768: 4, 1024: 5, 1280: 6 }}
+                  className="w-full"
                 >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-              )}
-              
-              {totalPages > 1 && currentPage < totalPages && (
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background/90 backdrop-blur-sm border-2 border-primary shadow-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100"
-                  aria-label="Next page"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-              )}
-
-              <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
-                <div className="grid grid-rows-3 gap-3 grid-flow-col auto-cols-[180px]">
+                  <Masonry gutter="12px">
+                    {assets.map((asset, index) => (
+                      <motion.div
+                        key={asset.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3) }}
+                      >
+                        <PlaceCard
+                          asset={asset}
+                          onOpen={() => openModal(asset.image, asset.name)}
+                        />
+                      </motion.div>
+                    ))}
+                  </Masonry>
+                </ResponsiveMasonry>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 w-full">
                   {assets.map((asset, index) => (
                     <motion.div
                       key={asset.id}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3, delay: index * 0.02 }}
+                      transition={{ duration: 0.3, delay: Math.min(index * 0.02, 0.3) }}
                     >
-                      {selectedApi === "api.places" ? (
-                        <PlaceCard
-                          asset={asset}
-                          onOpen={() => openModal(asset.image, asset.name)}
-                        />
-                      ) : selectedApi === "api.thing-icos" ? (
+                      {selectedApi === "api.thing-icos" ? (
                         <DefaultCard
                           asset={asset}
                           variant="square"
@@ -289,15 +307,18 @@ const ApiPlayground = () => {
                     </motion.div>
                   ))}
                 </div>
-              </div>
+              )}
 
-              {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-6">
-                  <span className="text-sm text-muted-foreground px-4">
-                    {currentPage} / {totalPages}
+              {loadingMore && (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                  <span className="ml-2 text-sm text-muted-foreground">
+                    {t("playground.loadingMore", "Carregando mais...")}
                   </span>
                 </div>
               )}
+
+              <div ref={loadMoreRef} className="h-4 w-full" />
             </div>
           ) : (
             <div className="text-center py-20">
