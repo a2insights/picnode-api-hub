@@ -47,6 +47,14 @@ export interface ThingIcoResource {
   updated_at: string | null;
 }
 
+export interface CompanyResource {
+  id: number;
+  name: string;
+  media?: MediaResource | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   links: {
@@ -109,6 +117,24 @@ export const picnodeService = {
     media_conversions?: string;
   }): Promise<PaginatedResponse<ThingIcoResource>> {
     const response = await picnodeApi.get('/thing-icos', {
+      params: {
+        'filter[search]': params?.search,
+        page: params?.page,
+        has_media: params?.has_media ? 1 : undefined,
+        media_conversions: params?.media_conversions || 'sm,md,lg',
+        include: 'media',
+      },
+    });
+    return response.data;
+  },
+
+  async getCompanies(params?: {
+    search?: string;
+    page?: number;
+    has_media?: boolean;
+    media_conversions?: string;
+  }): Promise<PaginatedResponse<CompanyResource>> {
+    const response = await picnodeApi.get('/companies', {
       params: {
         'filter[search]': params?.search,
         page: params?.page,

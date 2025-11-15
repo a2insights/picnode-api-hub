@@ -6,6 +6,7 @@ import {
   MapPin,
   Flag,
   Sparkles,
+  Building2,
   Search,
   Loader2,
   ChevronLeft,
@@ -21,6 +22,7 @@ import {
   type PlaceResource,
   type FootballClubResource,
   type ThingIcoResource,
+  type CompanyResource,
   type MediaResource,
 } from "@/services/picnodeService";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -184,6 +186,15 @@ const ApiPlayground = () => {
           type: "icon",
           raw: ico,
         }));
+      } else if (apiAtRequestTime === "api.companies") {
+        response = await picnodeService.getCompanies(params);
+        transformedAssets = response.data.map((company: CompanyResource) => ({
+          id: company.id.toString(),
+          name: company.name,
+          image: getMediaUrl(company.media),
+          type: "company",
+          raw: company,
+        }));
       }
 
       // Ignore response if API changed during request
@@ -260,6 +271,7 @@ const ApiPlayground = () => {
     if (apiId === "api.thing-icos") return Sparkles;
     if (apiId === "api.places") return MapPin;
     if (apiId === "api.football-clubs") return Flag;
+    if (apiId === "api.companies") return Building2;
     return MapPin;
   };
 
