@@ -1,4 +1,4 @@
-import { Flag, MapPin, Box, Sparkles } from 'lucide-react';
+import { Flag, MapPin, Box, Sparkles, Building2 } from 'lucide-react';
 
 export const availableApis = [
   {
@@ -33,5 +33,16 @@ export const availableApis = [
     priceFactor: 1.5,
     availability: 'Available',
     color: 'from-blue-500 to-cyan-500',
+  },
+  {
+    id: 'api.companies',
+    name: 'Companies API',
+    description: 'Logos e informações de empresas ao redor do mundo.',
+    type: 'Images',
+    icon: Building2,
+    basePrice: 0.001,
+    priceFactor: 1.3,
+    availability: 'Available',
+    color: 'from-orange-500 to-red-500',
   },
 ];
