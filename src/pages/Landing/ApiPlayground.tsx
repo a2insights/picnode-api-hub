@@ -371,7 +371,7 @@ const ApiPlayground = () => {
                 <div className="flex gap-3">
                   {assets.map((asset, index) => (
                     <motion.div
-                      key={asset.id}
+                      key={`${selectedApi}-${asset.id}-${index}`}
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{
