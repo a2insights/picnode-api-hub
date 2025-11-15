@@ -4,6 +4,17 @@ export default {
   darkMode: ["class"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
+   safelist: [
+    {
+      pattern: /^from-(.*)-(.*)$/,
+    },
+    {
+      pattern: /^to-(.*)-(.*)$/,
+    },
+    {
+      pattern: /^via-(.*)-(.*)$/, // caso use gradiente com via
+    }
+  ],
   theme: {
     container: {
       center: true,

@@ -11,12 +11,14 @@ import {
   Loader2,
   ChevronLeft,
   ChevronRight,
+  LucideIcon,
+  Box,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { availableApis } from "@/lib/apis";
+import { useAppContext } from "@/contexts/AppContext";
 import {
   picnodeService,
   type PlaceResource,
@@ -39,6 +41,14 @@ interface Asset {
   type: string;
   raw?: any;
 }
+
+const iconMap: { [key: string]: LucideIcon } = {
+  Flag,
+  MapPin,
+  Box,
+  Sparkles,
+  Building2,
+};
 
 const AssetSkeleton = ({ variant }: { variant: "place" | "default" }) => (
   <Card className="overflow-hidden border-border">
@@ -81,7 +91,8 @@ const InlineLoader = () => (
 
 const ApiPlayground = () => {
   const { t } = useTranslation();
-  const [selectedApi, setSelectedApi] = useState<string>("api.places");
+  const { apis } = useAppContext();
+  const [selectedApi, setSelectedApi] = useState<string>("");
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -105,6 +116,12 @@ const ApiPlayground = () => {
     src: string;
     alt?: string;
   } | null>(null);
+
+  useEffect(() => {
+    if (apis.length > 0 && !selectedApi) {
+      setSelectedApi(apis[0].slug);
+    }
+  }, [apis, selectedApi]);
 
   const openModal = (src: string, alt?: string) => {
     setModalImage({ src, alt });
@@ -143,8 +160,9 @@ const ApiPlayground = () => {
   };
 
   const fetchAssets = async (page = 1, append = false) => {
+    if (!selectedApi) return;
     const apiAtRequestTime = selectedApi;
-    
+
     if (append) setLoadingMore(true);
     else setLoading(true);
 
@@ -159,7 +177,16 @@ const ApiPlayground = () => {
       let response: any;
       let transformedAssets: Asset[] = [];
 
-      if (apiAtRequestTime === "api.places") {
+      const currentApi = apis.find((api) => api.slug === apiAtRequestTime);
+      if (!currentApi || !currentApi.endpoints) {
+        setLoading(false);
+        setLoadingMore(false);
+        return;
+      }
+
+      const endpoint = Object.values(currentApi.endpoints)[0] as string;
+
+      if (endpoint === "places") {
         response = await picnodeService.getPlaces(params);
         transformedAssets = response.data.map((place: PlaceResource) => ({
           id: place.id.toString(),
@@ -168,7 +195,7 @@ const ApiPlayground = () => {
           type: place.type,
           raw: place,
         }));
-      } else if (apiAtRequestTime === "api.football-clubs") {
+      } else if (endpoint === "football-clubs") {
         response = await picnodeService.getFootballClubs(params);
         transformedAssets = response.data.map((club: FootballClubResource) => ({
           id: club.id.toString(),
@@ -177,7 +204,7 @@ const ApiPlayground = () => {
           type: "club",
           raw: club,
         }));
-      } else if (apiAtRequestTime === "api.thing-icos") {
+      } else if (endpoint === "thing-icos") {
         response = await picnodeService.getThingIcos(params);
         transformedAssets = response.data.map((ico: ThingIcoResource) => ({
           id: ico.id.toString(),
@@ -186,7 +213,7 @@ const ApiPlayground = () => {
           type: "icon",
           raw: ico,
         }));
-      } else if (apiAtRequestTime === "api.companies") {
+      } else if (endpoint === "companies") {
         response = await picnodeService.getCompanies(params);
         transformedAssets = response.data.map((company: CompanyResource) => ({
           id: company.id.toString(),
@@ -197,7 +224,6 @@ const ApiPlayground = () => {
         }));
       }
 
-      // Ignore response if API changed during request
       if (currentApiRef.current !== apiAtRequestTime) {
         return;
       }
@@ -211,7 +237,6 @@ const ApiPlayground = () => {
     } catch (error) {
       console.error("Error fetching assets:", error);
     } finally {
-      // Only update loading state if we're still on the same API
       if (currentApiRef.current === apiAtRequestTime) {
         setLoading(false);
         setLoadingMore(false);
@@ -268,20 +293,19 @@ const ApiPlayground = () => {
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   const getApiIcon = (apiId: string) => {
-    if (apiId === "api.thing-icos") return Sparkles;
-    if (apiId === "api.places") return MapPin;
-    if (apiId === "api.football-clubs") return Flag;
-    if (apiId === "api.companies") return Building2;
-    return MapPin;
+    const api = apis.find((a) => a.slug === apiId);
+    return iconMap[api?.icon || "Box"] || Box;
   };
 
   const getVariant = (): "place" | "default" => {
-    if (selectedApi === "api.places") return "place";
+    const api = apis.find((a) => a.slug === selectedApi);
+    if (api?.slug === "place") return "place";
     return "default";
   };
 
   const getCardWidth = (): string => {
-    if (selectedApi === "api.places") return "min-w-[220px]";
+    const api = apis.find((a) => a.slug === selectedApi);
+    if (api?.slug === "place") return "min-w-[220px]";
     return "w-[150px]";
   };
 
@@ -291,7 +315,6 @@ const ApiPlayground = () => {
   return (
     <section className="py-24 px-4 bg-gradient-to-b from-background via-accent/5 to-background overflow-hidden">
       <div className="container mx-auto max-w-7xl">
-        {/* Título e busca */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -307,14 +330,14 @@ const ApiPlayground = () => {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {availableApis.map((api) => {
-              const Icon = getApiIcon(api.id);
-              const isSelected = selectedApi === api.id;
+            {apis.map((api) => {
+              const Icon = getApiIcon(api.slug);
+              const isSelected = selectedApi === api.slug;
 
               return (
                 <Button
                   key={api.id}
-                  onClick={() => handleApiChange(api.id)}
+                  onClick={() => handleApiChange(api.slug)}
                   variant={isSelected ? "default" : "outline"}
                   className="group relative overflow-hidden"
                 >
@@ -431,9 +454,9 @@ const ApiPlayground = () => {
           viewport={{ once: true }}
           className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6"
         >
-          {availableApis.map((api) => {
-            const Icon = getApiIcon(api.id);
-            const isActive = selectedApi === api.id;
+          {apis.map((api) => {
+            const Icon = getApiIcon(api.slug);
+            const isActive = selectedApi === api.slug;
 
             return (
               <div
@@ -462,7 +485,7 @@ const ApiPlayground = () => {
                       <span className="text-muted-foreground">
                         {t("playground.basePrice")}
                       </span>
-                      <span className="font-semibold">${api.basePrice}</span>
+                      <span className="font-semibold">${api.pricing.basePrice}</span>
                     </div>
                   </div>
                 </div>

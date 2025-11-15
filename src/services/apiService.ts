@@ -2,9 +2,9 @@ import axios from "axios";
 
 const getBaseUrl = () => {
   if (window.location.hostname === "localhost") {
-    // return "http://localhost/api/picnode";
+    // return "http://localhost/api";
   }
-  return "https://a2insights.com.br/api/picnode";
+  return "https://a2insights.com.br/api";
 };
 
 const axiosInstance = axios.create({
@@ -26,7 +26,7 @@ axiosInstance.interceptors.request.use(
 
 export const register = async (userData: any) => {
   try {
-    const response = await axiosInstance.post("/register", userData);
+    const response = await axiosInstance.post("picnode/register", userData);
     return response.data;
   } catch (error) {
     console.error("Error during registration:", error);
@@ -36,7 +36,7 @@ export const register = async (userData: any) => {
 
 export const login = async (credentials: any) => {
   try {
-    const response = await axiosInstance.post("/login", credentials);
+    const response = await axiosInstance.post("picnode/login", credentials);
     return response.data;
   } catch (error) {
     console.error("Error during login:", error);
@@ -46,7 +46,7 @@ export const login = async (credentials: any) => {
 
 export const logout = async () => {
   try {
-    const response = await axiosInstance.delete("/logout");
+    const response = await axiosInstance.delete("picnode/logout");
     return response.data;
   } catch (error) {
     console.error("Error during logout:", error);
@@ -57,7 +57,7 @@ export const logout = async () => {
 export const updateProfile = async (userData: any) => {
   try {
     const response = await axiosInstance.put(
-      "/user/profile-information",
+      "picnode/user/profile-information",
       userData
     );
     return response.data;
@@ -69,7 +69,7 @@ export const updateProfile = async (userData: any) => {
 
 export const sendConfirmationEmail = async () => {
   try {
-    const response = await axiosInstance.post("/user/email-verification");
+    const response = await axiosInstance.post("picnode/user/email-verification");
     return response.data;
   } catch (error) {
     console.error("Error sending confirmation email:", error);
@@ -79,7 +79,7 @@ export const sendConfirmationEmail = async () => {
 
 export const getMe = async () => {
   try {
-    const response = await axiosInstance.get("/me");
+    const response = await axiosInstance.get("picnode/me");
     return response.data;
   } catch (error) {
     console.error("Error fetching user data:", error);
@@ -95,7 +95,7 @@ export const createToken = async (tokenData: {
   limit_value: number;
 }) => {
   try {
-    const response = await axiosInstance.post("/tokens", tokenData);
+    const response = await axiosInstance.post("picnode/tokens", tokenData);
     return response.data;
   } catch (error) {
     console.error("Error creating token:", error);
@@ -105,7 +105,7 @@ export const createToken = async (tokenData: {
 
 export const getTokens = async (page: number = 1) => {
   try {
-    const response = await axiosInstance.get(`/tokens?page=${page}`);
+    const response = await axiosInstance.get(`picnode/tokens?page=${page}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching tokens:", error);
@@ -124,7 +124,7 @@ export const createCheckoutSession = async (checkoutData: {
   cancel_url: string;
 }) => {
   try {
-    const response = await axiosInstance.post("/checkout", checkoutData);
+    const response = await axiosInstance.post("picnode/checkout", checkoutData);
     return response.data;
   } catch (error) {
     console.error("Error creating checkout session:", error);
@@ -134,7 +134,7 @@ export const createCheckoutSession = async (checkoutData: {
 
 export const getOrder = async (orderId: string) => {
   try {
-    const response = await axiosInstance.get(`/orders/${orderId}`);
+    const response = await axiosInstance.get(`picnode/orders/${orderId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching order:", error);
@@ -144,7 +144,7 @@ export const getOrder = async (orderId: string) => {
 
 export const getOrders = async (page: number = 1) => {
   try {
-    const response = await axiosInstance.get(`/orders?page=${page}`);
+    const response = await axiosInstance.get(`picnode/orders?page=${page}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -160,7 +160,7 @@ export const calculateTotal = async (data: {
   currency: "usd" | "eur" | "gbp" | "brl";
 }) => {
   try {
-    const response = await axiosInstance.post("/orders/calculate-total", data);
+    const response = await axiosInstance.post("picnode/orders/calculate-total", data);
     return response.data;
   } catch (error) {
     console.error("Error calculating total:", error);
@@ -170,7 +170,7 @@ export const calculateTotal = async (data: {
 
 export const getDashboardData = async () => {
   try {
-    const response = await axiosInstance.get("/dashboard");
+    const response = await axiosInstance.get("picnode/dashboard");
     return response.data;
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
@@ -194,6 +194,7 @@ export const apiService = {
   getDashboardData,
   getBaseUrl,
   axiosInstance,
+  get: axiosInstance.get, // Add generic GET method
 };
 
 export default apiService;

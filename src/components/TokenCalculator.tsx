@@ -8,7 +8,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, Sparkles, Loader2 } from "lucide-react";
-import { availableApis } from "@/lib/apis";
+import { useAppContext } from "@/contexts/AppContext";
 import { CheckoutModal } from "@/pages/Landing/CheckoutModal";
 import { calculateTotal } from "@/services/apiService";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -32,19 +32,24 @@ export const TokenCalculator = ({
   onComplete,
 }: TokenCalculatorProps) => {
   const { t } = useTranslation();
+  const { apis } = useAppContext();
   const [validity, setValidity] = useState([7]);
   const [limitType, setLimitType] = useState<"rateLimit" | "totalRequests">(
     "totalRequests"
   );
   const [rateLimit, setRateLimit] = useState([20]);
   const [totalRequests, setTotalRequests] = useState([1000]);
-  const [selectedApis, setSelectedApis] = useState<string[]>(
-    availableApis.map((api) => api.id)
-  );
+  const [selectedApis, setSelectedApis] = useState<string[]>([]);
   const [currency, setCurrency] = useState<Currency>("USD");
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [calculatedPrice, setCalculatedPrice] = useState<string>("0.00");
   const [isCalculating, setIsCalculating] = useState(false);
+
+  useEffect(() => {
+    if (apis.length > 0) {
+      setSelectedApis(apis.map((api) => api.slug));
+    }
+  }, [apis]);
 
   const debouncedValidity = useDebounce(validity, 500);
   const debouncedLimitType = useDebounce(limitType, 500);
@@ -146,14 +151,14 @@ export const TokenCalculator = ({
               {t("calculator.apis")}
             </label>
             <div className="grid grid-cols-2 gap-4">
-              {availableApis.map((api) => (
+              {apis.map((api) => (
                 <div key={api.id} className="flex items-center space-x-2">
                   <Checkbox
-                    id={api.id}
-                    checked={selectedApis.includes(api.id)}
-                    onCheckedChange={() => handleApiChange(api.id)}
+                    id={api.slug}
+                    checked={selectedApis.includes(api.slug)}
+                    onCheckedChange={() => handleApiChange(api.slug)}
                   />
-                  <Label htmlFor={api.id} className="cursor-pointer">
+                  <Label htmlFor={api.slug} className="cursor-pointer">
                     {api.name}
                   </Label>
                 </div>

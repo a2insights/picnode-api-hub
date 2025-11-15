@@ -2,33 +2,19 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Flag, MapPin, Box, Sparkles } from 'lucide-react';
+import { Flag, MapPin, Box, Sparkles, LucideIcon } from 'lucide-react';
+import { useAppContext } from '@/contexts/AppContext';
 
-const apis = [
-  {
-    key: 'flags',
-    icon: Flag,
-    color: 'from-red-500 to-orange-500',
-  },
-  {
-    key: 'places',
-    icon: MapPin,
-    color: 'from-green-500 to-emerald-500',
-  },
-  {
-    key: 'logos',
-    icon: Box,
-    color: 'from-blue-500 to-cyan-500',
-  },
-  {
-    key: 'icons',
-    icon: Sparkles,
-    color: 'from-purple-500 to-pink-500',
-  },
-];
+const iconMap: { [key: string]: LucideIcon } = {
+  Flag,
+  MapPin,
+  Box,
+  Sparkles,
+};
 
 export const ApisSection = () => {
   const { t } = useTranslation();
+  const { apis } = useAppContext();
 
   return (
     <section id="apis" className="py-24 relative">
@@ -47,10 +33,10 @@ export const ApisSection = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {apis.map((api, index) => {
-            const Icon = api.icon;
+            const Icon = iconMap[api.icon] || Box;
             return (
               <motion.div
-                key={api.key}
+                key={api.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -63,12 +49,12 @@ export const ApisSection = () => {
                     </div>
                     <div className="flex items-center gap-2 mb-2">
                       <h3 className="text-xl font-semibold">
-                        {t(`apis.${api.key}.title`)}
+                        {api.name}
                       </h3>
                       <Badge variant="secondary" className="text-xs">API</Badge>
                     </div>
                     <p className="text-muted-foreground text-sm">
-                      {t(`apis.${api.key}.description`)}
+                      {api.description}
                     </p>
                   </CardContent>
                 </Card>
