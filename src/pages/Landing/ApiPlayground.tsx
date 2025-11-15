@@ -1,5 +1,5 @@
 // src/components/ApiPlayground.tsx
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -87,6 +87,7 @@ const ApiPlayground = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const debouncedSearch = useDebounce(searchTerm, 500);
+  const currentApiRef = useRef<string>(selectedApi);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
@@ -140,6 +141,8 @@ const ApiPlayground = () => {
   };
 
   const fetchAssets = async (page = 1, append = false) => {
+    const apiAtRequestTime = selectedApi;
+    
     if (append) setLoadingMore(true);
     else setLoading(true);
 
@@ -154,7 +157,7 @@ const ApiPlayground = () => {
       let response: any;
       let transformedAssets: Asset[] = [];
 
-      if (selectedApi === "api.places") {
+      if (apiAtRequestTime === "api.places") {
         response = await picnodeService.getPlaces(params);
         transformedAssets = response.data.map((place: PlaceResource) => ({
           id: place.id.toString(),
@@ -163,7 +166,7 @@ const ApiPlayground = () => {
           type: place.type,
           raw: place,
         }));
-      } else if (selectedApi === "api.football-clubs") {
+      } else if (apiAtRequestTime === "api.football-clubs") {
         response = await picnodeService.getFootballClubs(params);
         transformedAssets = response.data.map((club: FootballClubResource) => ({
           id: club.id.toString(),
@@ -172,7 +175,7 @@ const ApiPlayground = () => {
           type: "club",
           raw: club,
         }));
-      } else if (selectedApi === "api.thing-icos") {
+      } else if (apiAtRequestTime === "api.thing-icos") {
         response = await picnodeService.getThingIcos(params);
         transformedAssets = response.data.map((ico: ThingIcoResource) => ({
           id: ico.id.toString(),
@@ -181,6 +184,11 @@ const ApiPlayground = () => {
           type: "icon",
           raw: ico,
         }));
+      }
+
+      // Ignore response if API changed during request
+      if (currentApiRef.current !== apiAtRequestTime) {
+        return;
       }
 
       if (append) setAssets((prev) => [...prev, ...transformedAssets]);
@@ -192,8 +200,11 @@ const ApiPlayground = () => {
     } catch (error) {
       console.error("Error fetching assets:", error);
     } finally {
-      setLoading(false);
-      setLoadingMore(false);
+      // Only update loading state if we're still on the same API
+      if (currentApiRef.current === apiAtRequestTime) {
+        setLoading(false);
+        setLoadingMore(false);
+      }
     }
   };
 
@@ -214,9 +225,12 @@ const ApiPlayground = () => {
   }, [emblaApi]);
 
   useEffect(() => {
+    currentApiRef.current = selectedApi;
     setCurrentPage(1);
     setAssets([]);
     setHasMore(true);
+    setLoading(true);
+    setLoadingMore(false);
     fetchAssets(1);
   }, [selectedApi, debouncedSearch]);
 
@@ -374,7 +388,6 @@ const ApiPlayground = () => {
                       ) : (
                         <DefaultCard
                           asset={asset}
-                          variant={variant}
                           onOpen={() => openModal(asset.image, asset.name)}
                         />
                       )}
