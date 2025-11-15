@@ -365,7 +365,7 @@ const ApiPlayground = () => {
               )}
 
               <div
-                className="overflow-hidden cursor-grab active:cursor-grabbing"
+                className="overflow-hidden cursor-grab active:cursor-grabbing select-none"
                 ref={emblaRef}
               >
                 <div className="flex gap-3">

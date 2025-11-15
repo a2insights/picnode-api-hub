@@ -13,7 +13,7 @@ interface Asset {
 const PlaceCard = ({ asset, onOpen }: { asset: Asset; onOpen?: () => void }) => {
   return (
     <Card
-      className="overflow-hidden cursor-pointer border-border hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 h-full group"
+      className="overflow-hidden cursor-pointer border-border hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 h-full group select-none"
       onClick={onOpen}
     >
       <div className="relative w-full">
