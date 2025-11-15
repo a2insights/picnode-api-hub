@@ -269,5 +269,33 @@
     "title": "Página não encontrada",
     "description": "Desculpe, a página que você está procurando não existe ou foi movida.",
     "backHome": "Voltar para o Início"
+  },
+  "profile": {
+    "devOverlay": {
+      "title": "🚧 Em Desenvolvimento",
+      "description": "Esta funcionalidade ainda está em fase de implementação. Em breve estará disponível."
+    },
+    "success": {
+      "title": "Sucesso!",
+      "profileUpdated": "Perfil atualizado com sucesso!"
+    },
+    "update": {
+      "title": "Perfil",
+      "description": "Atualize suas informações pessoais.",
+      "name": "Nome",
+      "email": "E-mail",
+      "newPassword": "Nova Senha",
+      "confirmPassword": "Confirmar Nova Senha",
+      "button": "Atualizar Perfil"
+    },
+    "emailConfirmation": {
+      "title": "Confirmação de E-mail",
+      "description": "Confirme seu endereço de e-mail para garantir a segurança da sua conta.",
+      "sentTitle": "E-mail Enviado!",
+      "sentDescription": "Um novo e-mail de confirmação foi enviado.",
+      "confirmed": "Seu e-mail foi confirmado.",
+      "notConfirmed": "Seu e-mail não está confirmado.",
+      "button": "Enviar E-mail de Confirmação"
+    }
   }
 }

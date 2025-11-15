@@ -269,5 +269,33 @@
     "title": "Page not found",
     "description": "Sorry, the page you are looking for does not exist or has been moved.",
     "backHome": "Back to Home"
+  },
+  "profile": {
+    "devOverlay": {
+      "title": "🚧 Under Development",
+      "description": "This feature is still being implemented. It will be available soon."
+    },
+    "success": {
+      "title": "Success!",
+      "profileUpdated": "Profile updated successfully!"
+    },
+    "update": {
+      "title": "Profile",
+      "description": "Update your personal information.",
+      "name": "Name",
+      "email": "Email",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "button": "Update Profile"
+    },
+    "emailConfirmation": {
+      "title": "Email Confirmation",
+      "description": "Confirm your email address to ensure account security.",
+      "sentTitle": "Email Sent!",
+      "sentDescription": "A new confirmation email has been sent.",
+      "confirmed": "Your email has been confirmed.",
+      "notConfirmed": "Your email is not confirmed.",
+      "button": "Send Confirmation Email"
+    }
   }
 }
