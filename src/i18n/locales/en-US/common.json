@@ -4,7 +4,11 @@
     "apis": "APIs",
     "documentation": "Documentation",
     "login": "Login",
-    "contact": "Contact"
+    "contact": "Contact",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "loggingOut": "Logging out..."
   },
   "hero": {
     "title": "All the images you need, in one API.",
@@ -45,6 +49,10 @@
     "icons": {
       "title": "ThingIco API",
       "description": "Library with thousands of icons for any type of interface."
+    },
+    "companies": {
+      "title": "Companies API",
+      "description": "Logos and information from companies around the world."
     }
   },
   "calculator": {
@@ -73,7 +81,8 @@
       "password": "Password",
       "name": "Name",
       "loginButton": "Sign In",
-      "signupButton": "Create Account"
+      "signupButton": "Create Account",
+      "loading": "Loading..."
     },
     "payment": {
       "title": "Choose payment method",
@@ -255,5 +264,10 @@
       "view": "View"
     },
     "thanks": "Thank you for your purchase!"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, the page you are looking for does not exist or has been moved.",
+    "backHome": "Back to Home"
   }
 }

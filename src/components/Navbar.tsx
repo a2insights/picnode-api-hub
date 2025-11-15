@@ -51,11 +51,11 @@ export const Navbar = () => {
           {isAuthenticated ? (
             <>
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/dashboard">{t('nav.dashboard')}</Link>
               </Button>
               <Button variant="ghost" size="sm" onClick={logout} disabled={logoutLoading}>
                 {logoutLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {logoutLoading ? 'Logging out...' : 'Logout'}
+                {logoutLoading ? t('nav.loggingOut') : t('nav.logout')}
               </Button>
             </>
           ) : (
@@ -64,7 +64,7 @@ export const Navbar = () => {
                 <Link to="/login">{t('nav.login')}</Link>
               </Button>
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/register">Register</Link>
+                <Link to="/register">{t('nav.register')}</Link>
               </Button>
             </>
           )}

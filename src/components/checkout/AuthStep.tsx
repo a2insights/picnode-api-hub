@@ -116,7 +116,7 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loginLoading}>
-                  {loginLoading ? 'Loading...' : t('checkout.auth.loginButton')}
+                  {loginLoading ? t('checkout.auth.loading') : t('checkout.auth.loginButton')}
                 </Button>
               </form>
             </CardContent>
@@ -175,7 +175,7 @@ export const AuthStep = ({ onAuth }: AuthStepProps) => {
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={signupLoading}>
-                  {signupLoading ? 'Loading...' : t('checkout.auth.signupButton')}
+                  {signupLoading ? t('checkout.auth.loading') : t('checkout.auth.signupButton')}
                 </Button>
               </form>
             </CardContent>
