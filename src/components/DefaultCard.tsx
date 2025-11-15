@@ -18,7 +18,7 @@ const DefaultCard = ({
 }) => {
   return (
     <Card
-      className="group cursor-pointer overflow-hidden border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 h-full"
+      className="group cursor-pointer overflow-hidden border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 h-full select-none"
       onClick={onOpen}
     >
       <div className="relative overflow-hidden h-[120px]">
