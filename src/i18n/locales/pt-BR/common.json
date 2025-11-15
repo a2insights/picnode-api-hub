@@ -4,7 +4,11 @@
     "apis": "APIs",
     "documentation": "Documentação",
     "login": "Login",
-    "contact": "Contato"
+    "contact": "Contato",
+    "register": "Registrar",
+    "dashboard": "Painel",
+    "logout": "Sair",
+    "loggingOut": "Saindo..."
   },
   "hero": {
     "title": "Todas as imagens que você precisa, em uma única API.",
@@ -45,6 +49,10 @@
     "icons": {
       "title": "ThingIco API",
       "description": "Biblioteca com milhares de ícones para qualquer tipo de interface."
+    },
+    "companies": {
+      "title": "Companies API",
+      "description": "Logos e informações de empresas ao redor do mundo."
     }
   },
   "calculator": {
@@ -73,7 +81,8 @@
       "password": "Senha",
       "name": "Nome",
       "loginButton": "Entrar",
-      "signupButton": "Criar Conta"
+      "signupButton": "Criar Conta",
+      "loading": "Carregando..."
     },
     "payment": {
       "title": "Escolha o método de pagamento",
@@ -255,5 +264,10 @@
       "view": "Ver"
     },
     "thanks": "Obrigado pela sua compra!"
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "Desculpe, a página que você está procurando não existe ou foi movida.",
+    "backHome": "Voltar para o Início"
   }
 }
