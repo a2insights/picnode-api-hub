@@ -1,0 +1,301 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "apis": "APIs",
+    "documentation": "Documentation",
+    "login": "Connexion",
+    "contact": "Contact",
+    "register": "S'inscrire",
+    "dashboard": "Tableau de bord",
+    "logout": "Déconnexion",
+    "loggingOut": "Déconnexion..."
+  },
+  "hero": {
+    "title": "Toutes les images dont vous avez besoin, dans une seule API.",
+    "subtitle": "Achetez des tokens, connectez-vous à nos APIs et centralisez vos images avec PicNode.",
+    "freeToken": "Générer un Token Beta Gratuit",
+    "buyTokens": "Acheter des Tokens",
+    "exploreApis": "Explorer les APIs"
+  },
+  "about": {
+    "title": "Qu'est-ce que PicNode",
+    "unified": {
+      "title": "Hub unifié d'APIs visuelles",
+      "description": "Accédez aux icônes, drapeaux, logos et images de lieux dans un seul endpoint centralisé."
+    },
+    "tokens": {
+      "title": "Tokens configurables et sécurisés",
+      "description": "Configurez la validité, le rate limit et le total des requêtes selon vos besoins."
+    },
+    "integration": {
+      "title": "Intégration simple via REST",
+      "description": "APIs RESTful faciles à intégrer dans n'importe quel langage ou framework."
+    }
+  },
+  "apis": {
+    "title": "APIs Disponibles",
+    "flags": {
+      "title": "FootBall Clubs API",
+      "description": "Écussons et blasons de clubs de football du monde entier."
+    },
+    "places": {
+      "title": "Places API",
+      "description": "Drapeaux et blasons de lieux du monde entier."
+    },
+    "logos": {
+      "title": "Logos API",
+      "description": "Logos d'entreprises, de marques et d'organisations au format vectoriel."
+    },
+    "icons": {
+      "title": "ThingIco API",
+      "description": "Bibliothèque avec des milliers d'icônes pour tout type d'interface."
+    },
+    "companies": {
+      "title": "Companies API",
+      "description": "Logos et informations d'entreprises du monde entier."
+    }
+  },
+  "calculator": {
+    "title": "Calculateur de Tokens",
+    "freeTier": "Niveau Gratuit",
+    "getFreeToken": "Obtenir un Token Gratuit",
+    "apis": "Sélectionner les APIs",
+    "validity": "Validité (jours)",
+    "limitType": "Type de Limite",
+    "rateLimit": "Rate Limit (req/min)",
+    "totalRequests": "Total de Requêtes",
+    "currency": "Devise",
+    "estimatedPrice": "Prix Estimé",
+    "proceed": "Procéder à l'achat",
+    "selectAtLeastOneApi": "Sélectionnez au moins une API"
+  },
+  "checkout": {
+    "auth": {
+      "login": "Connexion",
+      "signup": "Créer un Compte",
+      "loginTitle": "Connectez-vous à votre compte",
+      "loginDescription": "Utilisez vos identifiants pour continuer",
+      "signupTitle": "Créez votre compte",
+      "signupDescription": "Remplissez les détails pour commencer",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "name": "Nom",
+      "loginButton": "Se connecter",
+      "signupButton": "Créer un Compte",
+      "loading": "Chargement..."
+    },
+    "payment": {
+      "title": "Choisissez le mode de paiement",
+      "card": "Carte de Crédit",
+      "cardDescription": "Paiement instantané",
+      "cardInfo": "Payez par carte de crédit et recevez votre token immédiatement",
+      "pix": "PIX",
+      "pixDescription": "Paiement par QR Code",
+      "pixInfo": "Scannez le QR Code et confirmez le paiement dans votre banque",
+      "paypalDescription": "Payez avec votre compte PayPal",
+      "comingSoon": "Bientôt disponible"
+    },
+    "card": {
+      "title": "Paiement par Carte",
+      "number": "Numéro de Carte",
+      "name": "Nom sur la Carte",
+      "expiry": "Date d'Expiration",
+      "cvv": "CVV",
+      "pay": "Payer Maintenant",
+      "processing": "Traitement...",
+      "back": "Retour",
+      "checkoutError": "Une erreur s'est produite lors de la création de la session de paiement.",
+      "checkoutErrorTitle": "Erreur de Paiement",
+      "checkoutErrorDescription": "Nous n'avons pas pu vous rediriger vers la page de paiement. Veuillez réessayer.",
+      "redirecting": "Redirection vers le paiement..."
+    },
+    "pix": {
+      "title": "Paiement via PIX",
+      "expiresIn": "Expire dans",
+      "scanQR": "Scannez le QR Code avec l'application de votre banque",
+      "instructions": "Le paiement sera confirmé automatiquement après le scan du QR Code",
+      "copied": "Code PIX copié !",
+      "confirmed": "Paiement Confirmé !",
+      "processing": "Traitement de votre token...",
+      "back": "Retour"
+    },
+    "success": {
+      "title": "Paiement Confirmé !",
+      "titleFree": "Félicitations ! 🎉",
+      "subtitle": "Votre token est prêt à l'emploi. Copiez-le et commencez à l'intégrer.",
+      "subtitleFree": "Votre compte gratuit a été créé avec succès ! Profitez de vos 7 jours d'accès.",
+      "alreadyClaimedTitle": "Token Déjà Réclamé",
+      "alreadyClaimedSubtitle": "Vous avez déjà réclamé votre token gratuit. Vous pouvez gérer vos tokens dans le tableau de bord.",
+      "yourToken": "Votre Token",
+      "copy": "Copier",
+      "days": "jours",
+      "dashboard": "Aller au Tableau de bord",
+      "download": "Télécharger .json",
+      "creating": "Création de votre token..."
+    }
+  },
+  "benefits": {
+    "title": "Pourquoi choisir PicNode ?",
+    "security": {
+      "title": "Sécurité Sanctum",
+      "description": "Authentification robuste avec Laravel Sanctum pour une sécurité maximale."
+    },
+    "flexibility": {
+      "title": "Configuration flexible",
+      "description": "Ajustez vos tokens selon la demande de votre projet."
+    },
+    "dashboard": {
+      "title": "Tableau de bord avec statistiques",
+      "description": "Suivez l'utilisation, la consommation et les performances en temps réel."
+    },
+    "pricing": {
+      "title": "Tarification basée sur l'utilisation",
+      "description": "Ne payez que ce que vous utilisez, sans frais mensuels fixes."
+    }
+  },
+  "cta": {
+    "title": "Commencez dès maintenant à centraliser vos ressources visuelles.",
+    "button": "Générer un Token Beta Gratuit"
+  },
+  "footer": {
+    "allRights": "Tous droits réservés."
+  },
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "crystal": "Crystal"
+  },
+  "playground": {
+    "title": "Essayez Nos APIs",
+    "description": "Explorez notre galerie de ressources disponibles via les APIs. Sélectionnez une API et parcourez les ressources.",
+    "info": "Parcourez la galerie et explorez des milliers de ressources disponibles",
+    "basePrice": "Prix de Base",
+    "search": "Rechercher des ressources...",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "noResults": "Aucun résultat trouvé"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "myTokens": "Mes Tokens",
+    "availableApis": "APIs Disponibles",
+    "payments": "Paiements",
+    "ordersTitle": "Commandes",
+    "docs": "Documentation",
+    "newToken": "Nouveau Token",
+    "overview": {
+      "activeTokens": "Tokens Actifs",
+      "totalRequests": "Requêtes Totales",
+      "rateLimit": "Limite de Rate",
+      "expiringSoon": "Expire Bientôt"
+    },
+    "tokens": {
+      "table": {
+        "token": "Token",
+        "scope": "Portée",
+        "expiration": "Expiration",
+        "usage": "Utilisation",
+        "status": "Statut",
+        "never": "Jamais",
+        "loading": "Chargement des tokens...",
+        "noTokens": "Aucun token trouvé",
+        "errors": {
+          "fetch": "Erreur lors de la récupération des tokens. Veuillez réessayer plus tard."
+        }
+      },
+      "viewDialog": {
+        "title": "Informations du Token",
+        "used": "Utilisé",
+        "limit": "Limite",
+        "type": "Type"
+      },
+      "newToken": "Nouveau Token",
+      "actions": {
+        "copy": "Copier le Token",
+        "details": "Voir les Détails",
+        "renew": "Renouveler",
+        "revoke": "Révoquer"
+      },
+      "status": {
+        "active": "Actif",
+        "expired": "Expiré",
+        "revoked": "Révoqué"
+      },
+      "noTokens": "Vous n'avez pas encore de tokens. Créez-en un pour commencer !"
+    },
+    "tokenDetails": {
+      "title": "Détails du Token",
+      "includedApis": "APIs Incluses",
+      "rateLimit": "Rate Limit",
+      "totalRequests": "Total de Requêtes",
+      "expiration": "Expiration",
+      "paidAmount": "Montant Payé",
+      "dailyUsage": "Utilisation Quotidienne"
+    },
+    "apisTable": {
+      "api": "API",
+      "type": "Type",
+      "basePrice": "Prix de Base",
+      "availability": "Disponibilité"
+    },
+    "paymentsTable": {
+      "date": "Date",
+      "token": "Token",
+      "amount": "Montant",
+      "method": "Méthode",
+      "status": "Statut"
+    },
+    "ordersPage": {
+      "errorTitle": "Erreur de Chargement des Commandes",
+      "errorDescription": "Impossible de charger la liste des commandes.",
+      "noOrders": "Aucune commande trouvée"
+    },
+    "ordersTable": {
+      "actions": "Actions",
+      "date": "Date",
+      "apis": "APIs",
+      "limit": "Limite",
+      "total": "Total",
+      "status": "Statut",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page": "Page",
+      "of": "sur",
+      "view": "Voir"
+    },
+    "thanks": "Merci pour votre achat !"
+  },
+  "notFound": {
+    "title": "Page non trouvée",
+    "description": "Désolé, la page que vous recherchez n'existe pas ou a été déplacée.",
+    "backHome": "Retour à l'Accueil"
+  },
+  "profile": {
+    "devOverlay": {
+      "title": "🚧 En Développement",
+      "description": "Cette fonctionnalité est encore en phase de mise en œuvre. Elle sera bientôt disponible."
+    },
+    "success": {
+      "title": "Succès !",
+      "profileUpdated": "Profil mis à jour avec succès !"
+    },
+    "update": {
+      "title": "Profil",
+      "description": "Mettez à jour vos informations personnelles.",
+      "name": "Nom",
+      "email": "E-mail",
+      "newPassword": "Nouveau Mot de passe",
+      "confirmPassword": "Confirmer le Nouveau Mot de passe",
+      "button": "Mettre à jour le Profil"
+    },
+    "emailConfirmation": {
+      "title": "Confirmation d'E-mail",
+      "description": "Confirmez votre adresse e-mail pour garantir la sécurité de votre compte.",
+      "sentTitle": "E-mail Envoyé !",
+      "sentDescription": "Un nouvel e-mail de confirmation a été envoyé.",
+      "confirmed": "Votre e-mail a été confirmé.",
+      "notConfirmed": "Votre e-mail n'est pas confirmé.",
+      "button": "Envoyer l'E-mail de Confirmation"
+    }
+  }
+}

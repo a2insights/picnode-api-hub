@@ -53,7 +53,7 @@ const handleOrderClick = (url: string) => {
 }
 
 export const OrdersPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [orders, setOrders] = useState<Order[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
@@ -95,7 +95,7 @@ export const OrdersPage = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR", {
+    return new Date(dateString).toLocaleDateString(i18n.language, {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
