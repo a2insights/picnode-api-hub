@@ -1,0 +1,301 @@
+{
+  "nav": {
+    "home": "Home",
+    "apis": "APIs",
+    "documentation": "Documentazione",
+    "login": "Accedi",
+    "contact": "Contatto",
+    "register": "Registrati",
+    "dashboard": "Dashboard",
+    "logout": "Esci",
+    "loggingOut": "Disconnessione..."
+  },
+  "hero": {
+    "title": "Tutte le immagini di cui hai bisogno, in una sola API.",
+    "subtitle": "Acquista token, connettiti alle nostre API e centralizza le tue immagini con PicNode.",
+    "freeToken": "Genera Token Beta Gratuito",
+    "buyTokens": "Acquista Token",
+    "exploreApis": "Esplora le API"
+  },
+  "about": {
+    "title": "Cos'è PicNode",
+    "unified": {
+      "title": "Hub unificato di API visive",
+      "description": "Accedi a icone, bandiere, loghi e immagini di luoghi in un unico endpoint centralizzato."
+    },
+    "tokens": {
+      "title": "Token configurabili e sicuri",
+      "description": "Configura validità, rate limit e totale delle richieste secondo le tue esigenze."
+    },
+    "integration": {
+      "title": "Integrazione semplice via REST",
+      "description": "API RESTful facili da integrare in qualsiasi linguaggio o framework."
+    }
+  },
+  "apis": {
+    "title": "API Disponibili",
+    "flags": {
+      "title": "FootBall Clubs API",
+      "description": "Stemmi e blasoni di club calcistici di tutto il mondo."
+    },
+    "places": {
+      "title": "Places API",
+      "description": "Bandiere e blasoni di luoghi di tutto il mondo."
+    },
+    "logos": {
+      "title": "Logos API",
+      "description": "Loghi di aziende, marchi e organizzazioni in formato vettoriale."
+    },
+    "icons": {
+      "title": "ThingIco API",
+      "description": "Libreria con migliaia di icone per qualsiasi tipo di interfaccia."
+    },
+    "companies": {
+      "title": "Companies API",
+      "description": "Loghi e informazioni di aziende di tutto il mondo."
+    }
+  },
+  "calculator": {
+    "title": "Calcolatore di Token",
+    "freeTier": "Livello Gratuito",
+    "getFreeToken": "Ottieni Token Gratuito",
+    "apis": "Seleziona API",
+    "validity": "Validità (giorni)",
+    "limitType": "Tipo di Limite",
+    "rateLimit": "Rate Limit (rich/min)",
+    "totalRequests": "Totale Richieste",
+    "currency": "Valuta",
+    "estimatedPrice": "Prezzo Stimato",
+    "proceed": "Procedi all'acquisto",
+    "selectAtLeastOneApi": "Seleziona almeno una API"
+  },
+  "checkout": {
+    "auth": {
+      "login": "Accedi",
+      "signup": "Crea Account",
+      "loginTitle": "Accedi al tuo account",
+      "loginDescription": "Usa le tue credenziali per continuare",
+      "signupTitle": "Crea il tuo account",
+      "signupDescription": "Compila i dettagli per iniziare",
+      "email": "E-mail",
+      "password": "Password",
+      "name": "Nome",
+      "loginButton": "Entra",
+      "signupButton": "Crea Account",
+      "loading": "Caricamento..."
+    },
+    "payment": {
+      "title": "Scegli il metodo di pagamento",
+      "card": "Carta di Credito",
+      "cardDescription": "Pagamento istantaneo",
+      "cardInfo": "Paga con carta di credito e ricevi il tuo token immediatamente",
+      "pix": "PIX",
+      "pixDescription": "Pagamento tramite QR Code",
+      "pixInfo": "Scansiona il QR Code e conferma il pagamento nella tua banca",
+      "paypalDescription": "Paga con il tuo account PayPal",
+      "comingSoon": "Prossimamente"
+    },
+    "card": {
+      "title": "Pagamento con Carta",
+      "number": "Numero Carta",
+      "name": "Nome sulla Carta",
+      "expiry": "Scadenza",
+      "cvv": "CVV",
+      "pay": "Paga Ora",
+      "processing": "Elaborazione...",
+      "back": "Indietro",
+      "checkoutError": "Si è verificato un errore durante la creazione della sessione di pagamento.",
+      "checkoutErrorTitle": "Errore di Pagamento",
+      "checkoutErrorDescription": "Non siamo riusciti a reindirizzarti alla pagina di pagamento. Riprova.",
+      "redirecting": "Reindirizzamento al pagamento..."
+    },
+    "pix": {
+      "title": "Pagamento via PIX",
+      "expiresIn": "Scade tra",
+      "scanQR": "Scansiona il QR Code con l'app della tua banca",
+      "instructions": "Il pagamento sarà confermato automaticamente dopo la scansione del QR Code",
+      "copied": "Codice PIX copiato!",
+      "confirmed": "Pagamento Confermato!",
+      "processing": "Elaborazione del tuo token...",
+      "back": "Indietro"
+    },
+    "success": {
+      "title": "Pagamento Confermato!",
+      "titleFree": "Congratulazioni! 🎉",
+      "subtitle": "Il tuo token è pronto all'uso. Copialo e inizia a integrarlo.",
+      "subtitleFree": "Il tuo account gratuito è stato creato con successo! Goditi i tuoi 7 giorni di accesso.",
+      "alreadyClaimedTitle": "Token Già Rivendicato",
+      "alreadyClaimedSubtitle": "Hai già rivendicato il tuo token gratuito. Puoi gestire i tuoi token nella dashboard.",
+      "yourToken": "Il Tuo Token",
+      "copy": "Copia",
+      "days": "giorni",
+      "dashboard": "Vai alla Dashboard",
+      "download": "Scarica .json",
+      "creating": "Creazione del tuo token..."
+    }
+  },
+  "benefits": {
+    "title": "Perché scegliere PicNode?",
+    "security": {
+      "title": "Sicurezza Sanctum",
+      "description": "Autenticazione robusta con Laravel Sanctum per la massima sicurezza."
+    },
+    "flexibility": {
+      "title": "Configurazione flessibile",
+      "description": "Regola i tuoi token in base alla domanda del tuo progetto."
+    },
+    "dashboard": {
+      "title": "Dashboard con statistiche",
+      "description": "Monitora uso, consumo e prestazioni in tempo reale."
+    },
+    "pricing": {
+      "title": "Prezzi basati sull'uso",
+      "description": "Paga solo per ciò che usi, senza canoni mensili fissi."
+    }
+  },
+  "cta": {
+    "title": "Inizia ora a centralizzare le tue risorse visive.",
+    "button": "Genera Token Beta Gratuito"
+  },
+  "footer": {
+    "allRights": "Tutti i diritti riservati."
+  },
+  "theme": {
+    "light": "Chiaro",
+    "dark": "Scuro",
+    "crystal": "Crystal"
+  },
+  "playground": {
+    "title": "Prova le Nostre API",
+    "description": "Esplora la nostra galleria di risorse disponibili tramite le API. Seleziona un'API e naviga tra le risorse.",
+    "info": "Naviga nella galleria ed esplora migliaia di risorse disponibili",
+    "basePrice": "Prezzo Base",
+    "search": "Cerca risorse...",
+    "previous": "Precedente",
+    "next": "Successivo",
+    "noResults": "Nessun risultato trovato"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "myTokens": "I Miei Token",
+    "availableApis": "API Disponibili",
+    "payments": "Pagamenti",
+    "ordersTitle": "Ordini",
+    "docs": "Documentazione",
+    "newToken": "Nuovo Token",
+    "overview": {
+      "activeTokens": "Token Attivi",
+      "totalRequests": "Richieste Totali",
+      "rateLimit": "Limite di Rate",
+      "expiringSoon": "In Scadenza a Breve"
+    },
+    "tokens": {
+      "table": {
+        "token": "Token",
+        "scope": "Ambito",
+        "expiration": "Scadenza",
+        "usage": "Utilizzo",
+        "status": "Stato",
+        "never": "Mai",
+        "loading": "Caricamento token...",
+        "noTokens": "Nessun token trovato",
+        "errors": {
+          "fetch": "Errore nel recupero dei token. Riprova più tardi."
+        }
+      },
+      "viewDialog": {
+        "title": "Informazioni Token",
+        "used": "Usato",
+        "limit": "Limite",
+        "type": "Tipo"
+      },
+      "newToken": "Nuovo Token",
+      "actions": {
+        "copy": "Copia Token",
+        "details": "Vedi Dettagli",
+        "renew": "Rinnova",
+        "revoke": "Revoca"
+      },
+      "status": {
+        "active": "Attivo",
+        "expired": "Scaduto",
+        "revoked": "Revocato"
+      },
+      "noTokens": "Non hai ancora token. Creane uno per iniziare!"
+    },
+    "tokenDetails": {
+      "title": "Dettagli Token",
+      "includedApis": "API Incluse",
+      "rateLimit": "Rate Limit",
+      "totalRequests": "Totale Richieste",
+      "expiration": "Scadenza",
+      "paidAmount": "Importo Pagato",
+      "dailyUsage": "Utilizzo Giornaliero"
+    },
+    "apisTable": {
+      "api": "API",
+      "type": "Tipo",
+      "basePrice": "Prezzo Base",
+      "availability": "Disponibilità"
+    },
+    "paymentsTable": {
+      "date": "Data",
+      "token": "Token",
+      "amount": "Importo",
+      "method": "Metodo",
+      "status": "Stato"
+    },
+    "ordersPage": {
+      "errorTitle": "Errore Caricamento Ordini",
+      "errorDescription": "Impossibile caricare la lista degli ordini.",
+      "noOrders": "Nessun ordine trovato"
+    },
+    "ordersTable": {
+      "actions": "Azioni",
+      "date": "Data",
+      "apis": "API",
+      "limit": "Limite",
+      "total": "Totale",
+      "status": "Stato",
+      "previous": "Precedente",
+      "next": "Successivo",
+      "page": "Pagina",
+      "of": "di",
+      "view": "Vedi"
+    },
+    "thanks": "Grazie per il tuo acquisto!"
+  },
+  "notFound": {
+    "title": "Pagina non trovata",
+    "description": "Spiacenti, la pagina che stai cercando non esiste o è stata spostata.",
+    "backHome": "Torna alla Home"
+  },
+  "profile": {
+    "devOverlay": {
+      "title": "🚧 In Sviluppo",
+      "description": "Questa funzionalità è ancora in fase di implementazione. Sarà disponibile presto."
+    },
+    "success": {
+      "title": "Successo!",
+      "profileUpdated": "Profilo aggiornato con successo!"
+    },
+    "update": {
+      "title": "Profilo",
+      "description": "Aggiorna le tue informazioni personali.",
+      "name": "Nome",
+      "email": "E-mail",
+      "newPassword": "Nuova Password",
+      "confirmPassword": "Conferma Nuova Password",
+      "button": "Aggiorna Profilo"
+    },
+    "emailConfirmation": {
+      "title": "Conferma E-mail",
+      "description": "Conferma il tuo indirizzo e-mail per garantire la sicurezza del tuo account.",
+      "sentTitle": "E-mail Inviata!",
+      "sentDescription": "Una nuova e-mail di conferma è stata inviata.",
+      "confirmed": "La tua e-mail è stata confermata.",
+      "notConfirmed": "La tua e-mail non è confermata.",
+      "button": "Invia E-mail di Conferma"
+    }
+  }
+}
