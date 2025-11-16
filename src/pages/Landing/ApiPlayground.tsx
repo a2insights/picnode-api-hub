@@ -159,94 +159,97 @@ const ApiPlayground = () => {
     );
   };
 
-  const fetchAssets = async (page = 1, append = false) => {
-    if (!selectedApi) return;
-    const apiAtRequestTime = selectedApi;
+  const fetchAssets = useCallback(
+    async (page = 1, append = false) => {
+      if (!selectedApi) return;
+      const apiAtRequestTime = selectedApi;
 
-    if (append) setLoadingMore(true);
-    else setLoading(true);
+      if (append) setLoadingMore(true);
+      else setLoading(true);
 
-    try {
-      const params = {
-        search: debouncedSearch || undefined,
-        page,
-        has_media: true,
-        media_conversions: "sm,md,lg,preview",
-      };
+      try {
+        const params = {
+          search: debouncedSearch || undefined,
+          page,
+          has_media: true,
+          media_conversions: "sm,md,lg,preview",
+        };
 
-      let response: any;
-      let transformedAssets: Asset[] = [];
+        let response: any;
+        let transformedAssets: Asset[] = [];
 
-      const currentApi = apis.find((api) => api.slug === apiAtRequestTime);
-      if (!currentApi || !currentApi.endpoints) {
-        setLoading(false);
-        setLoadingMore(false);
-        return;
+        const currentApi = apis.find((api) => api.slug === apiAtRequestTime);
+        if (!currentApi || !currentApi.endpoints) {
+          setLoading(false);
+          setLoadingMore(false);
+          return;
+        }
+
+        const endpoint = Object.values(currentApi.endpoints)[0] as string;
+
+        if (endpoint === "places") {
+          response = await picnodeService.getPlaces(params);
+          transformedAssets = response.data.map((place: PlaceResource) => ({
+            id: place.id.toString(),
+            name: place.name,
+            image: getMediaUrl(place.media),
+            type: place.type,
+            raw: place,
+          }));
+        } else if (endpoint === "football-clubs") {
+          response = await picnodeService.getFootballClubs(params);
+          transformedAssets = response.data.map((club: FootballClubResource) => ({
+            id: club.id.toString(),
+            name: club.name,
+            image: getMediaUrl(club.media),
+            type: "club",
+            raw: club,
+          }));
+        } else if (endpoint === "thing-icos") {
+          response = await picnodeService.getThingIcos(params);
+          transformedAssets = response.data.map((ico: ThingIcoResource) => ({
+            id: ico.id.toString(),
+            name: ico.title,
+            image: getMediaUrl(ico.media),
+            type: "icon",
+            raw: ico,
+          }));
+        } else if (endpoint === "companies") {
+          response = await picnodeService.getCompanies(params);
+          transformedAssets = response.data.map((company: CompanyResource) => ({
+            id: company.id.toString(),
+            name: company.name,
+            image: getMediaUrl(company.media),
+            type: "company",
+            raw: company,
+          }));
+        }
+
+        if (currentApiRef.current !== apiAtRequestTime) {
+          return;
+        }
+
+        if (append) setAssets((prev) => [...prev, ...transformedAssets]);
+        else setAssets(transformedAssets);
+
+        const meta = response?.meta;
+        setCurrentPage(meta?.current_page || 1);
+        setHasMore((meta?.current_page || 1) < (meta?.last_page || 1));
+      } catch (error) {
+        console.error("Error fetching assets:", error);
+      } finally {
+        if (currentApiRef.current === apiAtRequestTime) {
+          setLoading(false);
+          setLoadingMore(false);
+        }
       }
-
-      const endpoint = Object.values(currentApi.endpoints)[0] as string;
-
-      if (endpoint === "places") {
-        response = await picnodeService.getPlaces(params);
-        transformedAssets = response.data.map((place: PlaceResource) => ({
-          id: place.id.toString(),
-          name: place.name,
-          image: getMediaUrl(place.media),
-          type: place.type,
-          raw: place,
-        }));
-      } else if (endpoint === "football-clubs") {
-        response = await picnodeService.getFootballClubs(params);
-        transformedAssets = response.data.map((club: FootballClubResource) => ({
-          id: club.id.toString(),
-          name: club.name,
-          image: getMediaUrl(club.media),
-          type: "club",
-          raw: club,
-        }));
-      } else if (endpoint === "thing-icos") {
-        response = await picnodeService.getThingIcos(params);
-        transformedAssets = response.data.map((ico: ThingIcoResource) => ({
-          id: ico.id.toString(),
-          name: ico.title,
-          image: getMediaUrl(ico.media),
-          type: "icon",
-          raw: ico,
-        }));
-      } else if (endpoint === "companies") {
-        response = await picnodeService.getCompanies(params);
-        transformedAssets = response.data.map((company: CompanyResource) => ({
-          id: company.id.toString(),
-          name: company.name,
-          image: getMediaUrl(company.media),
-          type: "company",
-          raw: company,
-        }));
-      }
-
-      if (currentApiRef.current !== apiAtRequestTime) {
-        return;
-      }
-
-      if (append) setAssets((prev) => [...prev, ...transformedAssets]);
-      else setAssets(transformedAssets);
-
-      const meta = response?.meta;
-      setCurrentPage(meta?.current_page || 1);
-      setHasMore((meta?.current_page || 1) < (meta?.last_page || 1));
-    } catch (error) {
-      console.error("Error fetching assets:", error);
-    } finally {
-      if (currentApiRef.current === apiAtRequestTime) {
-        setLoading(false);
-        setLoadingMore(false);
-      }
-    }
-  };
+    },
+    [selectedApi, debouncedSearch, apis]
+  );
 
   const loadMore = useCallback(() => {
     if (!loadingMore && hasMore) fetchAssets(currentPage + 1, true);
-  }, [loadingMore, hasMore, currentPage]);
+  }, [loadingMore, hasMore, currentPage, fetchAssets]);
 
   const onScroll = useCallback(() => {
     if (!emblaApi) return;
