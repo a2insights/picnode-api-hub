@@ -40,9 +40,9 @@ export const Navbar = () => {
           <button onClick={() => scrollToSection('apis')} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t('nav.apis')}
           </button>
-          <a href="https://a2insights.com.br/docs/api#/" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link to="/dashboard/docs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t('nav.documentation')}
-          </a>
+          </Link>
         </div>
 
         <div className="flex items-center gap-2">
