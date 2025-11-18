@@ -29,10 +29,9 @@ const menuItems = [
   {
     icon: Book,
     title: 'API Reference',
-    href: 'https://a2insights.com.br/docs/api',
-    external: true,
+    href: '/dashboard/docs',
   },
-];
+] as const;
 
 export const DocsLayout = ({ children }: DocsLayoutProps) => {
   const location = useLocation();
@@ -92,21 +91,6 @@ export const DocsLayout = ({ children }: DocsLayoutProps) => {
               {menuItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.href;
-                
-                if (item.external) {
-                  return (
-                    <a
-                      key={item.title}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted"
-                    >
-                      <Icon className="h-4 w-4" />
-                      {item.title}
-                    </a>
-                  );
-                }
 
                 return (
                   <Link
@@ -115,8 +99,8 @@ export const DocsLayout = ({ children }: DocsLayoutProps) => {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                       isActive
-                        ? 'bg-primary text-primary-foreground font-medium'
-                        : 'hover:bg-muted'
+                        ? 'bg-muted font-medium text-foreground'
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                     }`}
                   >
                     <Icon className="h-4 w-4" />
