@@ -1,10 +1,11 @@
-import { ReactNode, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Book, Code, Shield, Zap, Search, Menu, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { DocsSearch } from './DocsSearch';
+import { ReactNode, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Book, Code, Shield, Zap, Search, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { DocsSearch } from "./DocsSearch";
+import { ThemeSwitcher } from "../ThemeSwitcher";
+import { LanguageSwitcher } from "../LanguageSwitcher";
 
 interface DocsLayoutProps {
   children: ReactNode;
@@ -13,23 +14,23 @@ interface DocsLayoutProps {
 const menuItems = [
   {
     icon: Code,
-    title: 'Getting Started',
-    href: '/docs/getting-started',
+    title: "Getting Started",
+    href: "/docs/getting-started",
   },
   {
     icon: Zap,
-    title: 'Best Practices',
-    href: '/docs/best-practices',
+    title: "Best Practices",
+    href: "/docs/best-practices",
   },
   {
     icon: Shield,
-    title: 'Authentication',
-    href: '/docs/authentication',
+    title: "Authentication",
+    href: "/docs/authentication",
   },
   {
     icon: Book,
-    title: 'API Reference',
-    href: '/dashboard/docs',
+    title: "API Reference",
+    href: "/docs/api-reference",
   },
 ] as const;
 
@@ -63,10 +64,16 @@ export const DocsLayout = ({ children }: DocsLayoutProps) => {
             className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </Button>
 
           <div className="hidden md:flex items-center gap-4">
+            <ThemeSwitcher />
+            <LanguageSwitcher />
             <Link to="/dashboard">
               <Button variant="outline" size="sm">
                 Dashboard
@@ -76,12 +83,14 @@ export const DocsLayout = ({ children }: DocsLayoutProps) => {
         </div>
       </header>
 
-      <div className="container flex-1 items-start md:grid md:grid-cols-[240px_1fr] md:gap-6 lg:grid-cols-[280px_1fr] lg:gap-10 px-4 py-8">
+      <div className="container flex-1 items-start md:grid md:grid-cols-[180px_1fr] md:gap-6 lg:grid-cols-[220px_1fr] lg:gap-2 px-2 py-8">
         {/* Sidebar */}
-        <aside className={`fixed top-16 z-30 h-[calc(100vh-4rem)] w-full shrink-0 md:sticky md:block ${
-          mobileMenuOpen ? 'block' : 'hidden'
-        } md:w-auto bg-background border-r md:border-0`}>
-          <ScrollArea className="h-full py-6 pr-6 lg:py-8">
+        <aside
+          className={`fixed top-16 z-30 h-[calc(100vh-4rem)] w-full shrink-0 md:sticky md:block ${
+            mobileMenuOpen ? "block" : "hidden"
+          } md:w-auto bg-background border-r md:border-0`}
+        >
+          <ScrollArea className="h-full  pr-6 ">
             {/* Mobile Search */}
             <div className="md:hidden mb-6 px-4">
               <DocsSearch />
@@ -99,8 +108,8 @@ export const DocsLayout = ({ children }: DocsLayoutProps) => {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                       isActive
-                        ? 'bg-muted font-medium text-foreground'
-                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                        ? "bg-muted font-medium text-foreground"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -113,10 +122,8 @@ export const DocsLayout = ({ children }: DocsLayoutProps) => {
         </aside>
 
         {/* Main Content */}
-        <main className="relative py-6 lg:py-8">
-          <div className="mx-auto w-full max-w-4xl">
-            {children}
-          </div>
+        <main className="relative  ">
+          <div className="mx-auto w-full max-w-8xl">{children}</div>
         </main>
       </div>
     </div>

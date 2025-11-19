@@ -40,11 +40,19 @@ All colors MUST be HSL.
     --radius: 0.75rem;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(263 70% 60%), hsl(217 91% 60%));
-    --gradient-mesh: radial-gradient(at 40% 20%, hsl(263 70% 70% / 0.15) 0px, transparent 50%),
-                     radial-gradient(at 80% 0%, hsl(217 91% 70% / 0.1) 0px, transparent 50%),
-                     radial-gradient(at 0% 50%, hsl(263 70% 75% / 0.1) 0px, transparent 50%);
-    
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(263 70% 60%),
+      hsl(217 91% 60%)
+    );
+    --gradient-mesh: radial-gradient(
+        at 40% 20%,
+        hsl(263 70% 70% / 0.15) 0px,
+        transparent 50%
+      ),
+      radial-gradient(at 80% 0%, hsl(217 91% 70% / 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsl(263 70% 75% / 0.1) 0px, transparent 50%);
+
     /* Glows */
     --glow-primary: 0 0 80px hsl(263 70% 60% / 0.2);
     --glow-accent: 0 0 60px hsl(217 91% 60% / 0.15);
@@ -91,11 +99,19 @@ All colors MUST be HSL.
     --ring: 263 70% 60%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(263 70% 60%), hsl(217 91% 60%));
-    --gradient-mesh: radial-gradient(at 40% 20%, hsl(263 70% 30% / 0.3) 0px, transparent 50%),
-                     radial-gradient(at 80% 0%, hsl(217 91% 40% / 0.2) 0px, transparent 50%),
-                     radial-gradient(at 0% 50%, hsl(263 70% 25% / 0.2) 0px, transparent 50%);
-    
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(263 70% 60%),
+      hsl(217 91% 60%)
+    );
+    --gradient-mesh: radial-gradient(
+        at 40% 20%,
+        hsl(263 70% 30% / 0.3) 0px,
+        transparent 50%
+      ),
+      radial-gradient(at 80% 0%, hsl(217 91% 40% / 0.2) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsl(263 70% 25% / 0.2) 0px, transparent 50%);
+
     /* Glows */
     --glow-primary: 0 0 80px hsl(263 70% 60% / 0.4);
     --glow-accent: 0 0 60px hsl(217 91% 60% / 0.3);
@@ -142,11 +158,19 @@ All colors MUST be HSL.
     --ring: 280 80% 65%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(280 80% 65%), hsl(190 95% 55%));
-    --gradient-mesh: radial-gradient(at 40% 20%, hsl(280 80% 75% / 0.2) 0px, transparent 50%),
-                     radial-gradient(at 80% 0%, hsl(190 95% 65% / 0.15) 0px, transparent 50%),
-                     radial-gradient(at 0% 50%, hsl(240 85% 75% / 0.15) 0px, transparent 50%);
-    
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(280 80% 65%),
+      hsl(190 95% 55%)
+    );
+    --gradient-mesh: radial-gradient(
+        at 40% 20%,
+        hsl(280 80% 75% / 0.2) 0px,
+        transparent 50%
+      ),
+      radial-gradient(at 80% 0%, hsl(190 95% 65% / 0.15) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsl(240 85% 75% / 0.15) 0px, transparent 50%);
+
     /* Glows */
     --glow-primary: 0 0 60px hsl(280 80% 65% / 0.3);
     --glow-accent: 0 0 50px hsl(190 95% 55% / 0.25);

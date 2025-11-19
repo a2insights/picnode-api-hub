@@ -1,26 +1,41 @@
-import { useTranslation } from 'react-i18next';
-import { Link, NavLink, Outlet } from 'react-router-dom';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { Button } from '@/components/ui/button';
-import { Code2, LayoutDashboard, Key, Database, CreditCard, FileText, User, LogOut, Loader2 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from "react-i18next";
+import { Link, NavLink, Outlet } from "react-router-dom";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { Button } from "@/components/ui/button";
+import {
+  Code2,
+  LayoutDashboard,
+  Key,
+  Database,
+  CreditCard,
+  FileText,
+  User,
+  LogOut,
+  Loader2,
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 const Dashboard = () => {
   const { t } = useTranslation();
   const { user, logout, logoutLoading } = useAuth();
 
   const menuItems = [
-    { icon: LayoutDashboard, label: t('dashboard.title'), path: '/dashboard' },
-    { icon: Key, label: t('dashboard.myTokens'), path: '/dashboard/tokens' },
-    { icon: CreditCard, label: t('dashboard.ordersTitle'), path: '/dashboard/orders' },
-    { icon: FileText, label: t('dashboard.docs'), path: '/dashboard/docs' },
-    { icon: User, label: 'Profile', path: '/dashboard/profile' },
+    { icon: LayoutDashboard, label: t("dashboard.title"), path: "/dashboard" },
+    { icon: Key, label: t("dashboard.myTokens"), path: "/dashboard/tokens" },
+    {
+      icon: CreditCard,
+      label: t("dashboard.ordersTitle"),
+      path: "/dashboard/orders",
+    },
+    { icon: FileText, label: t("dashboard.docs"), path: "/dashboard/docs" },
+    { icon: User, label: "Profile", path: "/dashboard/profile" },
   ];
 
   return (
     <div className="min-h-screen flex w-full">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-border bg-sidebar flex flex-col">
+      <aside className="w-48 border-r border-border bg-sidebar flex flex-col">
         <div className="p-6 border-b border-sidebar-border">
           <Link to="/" className="flex items-center gap-2">
             <div className="bg-gradient-to-br from-primary to-accent p-2 rounded-lg">
@@ -39,12 +54,12 @@ const Dashboard = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
-                end={item.path === '/dashboard'}
+                end={item.path === "/dashboard"}
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
                     isActive
-                      ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                      : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                   }`
                 }
               >
@@ -56,8 +71,13 @@ const Dashboard = () => {
         </nav>
 
         <div className="p-4 border-t border-sidebar-border">
-          <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-            <Link to="/">← {t('nav.home')}</Link>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start"
+            asChild
+          >
+            <Link to="/">← {t("nav.home")}</Link>
           </Button>
         </div>
       </aside>
@@ -67,24 +87,35 @@ const Dashboard = () => {
         {/* Header */}
         <header className="h-16 border-b border-border bg-card px-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold">{t('dashboard.title')}</h1>
-            {user && <span className="text-sm text-muted-foreground">Welcome, {user.name}!</span>}
+            <h1 className="text-2xl font-bold">{t("dashboard.title")}</h1>
+            {user && (
+              <span className="text-sm text-muted-foreground">
+                Welcome, {user.name}!
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-3">
+            <ThemeSwitcher />
             <LanguageSwitcher />
-            <Button variant="outline" size="sm" onClick={logout} disabled={logoutLoading} className="gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={logout}
+              disabled={logoutLoading}
+              className="gap-2"
+            >
               {logoutLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <LogOut className="h-4 w-4" />
               )}
-              {logoutLoading ? 'Logging out...' : 'Logout'}
+              {logoutLoading ? "Logging out..." : "Logout"}
             </Button>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 p-2 overflow-auto">
           <Outlet />
         </main>
       </div>
