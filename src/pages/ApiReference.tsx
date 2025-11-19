@@ -1,6 +1,5 @@
 import { DocsLayout } from "@/components/docs/DocsLayout";
 import { ApiReferenceReact } from "@scalar/api-reference-react";
-import "@scalar/api-reference-react/style.css";
 import { useEffect, useState } from "react";
 
 export const ApiReference = () => {
@@ -9,17 +8,26 @@ export const ApiReference = () => {
       (typeof window !== "undefined" && localStorage.getItem("theme")) || "dark"
   );
 
+  const [loadedCss, setLoadedCss] = useState(false);
+
+  useEffect(() => {
+    import("@scalar/api-reference-react/style.css").then(() => {
+      setLoadedCss(true);
+    });
+  }, []);
+
   useEffect(() => {
     const updateTheme = () => {
       setTheme(localStorage.getItem("theme") || "dark");
     };
 
     window.addEventListener("theme-change", updateTheme);
-
     return () => {
       window.removeEventListener("theme-change", updateTheme);
     };
   }, []);
+
+  if (!loadedCss) return null;
 
   return (
     <DocsLayout>
