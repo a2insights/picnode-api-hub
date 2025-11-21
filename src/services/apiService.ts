@@ -69,7 +69,9 @@ export const updateProfile = async (userData: any) => {
 
 export const sendConfirmationEmail = async () => {
   try {
-    const response = await axiosInstance.post("picnode/user/email-verification");
+    const response = await axiosInstance.post(
+      "picnode/user/email-verification"
+    );
     return response.data;
   } catch (error) {
     console.error("Error sending confirmation email:", error);
@@ -160,7 +162,10 @@ export const calculateTotal = async (data: {
   currency: "usd" | "eur" | "gbp" | "brl";
 }) => {
   try {
-    const response = await axiosInstance.post("picnode/orders/calculate-total", data);
+    const response = await axiosInstance.post(
+      "picnode/orders/calculate-total",
+      data
+    );
     return response.data;
   } catch (error) {
     console.error("Error calculating total:", error);

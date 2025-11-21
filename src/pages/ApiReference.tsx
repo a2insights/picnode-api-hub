@@ -34,7 +34,7 @@ export const ApiReference = () => {
       <ApiReferenceReact
         key={theme}
         configuration={{
-          url: "https://a2insights.com.br/docs/api.json",
+          url: "/api.json",
           theme: "default",
           forceDarkModeState: theme === "dark" ? "dark" : "light",
           hideModels: false,

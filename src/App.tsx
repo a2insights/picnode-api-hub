@@ -21,6 +21,7 @@ import { Authentication } from "./pages/Authentication";
 import { useEffect } from "react";
 import { useAppContext } from "./contexts/AppContext";
 import apiService from "./services/apiService";
+import { PicnodeProvider } from "./contexts/PicnodeContext";
 
 const queryClient = new QueryClient();
 
@@ -50,33 +51,35 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<LoginPage />} />
+        <PicnodeProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<LoginPage />} />
 
-            {/* Public Documentation Routes */}
-            <Route path="/docs/getting-started" element={<GettingStarted />} />
-            <Route path="/docs/best-practices" element={<BestPractices />} />
-            <Route path="/docs/authentication" element={<Authentication />} />
+              {/* Public Documentation Routes */}
+              <Route path="/docs/getting-started" element={<GettingStarted />} />
+              <Route path="/docs/best-practices" element={<BestPractices />} />
+              <Route path="/docs/authentication" element={<Authentication />} />
 
-            {/* Public Api Documentation Route */}
-            <Route path="/docs/api-reference" element={<ApiReference />} />
+              {/* Public Api Documentation Route */}
+              <Route path="/docs/api-reference" element={<ApiReference />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={<Dashboard />}>
-                <Route index element={<DashboardOverview />} />
-                <Route path="tokens" element={<TokensPage />} />
-                <Route path="orders" element={<OrdersPage />} />
-                <Route path="docs" element={<DocsPage />} />
-                <Route path="profile" element={<ProfilePage />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/dashboard" element={<Dashboard />}>
+                  <Route index element={<DashboardOverview />} />
+                  <Route path="tokens" element={<TokensPage />} />
+                  <Route path="orders" element={<OrdersPage />} />
+                  <Route path="docs" element={<DocsPage />} />
+                  <Route path="profile" element={<ProfilePage />} />
+                </Route>
               </Route>
-            </Route>
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </PicnodeProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
