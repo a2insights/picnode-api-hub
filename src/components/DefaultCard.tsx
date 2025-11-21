@@ -33,7 +33,9 @@ const DefaultCard = ({
           <h3 className="text-foreground font-semibold text-xs truncate">
             {asset.name}
           </h3>
-          <p className="text-muted-foreground text-[10px]">{asset.type}</p>
+          {asset.type !== "company" && (
+            <p className="text-muted-foreground text-[10px]">{asset.type}</p>
+          )}
         </div>
       </div>
     </Card>

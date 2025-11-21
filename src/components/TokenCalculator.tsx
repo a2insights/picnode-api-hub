@@ -47,7 +47,12 @@ export const TokenCalculator = ({
 
   useEffect(() => {
     if (apis.length > 0) {
-      setSelectedApis(apis.map((api) => api.slug));
+      const allowedApis = apis.filter((api) =>
+        ["thing-icos", "places", "football-clubs", "companies"].includes(
+          api.slug
+        )
+      );
+      setSelectedApis(allowedApis.map((api) => api.slug));
     }
   }, [apis]);
 
@@ -151,18 +156,27 @@ export const TokenCalculator = ({
               {t("calculator.apis")}
             </label>
             <div className="grid grid-cols-2 gap-4">
-              {apis.map((api) => (
-                <div key={api.id} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={api.slug}
-                    checked={selectedApis.includes(api.slug)}
-                    onCheckedChange={() => handleApiChange(api.slug)}
-                  />
-                  <Label htmlFor={api.slug} className="cursor-pointer">
-                    {api.name}
-                  </Label>
-                </div>
-              ))}
+              {apis
+                .filter((api) =>
+                  [
+                    "thing-icos",
+                    "places",
+                    "football-clubs",
+                    "companies",
+                  ].includes(api.slug)
+                )
+                .map((api) => (
+                  <div key={api.id} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={api.slug}
+                      checked={selectedApis.includes(api.slug)}
+                      onCheckedChange={() => handleApiChange(api.slug)}
+                    />
+                    <Label htmlFor={api.slug} className="cursor-pointer">
+                      {api.name}
+                    </Label>
+                  </div>
+                ))}
             </div>
             {selectedApis.length === 0 && (
               <p className="text-sm text-destructive">

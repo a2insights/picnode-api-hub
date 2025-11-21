@@ -93,6 +93,11 @@
         "content": "You can find your authentication token in your dashboard under the Tokens section. Keep your token secure and never expose it in client-side code or public repositories."
       },
       {
+        "id": "token-scopes",
+        "title": "Token Scopes",
+        "content": "When creating a token, you can restrict its access to specific APIs. The allowed APIs are: `thing-icos`, `places`, `football-clubs`, and `companies`."
+      },
+      {
         "id": "using-token",
         "title": "Using Your Token",
         "content": "Include your token in the Authorization header with the Bearer scheme for every API request.",

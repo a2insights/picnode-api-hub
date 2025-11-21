@@ -50,6 +50,7 @@ export interface ThingIcoResource {
 export interface CompanyResource {
   id: number;
   name: string;
+  slug: string;
   media?: MediaResource | null;
   created_at: string | null;
   updated_at: string | null;

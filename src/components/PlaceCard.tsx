@@ -26,7 +26,11 @@ const PlaceCard = ({ asset, onOpen }: { asset: Asset; onOpen?: () => void }) => 
 
         <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-background/95 via-background/60 to-transparent">
           <h3 className="text-foreground font-semibold text-xs truncate">{asset.name}</h3>
-          <p className="text-muted-foreground text-[10px] truncate">{asset.type}</p>
+          {asset.type !== "company" && (
+            <p className="text-muted-foreground text-[10px] truncate">
+              {asset.type}
+            </p>
+          )}
         </div>
       </div>
     </Card>

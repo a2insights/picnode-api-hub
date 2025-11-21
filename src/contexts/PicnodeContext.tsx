@@ -164,22 +164,21 @@ export const PicnodeProvider = ({ children }: { children: React.ReactNode }) => 
         } else if (endpoint === "companies") {
           response = await picnodeService.getCompanies(params);
           transformedAssets = response.data.flatMap((company: CompanyResource) => {
-             if (Array.isArray(company.media) && company.media.length > 0) {
-              return company.media.map((media, index) => ({
+            const svgMedia =
+              Array.isArray(company.media) && company.media.length > 0
+                ? company.media.filter((m) => m.extension === "svg")
+                : [];
+
+            if (svgMedia.length > 0) {
+              return svgMedia.map((media, index) => ({
                 id: `${company.id}-${index}`,
-                name: company.name,
+                name: company.name || company.slug,
                 image: getMediaUrl(media),
                 type: "company",
                 raw: company,
               }));
             }
-            return [{
-              id: company.id.toString(),
-              name: company.name,
-              image: getMediaUrl(company.media),
-              type: "company",
-              raw: company,
-            }];
+            return [];
           });
         }
 
