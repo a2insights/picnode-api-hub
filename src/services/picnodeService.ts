@@ -1,13 +1,15 @@
-import axios from "axios";
+import axios from 'axios';
 
-const API_BASE_URL = "https://a2insights.com.br/api/picnode";
-const BEARER_TOKEN = "28|JHFYyuuwowfMc4cH7D53TM0RNfnjkQACa6taAP8X69805c5a";
+// const API_BASE_URL = "https://a2insights.com.br/api/picnode";
+// const BEARER_TOKEN = "28|JHFYyuuwowfMc4cH7D53TM0RNfnjkQACa6taAP8X69805c5a";
+const API_BASE_URL = 'http://localhost/api/picnode';
+const BEARER_TOKEN = '4|05hIVEsXha7CGN24sJxMYwKPrfRyz3QLDz62hLU0b6f79ce8';
 
 const picnodeApi = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     Authorization: `Bearer ${BEARER_TOKEN}`,
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -81,13 +83,13 @@ export const picnodeService = {
     has_media?: boolean;
     media_conversions?: string;
   }): Promise<PaginatedResponse<PlaceResource>> {
-    const response = await picnodeApi.get("/places", {
+    const response = await picnodeApi.get('/places', {
       params: {
-        "filter[search]": params?.search,
+        'filter[search]': params?.search,
         page: params?.page,
         has_media: params?.has_media ? 1 : undefined,
-        media_conversions: params?.media_conversions || "sm,md,lg",
-        include: "media",
+        media_conversions: params?.media_conversions || 'sm,md,lg',
+        include: 'media',
       },
     });
     return response.data;
@@ -99,13 +101,13 @@ export const picnodeService = {
     has_media?: boolean;
     media_conversions?: string;
   }): Promise<PaginatedResponse<FootballClubResource>> {
-    const response = await picnodeApi.get("/football-clubs", {
+    const response = await picnodeApi.get('/football-clubs', {
       params: {
-        "filter[search]": params?.search,
+        'filter[search]': params?.search,
         page: params?.page,
         has_media: params?.has_media ? 1 : undefined,
-        media_conversions: params?.media_conversions || "sm,md,lg",
-        include: "media",
+        media_conversions: params?.media_conversions || 'sm,md,lg',
+        include: 'media',
       },
     });
     return response.data;
@@ -117,13 +119,13 @@ export const picnodeService = {
     has_media?: boolean;
     media_conversions?: string;
   }): Promise<PaginatedResponse<ThingIcoResource>> {
-    const response = await picnodeApi.get("/thing-icos", {
+    const response = await picnodeApi.get('/thing-icos', {
       params: {
-        "filter[search]": params?.search,
+        'filter[search]': params?.search,
         page: params?.page,
         has_media: params?.has_media ? 1 : undefined,
-        media_conversions: params?.media_conversions || "sm,md,lg",
-        include: "media",
+        media_conversions: params?.media_conversions || 'sm,md,lg',
+        include: 'media',
       },
     });
     return response.data;
@@ -135,13 +137,13 @@ export const picnodeService = {
     has_media?: boolean;
     media_conversions?: string;
   }): Promise<PaginatedResponse<CompanyResource>> {
-    const response = await picnodeApi.get("/companies", {
+    const response = await picnodeApi.get('/companies', {
       params: {
-        "filter[search]": params?.search,
+        'filter[search]': params?.search,
         page: params?.page,
         has_media: params?.has_media ? 1 : undefined,
-        media_conversions: params?.media_conversions || "sm,md,lg",
-        include: "media",
+        media_conversions: params?.media_conversions || 'sm,md,lg',
+        include: 'media',
       },
     });
     return response.data;

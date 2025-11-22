@@ -1,48 +1,37 @@
-import { DocsLayout } from "@/components/docs/DocsLayout";
-import { ApiReferenceReact } from "@scalar/api-reference-react";
-import { useEffect, useState } from "react";
+import { DocsLayout } from '@/components/docs/DocsLayout';
+import { ApiSidebar, ApiItem } from '@/components/api-reference/ApiSidebar';
+import { ApiContent } from '@/components/api-reference/ApiContent';
+import { useAppContext } from '@/contexts/AppContext';
+import { useState, useEffect } from 'react';
 
 export const ApiReference = () => {
-  const [theme, setTheme] = useState(
-    () =>
-      (typeof window !== "undefined" && localStorage.getItem("theme")) || "dark"
-  );
+  const { apis } = useAppContext();
+  const [selectedApi, setSelectedApi] = useState<ApiItem | null>(null);
 
-  const [loadedCss, setLoadedCss] = useState(false);
-
+  // Select the first API by default when apis are loaded
   useEffect(() => {
-    import("@scalar/api-reference-react/style.css").then(() => {
-      setLoadedCss(true);
-    });
-  }, []);
-
-  useEffect(() => {
-    const updateTheme = () => {
-      setTheme(localStorage.getItem("theme") || "dark");
-    };
-
-    window.addEventListener("theme-change", updateTheme);
-    return () => {
-      window.removeEventListener("theme-change", updateTheme);
-    };
-  }, []);
-
-  if (!loadedCss) return null;
+    if (apis.length > 0 && !selectedApi) {
+      setSelectedApi(apis[0] as unknown as ApiItem);
+    }
+  }, [apis, selectedApi]);
 
   return (
-    <DocsLayout>
-      <ApiReferenceReact
-        key={theme}
-        configuration={{
-          url: "/api.json",
-          theme: "default",
-          forceDarkModeState: theme === "dark" ? "dark" : "light",
-          hideModels: false,
-          hideDownloadButton: false,
-          hideDarkModeToggle: true,
-          hiddenClients: true,
-        }}
-      />
+    <DocsLayout
+      secondarySidebar={
+        <ApiSidebar
+          apis={apis as unknown as ApiItem[]}
+          selectedApi={selectedApi}
+          onSelectApi={setSelectedApi}
+        />
+      }
+    >
+      {selectedApi ? (
+        <ApiContent api={selectedApi} />
+      ) : (
+        <div className="flex items-center justify-center h-full text-muted-foreground">
+          Select an API to view documentation
+        </div>
+      )}
     </DocsLayout>
   );
 };
