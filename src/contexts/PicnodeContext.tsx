@@ -1,4 +1,11 @@
-import { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import {
   picnodeService,
@@ -44,7 +51,11 @@ const PicnodeContext = createContext<PicnodeContextType>({
   loadMore: () => {},
 });
 
-export const PicnodeProvider = ({ children }: { children: React.ReactNode }) => {
+export const PicnodeProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const { apis } = useAppContext();
   const [selectedApi, setSelectedApi] = useState<string>("");
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -126,32 +137,25 @@ export const PicnodeProvider = ({ children }: { children: React.ReactNode }) => 
         if (endpoint === "places") {
           response = await picnodeService.getPlaces(params);
           transformedAssets = response.data.flatMap((place: PlaceResource) => {
-            if (Array.isArray(place.media) && place.media.length > 0) {
-              return place.media.map((media, index) => ({
-                id: `${place.id}-${index}`,
-                name: place.name,
-                image: getMediaUrl(media),
-                type: place.type,
-                raw: place,
-              }));
-            }
-            return [{
-              id: place.id.toString(),
+            return place.media.map((media, index) => ({
+              id: `${place.id}-${index}`,
               name: place.name,
-              image: getMediaUrl(place.media),
+              image: getMediaUrl(media),
               type: place.type,
               raw: place,
-            }];
+            }));
           });
         } else if (endpoint === "football-clubs") {
           response = await picnodeService.getFootballClubs(params);
-          transformedAssets = response.data.map((club: FootballClubResource) => ({
-            id: club.id.toString(),
-            name: club.name,
-            image: getMediaUrl(club.media),
-            type: "club",
-            raw: club,
-          }));
+          transformedAssets = response.data.map(
+            (club: FootballClubResource) => ({
+              id: club.id.toString(),
+              name: club.name,
+              image: getMediaUrl(club.media),
+              type: "club",
+              raw: club,
+            })
+          );
         } else if (endpoint === "thing-icos") {
           response = await picnodeService.getThingIcos(params);
           transformedAssets = response.data.map((ico: ThingIcoResource) => ({
@@ -163,14 +167,9 @@ export const PicnodeProvider = ({ children }: { children: React.ReactNode }) => 
           }));
         } else if (endpoint === "companies") {
           response = await picnodeService.getCompanies(params);
-          transformedAssets = response.data.flatMap((company: CompanyResource) => {
-            const svgMedia =
-              Array.isArray(company.media) && company.media.length > 0
-                ? company.media.filter((m) => m.extension === "svg")
-                : [];
-
-            if (svgMedia.length > 0) {
-              return svgMedia.map((media, index) => ({
+          transformedAssets = response.data.flatMap(
+            (company: CompanyResource) => {
+              return company.media.map((media, index) => ({
                 id: `${company.id}-${index}`,
                 name: company.name || company.slug,
                 image: getMediaUrl(media),
@@ -178,8 +177,7 @@ export const PicnodeProvider = ({ children }: { children: React.ReactNode }) => 
                 raw: company,
               }));
             }
-            return [];
-          });
+          );
         }
 
         if (currentApiRef.current !== apiAtRequestTime) {
@@ -190,7 +188,7 @@ export const PicnodeProvider = ({ children }: { children: React.ReactNode }) => 
         else setAssets(transformedAssets);
 
         const meta = response?.meta;
-        // If we randomized the page, we need to be careful about pagination. 
+        // If we randomized the page, we need to be careful about pagination.
         // For simplicity in this demo, we'll just set current page to the one we fetched.
         setCurrentPage(meta?.current_page || fetchPage);
         setHasMore((meta?.current_page || fetchPage) < (meta?.last_page || 1));
