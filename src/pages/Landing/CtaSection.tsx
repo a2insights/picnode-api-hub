@@ -19,7 +19,7 @@ export const CtaSection = () => {
       {/* Background Gradients */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/20 to-primary/20" />
       <div className="absolute inset-0 bg-gradient-mesh opacity-30" />
-      
+
       {/* Animated Floating Elements */}
       <motion.div
         className="absolute top-20 left-20 w-32 h-32 bg-primary/30 rounded-full blur-3xl"
@@ -31,7 +31,7 @@ export const CtaSection = () => {
         transition={{
           duration: 8,
           repeat: Infinity,
-          ease: "easeInOut",
+          ease: 'easeInOut',
         }}
       />
       <motion.div
@@ -44,7 +44,7 @@ export const CtaSection = () => {
         transition={{
           duration: 10,
           repeat: Infinity,
-          ease: "easeInOut",
+          ease: 'easeInOut',
         }}
       />
       <motion.div
@@ -57,10 +57,10 @@ export const CtaSection = () => {
         transition={{
           duration: 6,
           repeat: Infinity,
-          ease: "easeInOut",
+          ease: 'easeInOut',
         }}
       />
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -119,7 +119,8 @@ export const CtaSection = () => {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
           >
-            Comece agora mesmo com 500 requisições grátis por 7 dias. Sem cartão de crédito necessário.
+            Comece agora mesmo com 100 requisições grátis por 7 dias. Sem cartão de crédito
+            necessário.
           </motion.p>
 
           <motion.div
@@ -129,9 +130,9 @@ export const CtaSection = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Button 
-              size="lg" 
-              className="gap-2 group shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all" 
+            <Button
+              size="lg"
+              className="gap-2 group shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all"
               onClick={scrollToCalculator}
             >
               <Sparkles className="h-5 w-5 group-hover:rotate-12 transition-transform" />
