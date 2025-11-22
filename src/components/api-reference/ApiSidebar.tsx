@@ -1,6 +1,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { Flag, Sparkles, ChevronDown, Search } from 'lucide-react';
+import { Flag, Sparkles, ChevronDown, Search, Shield, MapPinCheck, Building2 } from 'lucide-react';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 
@@ -48,35 +48,15 @@ interface ApiSidebarProps {
 const iconMap: Record<string, any> = {
   Sparkles: Sparkles,
   Flag: Flag,
+  Shield: Shield,
+  MapPinCheck: MapPinCheck,
+  Building2: Building2,
 };
 
 export const ApiSidebar = ({ apis, selectedApi, onSelectApi }: ApiSidebarProps) => {
   const [search, setSearch] = useState('');
 
-  // Group APIs by category
-  const groupedApis = apis.reduce(
-    (acc, api) => {
-      if (!acc[api.category]) {
-        acc[api.category] = [];
-      }
-      acc[api.category].push(api);
-      return acc;
-    },
-    {} as Record<string, ApiItem[]>,
-  );
-
-  const filteredGroups = Object.entries(groupedApis).reduce(
-    (acc, [category, items]) => {
-      const filteredItems = items.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase()),
-      );
-      if (filteredItems.length > 0) {
-        acc[category] = filteredItems;
-      }
-      return acc;
-    },
-    {} as Record<string, ApiItem[]>,
-  );
+  const filteredApis = apis.filter((api) => api.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="h-full flex flex-col">
@@ -92,36 +72,30 @@ export const ApiSidebar = ({ apis, selectedApi, onSelectApi }: ApiSidebarProps) 
         </div>
       </div>
       <ScrollArea className="flex-1">
-        <div className="p-4 space-y-6">
-          <div className="space-y-1">
-            <h3 className="font-semibold text-sm text-foreground mb-2">API Directory</h3>
-            {Object.entries(filteredGroups).map(([category, items]) => (
-              <div key={category} className="space-y-1">
-                <div className="flex items-center text-sm font-medium text-muted-foreground mt-4 mb-2">
-                  <ChevronDown className="h-3 w-3 mr-2" />
-                  {category}
-                </div>
-                {items.map((api) => {
-                  const Icon = iconMap[api.icon] || Flag;
-                  return (
-                    <button
-                      key={api.id}
-                      onClick={() => onSelectApi(api)}
-                      className={cn(
-                        'w-full flex items-center px-2 py-1.5 text-sm rounded-md transition-colors',
-                        selectedApi?.id === api.id
-                          ? 'bg-primary/10 text-primary font-medium'
-                          : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-                      )}
-                    >
-                      <Icon className="h-4 w-4 mr-2" />
-                      {api.name}
-                    </button>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
+        <div className="p-4 space-y-1">
+          <h3 className="font-semibold text-sm text-foreground mb-2">API Directory</h3>
+          {filteredApis.length === 0 ? (
+            <div className="text-sm text-muted-foreground py-4 text-center">No APIs found.</div>
+          ) : (
+            filteredApis.map((api) => {
+              const Icon = iconMap[api.icon] || Flag;
+              return (
+                <button
+                  key={api.id}
+                  onClick={() => onSelectApi(api)}
+                  className={cn(
+                    'w-full flex items-center px-2 py-1.5 text-sm rounded-md transition-colors',
+                    selectedApi?.id === api.id
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                  )}
+                >
+                  <Icon className="h-4 w-4 mr-2" />
+                  {api.name}
+                </button>
+              );
+            })
+          )}
         </div>
       </ScrollArea>
     </div>

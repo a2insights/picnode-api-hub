@@ -3,11 +3,24 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { Clock, Activity, Globe, Server, AlertCircle } from 'lucide-react';
+import {
+  Clock,
+  Activity,
+  Globe,
+  Server,
+  AlertCircle,
+  Sparkles,
+  Flag,
+  Code2,
+  Shield,
+  MapPinCheck,
+  Building2,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import * as SwaggerParser from '@readme/openapi-parser';
 import { ResponseViewer } from './ResponseViewer';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { cn } from '@/lib/utils';
 
 interface ApiContentProps {
   api: ApiItem;
@@ -20,6 +33,14 @@ interface OpenApiSpec {
   };
   servers: { url: string }[];
 }
+
+const iconMap: Record<string, any> = {
+  Sparkles: Sparkles,
+  Flag: Flag,
+  Shield: Shield,
+  MapPinCheck: MapPinCheck,
+  Building2: Building2,
+};
 
 export const ApiContent = ({ api }: ApiContentProps) => {
   const [spec, setSpec] = useState<OpenApiSpec | null>(null);
@@ -82,40 +103,53 @@ export const ApiContent = ({ api }: ApiContentProps) => {
       })
     : [];
 
+  const Icon = iconMap[api.icon] || Flag;
+
   return (
     <div className="p-8 max-w-5xl mx-auto space-y-8">
       {/* Header Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight">{api.name}</h1>
-            <p className="text-muted-foreground text-lg">{api.description}</p>
+      <div className={cn('rounded-xl p-8 text-white shadow-lg bg-gradient-to-r', api.color)}>
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+              <Icon className="h-8 w-8" />
+            </div>
+            <div className="space-y-1">
+              <h1 className="text-3xl font-bold tracking-tight">{api.name}</h1>
+              <p className="text-white/90 text-lg max-w-2xl">{api.description}</p>
+            </div>
           </div>
           <Badge
-            variant={api.availability.status === 'Available' ? 'default' : 'secondary'}
-            className="text-sm px-3 py-1"
+            variant="secondary"
+            className="text-sm px-3 py-1 bg-white/20 hover:bg-white/30 text-white border-none backdrop-blur-sm"
           >
             {api.availability.status}
           </Badge>
         </div>
 
-        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2 bg-secondary/50 px-3 py-1.5 rounded-full">
-            <Activity className="h-4 w-4 text-green-500" />
+        <div className="flex flex-wrap gap-4 mt-8 text-sm font-medium text-white/90">
+          <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+            <Activity className="h-4 w-4" />
             <span>Uptime: {api.statistics.uptime}%</span>
           </div>
-          <div className="flex items-center gap-2 bg-secondary/50 px-3 py-1.5 rounded-full">
-            <Globe className="h-4 w-4 text-blue-500" />
+          <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+            <Globe className="h-4 w-4" />
             <span>{api.statistics.activeUsers.toLocaleString()} Active Users</span>
           </div>
-          <div className="flex items-center gap-2 bg-secondary/50 px-3 py-1.5 rounded-full">
-            <Server className="h-4 w-4 text-purple-500" />
+          <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+            <Server className="h-4 w-4" />
             <span>{api.statistics.totalRequests.toLocaleString()} Requests</span>
           </div>
-          <div className="flex items-center gap-2 bg-secondary/50 px-3 py-1.5 rounded-full">
-            <Clock className="h-4 w-4 text-orange-500" />
+          <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+            <Clock className="h-4 w-4" />
             <span>Updated: {new Date(api.updated_at).toLocaleDateString()}</span>
           </div>
+          {api.features.languages && (
+            <div className="flex items-center gap-2 bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/30">
+              <Code2 className="h-4 w-4" />
+              <span>{api.features.languages.split(',').join(', ')}</span>
+            </div>
+          )}
         </div>
       </div>
 

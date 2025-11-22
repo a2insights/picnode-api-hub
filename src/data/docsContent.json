@@ -16,8 +16,8 @@
       {
         "id": "common-parameters",
         "title": "Common Parameters",
-        "content": "Most endpoints support the following parameters:\n- `media_conversions`: Request specific image sizes (xs, sm, md, lg, preview, thumbnail, webp)\n- `include`: Request related resources (e.g., media, mediaCount)\n- `has_media`: Filter resources that have media attached",
-        "code": "fetch('https://a2insights.com.br/api/picnode/places?include=media&media_conversions=sm,webp')"
+        "content": "Most endpoints support the following parameters:\n- `media_conversions`: Request specific image sizes (xs, sm, md, lg, preview, thumbnail, webp)\n- `filter[search]`: Search for specific resources\n- `page`: Page number\n- `per_page`: Number of items per page",
+        "code": "fetch('https://a2insights.com.br/api/picnode/places?page=1&per_page=10&filter[search]=paris&media_conversions=sm,webp')"
       },
       {
         "id": "quick-start",
