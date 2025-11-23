@@ -29,6 +29,7 @@ import PlaceCard from '@/components/PlaceCard';
 import DefaultCard from '@/components/DefaultCard';
 import ImageModal from '@/components/ImageModal';
 import { MultilingualBadge } from '@/components/MultilingualBadge';
+import { AssetDetailModal } from '@/components/AssetDetailModal';
 
 interface Asset {
   id: string;
@@ -114,6 +115,9 @@ const ApiPlayground = () => {
     alt?: string;
   } | null>(null);
 
+  const [assetDetailOpen, setAssetDetailOpen] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
+
   const openModal = (src: string, alt?: string) => {
     setModalImage({ src, alt });
     setModalOpen(true);
@@ -122,6 +126,16 @@ const ApiPlayground = () => {
   const closeModal = () => {
     setModalOpen(false);
     setModalImage(null);
+  };
+
+  const openAssetDetail = (asset: Asset) => {
+    setSelectedAsset(asset);
+    setAssetDetailOpen(true);
+  };
+
+  const closeAssetDetail = () => {
+    setAssetDetailOpen(false);
+    setSelectedAsset(null);
   };
 
   const onScroll = useCallback(() => {
@@ -289,15 +303,9 @@ const ApiPlayground = () => {
                       className={`flex-shrink-0 ${cardWidth}`}
                     >
                       {variant === 'place' ? (
-                        <PlaceCard
-                          asset={asset}
-                          onOpen={() => openModal(asset.image, asset.name)}
-                        />
+                        <PlaceCard asset={asset} onOpen={() => openAssetDetail(asset)} />
                       ) : (
-                        <DefaultCard
-                          asset={asset}
-                          onOpen={() => openModal(asset.image, asset.name)}
-                        />
+                        <DefaultCard asset={asset} onOpen={() => openAssetDetail(asset)} />
                       )}
                     </motion.div>
                   ))}
@@ -381,6 +389,12 @@ const ApiPlayground = () => {
             <ImageModal src={modalImage.src} alt={modalImage.alt} onClose={closeModal} />
           )}
         </AnimatePresence>
+
+        <AssetDetailModal
+          asset={selectedAsset}
+          open={assetDetailOpen}
+          onOpenChange={setAssetDetailOpen}
+        />
       </div>
     </section>
   );

@@ -1,15 +1,25 @@
-import { Check, Image as ImageIcon, Search, Loader2 } from "lucide-react";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { usePicnodeContext } from "@/contexts/PicnodeContext";
-import { Input } from "@/components/ui/input";
+import { Check, Image as ImageIcon, Search, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { usePicnodeContext } from '@/contexts/PicnodeContext';
+import { Input } from '@/components/ui/input';
+import { AssetDetailModal } from '@/components/AssetDetailModal';
 
 export const ImagePickerDemo = () => {
   const { assets, loading, searchTerm, setSearchTerm } = usePicnodeContext();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Take only the first 6 assets for the grid
   const displayAssets = assets.slice(0, 6);
+
+  const handleSelectClick = () => {
+    if (selectedId) {
+      setModalOpen(true);
+    }
+  };
+
+  const selectedAsset = assets.find((asset) => asset.id === selectedId) || null;
 
   return (
     <div className="w-full max-w-md mx-auto bg-card border border-border rounded-xl shadow-xl overflow-hidden">
@@ -51,12 +61,12 @@ export const ImagePickerDemo = () => {
                 ${selectedId === asset.id ? 'ring-2 ring-primary ring-offset-2 ring-offset-card' : 'hover:opacity-90'}
               `}
             >
-              <img 
-                src={asset.image} 
+              <img
+                src={asset.image}
                 alt={asset.name}
                 className="w-full h-full object-contain p-2"
               />
-              
+
               {selectedId === asset.id && (
                 <div className="absolute top-2 right-2 h-5 w-5 bg-primary rounded-full flex items-center justify-center shadow-sm z-10">
                   <Check className="h-3 w-3 text-primary-foreground" />
@@ -74,13 +84,16 @@ export const ImagePickerDemo = () => {
 
       {/* Footer */}
       <div className="p-4 bg-muted/30 border-t border-border flex justify-between items-center">
-        <div className="text-xs text-muted-foreground">
-          {assets.length} assets found
-        </div>
-        <div className={`h-8 px-4 text-sm font-medium rounded-md flex items-center transition-colors ${selectedId ? 'bg-primary text-primary-foreground cursor-pointer' : 'bg-muted text-muted-foreground cursor-not-allowed'}`}>
+        <div className="text-xs text-muted-foreground">{assets.length} assets found</div>
+        <div
+          onClick={handleSelectClick}
+          className={`h-8 px-4 text-sm font-medium rounded-md flex items-center transition-colors ${selectedId ? 'bg-primary text-primary-foreground cursor-pointer hover:bg-primary/90' : 'bg-muted text-muted-foreground cursor-not-allowed'}`}
+        >
           Select
         </div>
       </div>
+
+      <AssetDetailModal asset={selectedAsset} open={modalOpen} onOpenChange={setModalOpen} />
     </div>
   );
 };
