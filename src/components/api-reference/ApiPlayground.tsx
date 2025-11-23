@@ -11,6 +11,7 @@ import ReactJson from 'react-json-view';
 import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
+import { useGlobalPlayground } from '@/contexts/GlobalPlaygroundContext';
 import { getTokens } from '@/services/apiService';
 import {
   Select,
@@ -39,6 +40,7 @@ interface ApiResponse {
 interface Token {
   id: number | string;
   name: string;
+  abilities?: string[];
   usage: {
     plain_text_token: string;
   };
@@ -96,50 +98,61 @@ export const ApiPlayground = ({
 }: ApiPlaygroundProps) => {
   const { theme } = useTheme();
   const { isAuthenticated } = useAuth();
+  const { globalToken, isLiveMode, setIsLiveMode, selectedServerUrl, setSelectedServerUrl } =
+    useGlobalPlayground();
+
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<ApiResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [paramValues, setParamValues] = useState<Record<string, string>>({});
-  const [mockMode, setMockMode] = useState(true);
 
   // Token state
   const [tokens, setTokens] = useState<Token[]>([]);
   const [selectedToken, setSelectedToken] = useState<string>('');
   const [manualToken, setManualToken] = useState('');
   const [loadingTokens, setLoadingTokens] = useState(false);
+  const [isManualToken, setIsManualToken] = useState(false);
 
-  // Server state
-  const [selectedServer, setSelectedServer] = useState<string>(servers[0]?.url || '');
-
-  // Group parameters by location
-  const pathParams = parameters.filter((p) => p.in === 'path');
-  const queryParams = parameters.filter((p) => p.in === 'query');
-  const headerParams = parameters.filter((p) => p.in === 'header');
-
+  // Initialize selected server if not set globally
   useEffect(() => {
-    if (servers.length > 0 && !selectedServer) {
-      setSelectedServer(servers[0].url);
+    if (!selectedServerUrl && servers.length > 0) {
+      setSelectedServerUrl(servers[0].url);
     }
-  }, [servers]);
+  }, [servers, selectedServerUrl, setSelectedServerUrl]);
 
+  // Sync with global token
+  useEffect(() => {
+    if (globalToken) {
+      setSelectedToken(globalToken);
+      // Check if it matches a user token to determine if manual
+      const match = tokens.find((t) => t.usage.plain_text_token === globalToken);
+      setIsManualToken(!match);
+      if (!match) {
+        setManualToken(globalToken);
+      }
+    } else {
+      setSelectedToken('');
+      setIsManualToken(false);
+      setManualToken('');
+    }
+  }, [globalToken, tokens]);
+
+  // Fetch tokens
   useEffect(() => {
     if (isAuthenticated) {
       const fetchTokens = async () => {
         setLoadingTokens(true);
         try {
-          const response = await getTokens();
+          const res = await getTokens();
           let tokenList: Token[] = [];
-          if (Array.isArray(response)) {
-            tokenList = response;
-          } else if (response && Array.isArray(response.data)) {
-            tokenList = response.data;
+          if (Array.isArray(res)) {
+            tokenList = res;
+          } else if (res && Array.isArray(res.data)) {
+            tokenList = res.data;
           }
           setTokens(tokenList);
-          if (tokenList.length > 0) {
-            setSelectedToken(tokenList[0].usage.plain_text_token);
-          }
         } catch (err) {
-          console.error('Failed to fetch tokens:', err);
+          console.error('Failed to fetch tokens', err);
         } finally {
           setLoadingTokens(false);
         }
@@ -153,24 +166,19 @@ export const ApiPlayground = ({
   };
 
   const handleTokenChange = (value: string) => {
-    setSelectedToken(value);
-    if (value) {
-      setMockMode(false);
+    if (value === 'manual') {
+      setIsManualToken(true);
+      setSelectedToken('');
+      setManualToken('');
+    } else {
+      setIsManualToken(false);
+      setSelectedToken(value);
     }
   };
 
   const handleManualTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setManualToken(e.target.value);
-    setMockMode(false);
-  };
-
-  const handleMockModeChange = (checked: boolean) => {
-    setMockMode(checked);
-    if (checked) {
-      if (selectedToken === 'manual') {
-        setSelectedToken('');
-      }
-    }
+    setSelectedToken(e.target.value);
   };
 
   const executeRequest = async () => {
@@ -180,6 +188,11 @@ export const ApiPlayground = ({
     const startTime = performance.now();
 
     try {
+      // Group parameters by location
+      const pathParams = parameters.filter((p) => p.in === 'path');
+      const queryParams = parameters.filter((p) => p.in === 'query');
+      const headerParams = parameters.filter((p) => p.in === 'header');
+
       // Construct URL
       let url = path;
 
@@ -204,9 +217,7 @@ export const ApiPlayground = ({
         'Content-Type': 'application/json',
       };
 
-      if (selectedToken === 'manual' && manualToken) {
-        headers['Authorization'] = `Bearer ${manualToken}`;
-      } else if (selectedToken && selectedToken !== 'manual') {
+      if (selectedToken) {
         headers['Authorization'] = `Bearer ${selectedToken}`;
       }
 
@@ -216,80 +227,20 @@ export const ApiPlayground = ({
         }
       });
 
-      if (mockMode) {
-        await new Promise((resolve) => setTimeout(resolve, 800 + Math.random() * 1000));
-
-        // Try to find a success response (200 or 2XX)
-        const successCode = Object.keys(responses).find((code) => code.startsWith('2'));
-        let mockData: any = null;
-
-        if (successCode) {
-          const responseDef = responses[successCode];
-          const content = responseDef.content?.['application/json'];
-
-          if (content) {
-            if (content.example) {
-              mockData = content.example;
-            } else if (content.schema) {
-              mockData = generateMockFromSchema(content.schema);
-            }
-          }
-        }
-
-        // Fallback if no schema/example found
-        if (!mockData) {
-          mockData = {
-            success: true,
-            message: 'Mock response from API Hub (No schema found)',
-            data: {
-              id: 'mock-id-123',
-              timestamp: new Date().toISOString(),
-              request: {
-                path: url,
-                method: method.toUpperCase(),
-                headers: {
-                  ...headers,
-                  Authorization: headers.Authorization ? 'Bearer [HIDDEN]' : undefined,
-                },
-                params: paramValues,
-              },
-            },
-          };
-        }
-
-        setResponse({
-          status: parseInt(successCode || '200'),
-          statusText: 'OK',
-          headers: {
-            'content-type': 'application/json',
-            'x-powered-by': 'PicNode API Hub (Mock)',
-          },
-          data: mockData,
-          time: Math.round(performance.now() - startTime),
-        });
-      } else {
-        // Real API Call
-        // Construct full URL using selectedServer
-        let fetchUrl = url;
-
-        if (selectedServer) {
-          // Remove trailing slash from server and leading slash from url to avoid double slashes
-          const baseUrl = selectedServer.replace(/\/$/, '');
-          const pathUrl = url.startsWith('/') ? url : `/${url}`;
-          fetchUrl = `${baseUrl}${pathUrl}`;
-        } else if (!url.startsWith('http')) {
-          // Fallback logic if no server selected (shouldn't happen if servers exist)
-          if (!url.startsWith('/api')) {
-            fetchUrl = `/api${url}`;
-          }
-        }
+      // LIVE MODE (Real Request)
+      if (isLiveMode) {
+        const baseUrl = selectedServerUrl || (servers.length > 0 ? servers[0].url : '');
+        // Remove trailing slash from server and leading slash from url to avoid double slashes
+        const cleanBaseUrl = baseUrl.replace(/\/$/, '');
+        const cleanPathUrl = url.startsWith('/') ? url : `/${url}`;
+        const fetchUrl = `${cleanBaseUrl}${cleanPathUrl}`;
 
         const res = await fetch(fetchUrl, {
           method: method.toUpperCase(),
           headers: headers,
         });
 
-        const data = await res.json().catch(() => null); // Handle non-JSON responses
+        const data = await res.json().catch(() => null);
 
         const resHeaders: Record<string, string> = {};
         res.headers.forEach((value, key) => {
@@ -304,74 +255,112 @@ export const ApiPlayground = ({
           time: Math.round(performance.now() - startTime),
         });
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      // MOCK MODE (Simulated Response)
+      else {
+        await new Promise((resolve) => setTimeout(resolve, 800)); // Simulate delay
+
+        // Try to find a success response schema (200 or 201)
+        const successStatus = Object.keys(responses).find((s) => s.startsWith('2'));
+        const responseSchema = successStatus
+          ? responses[successStatus]?.content?.['application/json']?.schema
+          : null;
+
+        const mockData = generateMockFromSchema(responseSchema) || {
+          message: 'Mock response data',
+        };
+
+        setResponse({
+          status: parseInt(successStatus || '200'),
+          statusText: 'OK',
+          headers: { 'content-type': 'application/json' },
+          data: mockData,
+          time: 150,
+        });
+      }
+    } catch (err: any) {
+      setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
   };
 
-  const isLiveMode = !mockMode && (!!selectedToken || !!manualToken);
+  // Group parameters for render
+  const pathParams = parameters.filter((p) => p.in === 'path');
+  const queryParams = parameters.filter((p) => p.in === 'query');
+  const headerParams = parameters.filter((p) => p.in === 'header');
 
   return (
-    <div
-      className={cn(
-        'border rounded-lg bg-card text-card-foreground shadow-sm overflow-hidden mt-4 transition-colors duration-300',
-        isLiveMode && 'border-emerald-500/50 shadow-emerald-500/10',
-      )}
-    >
-      <div
-        className={cn(
-          'p-4 border-b bg-muted/30 flex items-center justify-between flex-wrap gap-4 transition-colors duration-300',
-          isLiveMode && 'bg-emerald-500/5 border-emerald-500/20',
-        )}
-      >
-        <div className="flex items-center gap-2">
-          <h3 className="font-semibold">API Playground</h3>
-          {isLiveMode ? (
+    <div className="border rounded-lg overflow-hidden bg-card shadow-sm">
+      <div className="flex items-center justify-between p-4 border-b bg-muted/30">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <Badge
-              variant="default"
-              className="text-xs bg-emerald-600 hover:bg-emerald-700 border-emerald-500"
+              variant={!isLiveMode ? 'secondary' : 'default'}
+              className={cn('uppercase', isLiveMode && 'bg-emerald-500 hover:bg-emerald-600')}
             >
-              LIVE
+              {method}
             </Badge>
-          ) : (
-            <Badge variant="outline" className="text-xs">
-              Beta
+            <code className="text-sm font-mono">{path}</code>
+          </div>
+
+          {/* Live Mode Indicator */}
+          {isLiveMode && (
+            <Badge
+              variant="outline"
+              className="border-emerald-500 text-emerald-600 bg-emerald-50 flex items-center gap-1"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              LIVE
             </Badge>
           )}
         </div>
 
-        <div className="flex items-center gap-4 flex-wrap">
-          {/* Server Selector */}
-          {servers.length > 0 && (
-            <div className="w-[200px]">
-              <Select value={selectedServer} onValueChange={setSelectedServer}>
-                <SelectTrigger className="h-8 text-xs">
-                  <SelectValue placeholder="Select Server" />
-                </SelectTrigger>
-                <SelectContent>
-                  {servers.map((server) => (
-                    <SelectItem key={server.url} value={server.url} className="text-xs">
-                      {server.url}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+        <div className="flex items-center gap-4">
+          {/* Server Selection - Now Global */}
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-muted-foreground">Server:</Label>
+            <Select value={selectedServerUrl} onValueChange={setSelectedServerUrl}>
+              <SelectTrigger className="h-8 text-xs w-[200px]">
+                <SelectValue placeholder="Select server" />
+              </SelectTrigger>
+              <SelectContent>
+                {servers.map((server) => (
+                  <SelectItem key={server.url} value={server.url} className="text-xs">
+                    {server.url}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-          <div className="h-4 w-px bg-border hidden sm:block" />
+          <div className="h-4 w-px bg-border" />
 
-          {isAuthenticated ? (
-            <div className="flex items-center gap-2">
-              <Lock
-                className={cn('h-3 w-3 text-muted-foreground', isLiveMode && 'text-emerald-600')}
-              />
-              <div className="flex flex-col gap-2">
-                <div className="w-[200px]">
+          {/* Mock Mode Toggle - Now Global Live Mode */}
+          <div className="flex items-center gap-2">
+            <Switch
+              id="mock-mode"
+              checked={isLiveMode}
+              onCheckedChange={setIsLiveMode}
+              className={cn(isLiveMode && 'data-[state=checked]:bg-emerald-500')}
+            />
+            <Label htmlFor="mock-mode" className="text-xs font-medium cursor-pointer">
+              {isLiveMode ? 'Live Mode' : 'Mock Mode'}
+            </Label>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-5 divide-y lg:divide-y-0 lg:divide-x">
+        {/* Request Configuration Panel */}
+        <div className="lg:col-span-2 p-4 space-y-6 bg-muted/10">
+          <div className="space-y-4">
+            {/* Token Selection */}
+            {isAuthenticated ? (
+              <div className="space-y-3">
+                <Label className="text-xs font-mono">Authorization</Label>
+                <div className="flex flex-col gap-2">
                   <Select
-                    value={selectedToken}
+                    value={isManualToken ? 'manual' : selectedToken}
                     onValueChange={handleTokenChange}
                     disabled={loadingTokens}
                   >
@@ -387,6 +376,17 @@ export const ApiPlayground = ({
                       />
                     </SelectTrigger>
                     <SelectContent>
+                      {globalToken && (
+                        <SelectItem
+                          value={globalToken}
+                          className="text-xs font-medium border-b mb-1 pb-1"
+                        >
+                          <span className="font-bold mr-2">Global Token</span>
+                          <span className="text-muted-foreground">
+                            ({globalToken.substring(0, 8)}...)
+                          </span>
+                        </SelectItem>
+                      )}
                       {tokens.map((token) => (
                         <SelectItem
                           key={token.id}
@@ -398,6 +398,10 @@ export const ApiPlayground = ({
                           <span className="text-muted-foreground">
                             ({token.usage.plain_text_token.substring(0, 8)}...)
                           </span>
+                          {/* Access Control Warning */}
+                          {token.abilities && !token.abilities.includes(path.split('/')[2]) && (
+                            <AlertCircle className="ml-2 h-3 w-3 text-amber-500 inline" />
+                          )}
                         </SelectItem>
                       ))}
                       <SelectItem value="manual" className="text-xs font-medium border-t mt-1 pt-1">
@@ -405,39 +409,45 @@ export const ApiPlayground = ({
                       </SelectItem>
                     </SelectContent>
                   </Select>
+
+                  {isManualToken && (
+                    <Input
+                      placeholder="Paste your token here"
+                      value={manualToken}
+                      onChange={handleManualTokenChange}
+                      className={cn(
+                        'h-8 text-xs',
+                        isLiveMode && 'border-emerald-500 focus-visible:ring-emerald-500',
+                      )}
+                    />
+                  )}
                 </div>
-                {selectedToken === 'manual' && (
-                  <Input
-                    placeholder="Paste your token here"
-                    value={manualToken}
-                    onChange={handleManualTokenChange}
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <Label className="text-xs font-mono">Authorization</Label>
+                <div className="flex items-center gap-2">
+                  <Lock
                     className={cn(
-                      'h-8 text-xs w-[200px]',
-                      isLiveMode && 'border-emerald-500 focus-visible:ring-emerald-500',
+                      'h-3 w-3 text-muted-foreground',
+                      isLiveMode && 'text-emerald-600',
                     )}
                   />
-                )}
+                  <div className="flex-1">
+                    <Input
+                      placeholder="Paste Global Token..."
+                      value={manualToken || selectedToken}
+                      onChange={handleManualTokenChange}
+                      className={cn(
+                        'h-8 text-xs',
+                        isLiveMode && 'border-emerald-500 focus-visible:ring-emerald-500',
+                      )}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="text-xs text-muted-foreground flex items-center gap-1">
-              <Lock className="h-3 w-3" /> Login to use tokens
-            </div>
-          )}
-          <div className="h-4 w-px bg-border" />
-          <div className="flex items-center gap-2">
-            <Label htmlFor="mock-mode" className="text-sm cursor-pointer">
-              Mock Mode
-            </Label>
-            <Switch id="mock-mode" checked={mockMode} onCheckedChange={handleMockModeChange} />
-          </div>
-        </div>
-      </div>
+            )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 divide-y lg:divide-y-0 lg:divide-x">
-        {/* Request Configuration Panel */}
-        <div className="lg:col-span-2 p-4 space-y-6 bg-muted/10">
-          <div className="space-y-4">
             {pathParams.length > 0 && (
               <div className="space-y-3">
                 <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">

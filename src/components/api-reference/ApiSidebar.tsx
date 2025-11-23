@@ -1,8 +1,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { Flag, Sparkles, ChevronDown, Search, Shield, MapPinCheck, Building2 } from 'lucide-react';
-import { useState } from 'react';
-import { Input } from '@/components/ui/input';
+import { Flag, Sparkles, MapPinCheck, Building2, Shield } from 'lucide-react';
 
 export interface ApiItem {
   id: number;
@@ -43,6 +41,7 @@ interface ApiSidebarProps {
   apis: ApiItem[];
   selectedApi: ApiItem | null;
   onSelectApi: (api: ApiItem) => void;
+  search: string;
 }
 
 const iconMap: Record<string, any> = {
@@ -53,24 +52,11 @@ const iconMap: Record<string, any> = {
   Building2: Building2,
 };
 
-export const ApiSidebar = ({ apis, selectedApi, onSelectApi }: ApiSidebarProps) => {
-  const [search, setSearch] = useState('');
-
+export const ApiSidebar = ({ apis, selectedApi, onSelectApi, search }: ApiSidebarProps) => {
   const filteredApis = apis.filter((api) => api.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="p-4 border-b">
-        <div className="relative">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search APIs..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-8"
-          />
-        </div>
-      </div>
+    <div className="h-full flex flex-col overflow-hidden">
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-1">
           <h3 className="font-semibold text-sm text-foreground mb-2">API Directory</h3>

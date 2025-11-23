@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Book, Code, Shield, Zap, Search, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -38,11 +38,34 @@ const menuItems = [
 export const DocsLayout = ({ children, secondarySidebar }: DocsLayoutProps) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header
+        className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300 ${
+          isVisible ? 'translate-y-0' : '-translate-y-full'
+        }`}
+      >
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2">
@@ -81,7 +104,7 @@ export const DocsLayout = ({ children, secondarySidebar }: DocsLayoutProps) => {
       </header>
 
       <div
-        className={`container flex-1 items-start md:grid md:gap-6 lg:gap-2 px-2 py-8 ${
+        className={`container flex-1 items-start md:grid md:gap-6 lg:gap-2 px-2 pt-2 ${
           secondarySidebar
             ? 'md:grid-cols-[220px_240px_1fr]'
             : 'md:grid-cols-[180px_1fr] lg:grid-cols-[220px_1fr]'
@@ -89,11 +112,13 @@ export const DocsLayout = ({ children, secondarySidebar }: DocsLayoutProps) => {
       >
         {/* Main Sidebar */}
         <aside
-          className={`fixed top-16 z-30 h-[calc(100vh-4rem)] w-full shrink-0 md:sticky md:block ${
+          className={`fixed z-30 w-full shrink-0 md:sticky md:block ${
             mobileMenuOpen ? 'block' : 'hidden'
-          } md:w-auto bg-background border-r md:border-0`}
+          } md:w-auto bg-background border-r md:border-0 transition-all duration-300 ease-in-out ${
+            isVisible ? 'top-16 h-[calc(100vh-4rem)]' : 'top-0 h-screen'
+          }`}
         >
-          <ScrollArea className="h-full  pr-6 ">
+          <ScrollArea className="h-full pr-6">
             {/* Mobile Search */}
             <div className="md:hidden mb-6 px-4">
               <DocsSearch />
@@ -126,8 +151,12 @@ export const DocsLayout = ({ children, secondarySidebar }: DocsLayoutProps) => {
 
         {/* Secondary Sidebar */}
         {secondarySidebar && (
-          <aside className="hidden md:block sticky top-16 h-[calc(100vh-4rem)] overflow-hidden border-r bg-background/50">
-            <ScrollArea className="h-full">{secondarySidebar}</ScrollArea>
+          <aside
+            className={`hidden md:block sticky overflow-hidden border-r bg-background/50 transition-all duration-300 ease-in-out ${
+              isVisible ? 'top-16 h-[calc(100vh-4rem)]' : 'top-0 h-screen'
+            }`}
+          >
+            {secondarySidebar}
           </aside>
         )}
 
