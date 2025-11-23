@@ -53,7 +53,10 @@ interface Api {
   };
   endpoints: any | null;
   documentation: any[];
-  features: any[];
+  features: {
+    languages?: string;
+    [key: string]: any;
+  } | null;
   metadata: any[];
   created_at: string;
   updated_at: string;

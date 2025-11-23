@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Globe } from 'lucide-react';
 import { ImagePickerDemo } from '@/components/hero/ImagePickerDemo';
 
 export const HeroSection = () => {
@@ -45,7 +45,8 @@ export const HeroSection = () => {
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Access millions of high-quality images, icons, and logos through a single, powerful API. Built for developers who demand speed and reliability.
+              Access millions of high-quality images, icons, and logos through a single, powerful
+              API. Built for developers who demand speed and reliability.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -53,7 +54,12 @@ export const HeroSection = () => {
                 Get API Key
                 <ArrowRight className="h-4 w-4" />
               </Button>
-              <Button size="lg" variant="outline" className="gap-2 h-12 px-8 text-base" onClick={scrollToCalculator}>
+              <Button
+                size="lg"
+                variant="outline"
+                className="gap-2 h-12 px-8 text-base"
+                onClick={scrollToCalculator}
+              >
                 View Documentation
               </Button>
             </div>
@@ -66,6 +72,10 @@ export const HeroSection = () => {
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-blue-500" />
                 <span className="text-sm font-medium">Global CDN</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-foreground">Internationalized APIs</span>
               </div>
             </div>
           </motion.div>
@@ -81,9 +91,9 @@ export const HeroSection = () => {
               {/* Decorative elements behind the card */}
               <div className="absolute -top-12 -right-12 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
               <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
-              
+
               <ImagePickerDemo />
-              
+
               {/* Floating badges */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -108,4 +118,3 @@ export const HeroSection = () => {
     </section>
   );
 };
-

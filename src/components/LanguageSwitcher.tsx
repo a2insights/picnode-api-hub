@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Globe } from 'lucide-react';
+import { Globe, Check } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,16 +35,22 @@ export const LanguageSwitcher = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        {languages.map((lang) => (
-          <DropdownMenuItem
-            key={lang.code}
-            onClick={() => changeLanguage(lang.code)}
-            className="cursor-pointer"
-          >
-            <span className="mr-2">{lang.flag}</span>
-            {lang.label}
-          </DropdownMenuItem>
-        ))}
+        {languages.map((lang) => {
+          const isSelected = lang.code === i18n.language;
+          return (
+            <DropdownMenuItem
+              key={lang.code}
+              onClick={() => changeLanguage(lang.code)}
+              className={`cursor-pointer flex items-center justify-between ${isSelected ? 'bg-accent text-accent-foreground font-medium' : ''}`}
+            >
+              <div className="flex items-center">
+                <span className="mr-2">{lang.flag}</span>
+                {lang.label}
+              </div>
+              {isSelected && <Check className="h-4 w-4 ml-2" />}
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );
