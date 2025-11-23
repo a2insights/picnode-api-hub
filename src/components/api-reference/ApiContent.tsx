@@ -17,6 +17,7 @@ import {
   Building2,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as SwaggerParser from '@readme/openapi-parser';
 import { ResponseViewer } from './ResponseViewer';
 import { ApiPlayground } from './ApiPlayground';
@@ -44,6 +45,7 @@ const iconMap: Record<string, any> = {
 };
 
 export const ApiContent = ({ api }: ApiContentProps) => {
+  const { t } = useTranslation();
   const [spec, setSpec] = useState<OpenApiSpec | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -79,7 +81,7 @@ export const ApiContent = ({ api }: ApiContentProps) => {
       <div className="flex items-center justify-center h-64 text-muted-foreground">
         <div className="flex flex-col items-center gap-2">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p>Loading API specification...</p>
+          <p>{t('apiContent.loadingSpec')}</p>
         </div>
       </div>
     );
@@ -90,7 +92,7 @@ export const ApiContent = ({ api }: ApiContentProps) => {
       <div className="p-8 max-w-5xl mx-auto">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>{t('apiContent.error')}</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       </div>
@@ -131,19 +133,27 @@ export const ApiContent = ({ api }: ApiContentProps) => {
         <div className="flex flex-wrap gap-4 mt-8 text-sm font-medium text-white/90">
           <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
             <Activity className="h-4 w-4" />
-            <span>Uptime: {api.statistics.uptime}%</span>
+            <span>
+              {t('apiContent.uptime')}: {api.statistics.uptime}%
+            </span>
           </div>
           <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
             <Globe className="h-4 w-4" />
-            <span>{api.statistics.activeUsers.toLocaleString()} Active Users</span>
+            <span>
+              {api.statistics.activeUsers.toLocaleString()} {t('apiContent.activeUsers')}
+            </span>
           </div>
           <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
             <Server className="h-4 w-4" />
-            <span>{api.statistics.totalRequests.toLocaleString()} Requests</span>
+            <span>
+              {api.statistics.totalRequests.toLocaleString()} {t('apiContent.requests')}
+            </span>
           </div>
           <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
             <Clock className="h-4 w-4" />
-            <span>Updated: {new Date(api.updated_at).toLocaleDateString()}</span>
+            <span>
+              {t('apiContent.updated')}: {new Date(api.updated_at).toLocaleDateString()}
+            </span>
           </div>
           {api.features.languages && (
             <div className="flex items-center gap-2 bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/30">
@@ -163,26 +173,26 @@ export const ApiContent = ({ api }: ApiContentProps) => {
             value="endpoints"
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
           >
-            Endpoints
+            {t('apiContent.endpoints')}
           </TabsTrigger>
           <TabsTrigger
             value="pricing"
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
           >
-            Pricing
+            {t('apiContent.pricing')}
           </TabsTrigger>
           <TabsTrigger
             value="details"
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
           >
-            Details
+            {t('apiContent.details')}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="endpoints" className="mt-6 space-y-6">
           {apiPaths.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
-              No endpoints found for this API.
+              {t('apiContent.noEndpoints')}
             </div>
           ) : (
             apiPaths.map(([path, methods]) => (
@@ -203,7 +213,7 @@ export const ApiContent = ({ api }: ApiContentProps) => {
                         <code className="text-sm font-mono bg-muted px-2 py-1 rounded">{path}</code>
                       </div>
                       <CardDescription className="mt-2 text-base">
-                        {details.description || details.summary || 'No description available'}
+                        {details.description || details.summary || t('apiContent.noDescription')}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-6 space-y-6">
@@ -214,13 +224,13 @@ export const ApiContent = ({ api }: ApiContentProps) => {
                               value="docs"
                               className="text-xs uppercase tracking-wider data-[state=active]:bg-background data-[state=active]:shadow-sm"
                             >
-                              Documentation
+                              {t('apiContent.documentation')}
                             </TabsTrigger>
                             <TabsTrigger
                               value="playground"
                               className="text-xs uppercase tracking-wider data-[state=active]:bg-background data-[state=active]:shadow-sm"
                             >
-                              Try it out
+                              {t('apiContent.tryItOut')}
                             </TabsTrigger>
                           </TabsList>
                         </div>
@@ -230,16 +240,18 @@ export const ApiContent = ({ api }: ApiContentProps) => {
                           {details.parameters && details.parameters.length > 0 && (
                             <div>
                               <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                                Parameters
+                                {t('apiContent.parameters')}
                               </h3>
                               <div className="rounded-md border overflow-hidden">
                                 <table className="w-full text-sm text-left">
                                   <thead className="bg-muted/50 text-muted-foreground">
                                     <tr>
-                                      <th className="p-3 font-medium">Name</th>
-                                      <th className="p-3 font-medium">In</th>
-                                      <th className="p-3 font-medium">Type</th>
-                                      <th className="p-3 font-medium">Description</th>
+                                      <th className="p-3 font-medium">{t('apiContent.name')}</th>
+                                      <th className="p-3 font-medium">{t('apiContent.in')}</th>
+                                      <th className="p-3 font-medium">{t('apiContent.type')}</th>
+                                      <th className="p-3 font-medium">
+                                        {t('apiContent.description')}
+                                      </th>
                                     </tr>
                                   </thead>
                                   <tbody className="divide-y">
@@ -268,7 +280,7 @@ export const ApiContent = ({ api }: ApiContentProps) => {
                           {details.responses && (
                             <div>
                               <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                                Responses
+                                {t('apiContent.responses')}
                               </h3>
                               <div className="space-y-4">
                                 {Object.entries(details.responses).map(
@@ -302,27 +314,37 @@ export const ApiContent = ({ api }: ApiContentProps) => {
         <TabsContent value="pricing" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Pricing Model</CardTitle>
-              <CardDescription>Usage-based pricing for this API</CardDescription>
+              <CardTitle>{t('apiContent.pricingModel')}</CardTitle>
+              <CardDescription>{t('apiContent.pricingDesc')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
-                  <div className="text-sm font-medium text-muted-foreground">Base Price</div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    {t('apiContent.basePrice')}
+                  </div>
                   <div className="text-2xl font-bold mt-1">${api.pricing.basePrice}</div>
-                  <div className="text-xs text-muted-foreground mt-1">per request</div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {t('apiContent.perRequest')}
+                  </div>
                 </div>
                 <div className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
-                  <div className="text-sm font-medium text-muted-foreground">Price Factor</div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    {t('apiContent.priceFactor')}
+                  </div>
                   <div className="text-2xl font-bold mt-1">x{api.pricing.priceFactor}</div>
-                  <div className="text-xs text-muted-foreground mt-1">multiplier</div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {t('apiContent.multiplier')}
+                  </div>
                 </div>
                 <div className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
-                  <div className="text-sm font-medium text-muted-foreground">Rate Limit</div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    {t('apiContent.rateLimit')}
+                  </div>
                   <div className="text-2xl font-bold mt-1">
                     {api.availability.rateLimit.requestsPerMinute}
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1">req/min</div>
+                  <div className="text-xs text-muted-foreground mt-1">{t('apiContent.reqMin')}</div>
                 </div>
               </div>
             </CardContent>
@@ -332,35 +354,37 @@ export const ApiContent = ({ api }: ApiContentProps) => {
         <TabsContent value="details" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Additional Information</CardTitle>
+              <CardTitle>{t('apiContent.additionalInfo')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-medium mb-2">Construction Status</h4>
+                  <h4 className="font-medium mb-2">{t('apiContent.constructionStatus')}</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between py-1 border-b">
-                      <span className="text-muted-foreground">Status</span>
+                      <span className="text-muted-foreground">{t('apiContent.status')}</span>
                       <span>
-                        {api.construction.inConstruction ? 'In Construction' : 'Complete'}
+                        {api.construction.inConstruction
+                          ? t('apiContent.inConstruction')
+                          : t('apiContent.complete')}
                       </span>
                     </div>
                     <div className="flex justify-between py-1 border-b">
-                      <span className="text-muted-foreground">Progress</span>
+                      <span className="text-muted-foreground">{t('apiContent.progress')}</span>
                       <span>{api.construction.progress}%</span>
                     </div>
                     <div className="flex justify-between py-1 border-b">
-                      <span className="text-muted-foreground">Est. Completion</span>
+                      <span className="text-muted-foreground">{t('apiContent.estCompletion')}</span>
                       <span>{api.construction.estimatedCompletion}</span>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-medium mb-2">Features</h4>
+                  <h4 className="font-medium mb-2">{t('apiContent.features')}</h4>
                   <div className="space-y-2 text-sm">
                     {api.features.languages && (
                       <div className="flex justify-between py-1 border-b">
-                        <span className="text-muted-foreground">Languages</span>
+                        <span className="text-muted-foreground">{t('apiContent.languages')}</span>
                         <span>{api.features.languages}</span>
                       </div>
                     )}

@@ -5,11 +5,12 @@ import { DocsLayout } from '@/components/docs/DocsLayout';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import docsContent from '@/data/docsContent.json';
+import { useDocsContent } from '@/hooks/useDocsContent';
 
 export const BestPractices = () => {
   const location = useLocation();
   const { i18n } = useTranslation();
+  const docsContent = useDocsContent();
   const { title, sections } = docsContent.bestPractices;
 
   useEffect(() => {

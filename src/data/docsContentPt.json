@@ -1,0 +1,125 @@
+{
+  "gettingStarted": {
+    "title": "Começando",
+    "slug": "getting-started",
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Introdução",
+        "content": "A API PicNode fornece acesso a uma vasta coleção de imagens de lugares, clubes de futebol e ícones. Este guia ajudará você a começar a integrar nossas APIs em sua aplicação."
+      },
+      {
+        "id": "base-url",
+        "title": "URL Base",
+        "content": "Todas as requisições da API devem ser feitas para: https://a2insights.com.br/api/picnode"
+      },
+      {
+        "id": "common-parameters",
+        "title": "Parâmetros Comuns",
+        "content": "A maioria dos endpoints suporta os seguintes parâmetros:\n- `media_conversions`: Solicita tamanhos específicos de imagem (xs, sm, md, lg, preview, thumbnail, webp)\n- `filter[search]`: Busca por recursos específicos\n- `page`: Número da página\n- `per_page`: Número de itens por página",
+        "code": "fetch('https://a2insights.com.br/api/picnode/places?page=1&per_page=10&filter[search]=paris&media_conversions=sm,webp')"
+      },
+      {
+        "id": "quick-start",
+        "title": "Início Rápido",
+        "content": "Para começar a usar a API, você precisará de um token de autenticação. Uma vez que você tenha seu token, você pode fazer requisições para qualquer um dos nossos endpoints disponíveis.",
+        "code": "curl -X GET \"https://a2insights.com.br/api/picnode/places\" \\\n  -H \"Authorization: Bearer SEU_TOKEN\" \\\n  -H \"Content-Type: application/json\""
+      },
+      {
+        "id": "available-endpoints",
+        "title": "Endpoints Disponíveis",
+        "content": "Fornecemos os seguintes endpoints:\n- /companies - Informações de empresas\n- /companies/{id} - Detalhes específicos da empresa\n- /places - Locais geográficos com imagens\n- /places/types - Tipos de lugares disponíveis\n- /football-clubs - Logos e imagens de clubes de futebol\n- /thing-icos - Coleção de ícones"
+      },
+      {
+        "id": "response-format",
+        "title": "Formato da Resposta",
+        "content": "Todas as respostas são retornadas em formato JSON com suporte a paginação. Cada resposta inclui dados, links para navegação e metadados sobre a página atual.",
+        "code": "{\n  \"data\": [...],\n  \"links\": {\n    \"first\": \"...\",\n    \"last\": \"...\",\n    \"prev\": null,\n    \"next\": \"...\"\n  },\n  \"meta\": {\n    \"current_page\": 1,\n    \"last_page\": 10,\n    \"per_page\": 15,\n    \"total\": 150\n  }\n}"
+      }
+    ]
+  },
+  "bestPractices": {
+    "title": "Melhores Práticas",
+    "slug": "best-practices",
+    "sections": [
+      {
+        "id": "rate-limiting",
+        "title": "Limite de Taxa (Rate Limiting)",
+        "content": "Para garantir o uso justo e a estabilidade do sistema, implementamos limite de taxa. Recomendamos implementar backoff exponencial para tentativas de repetição e cache de respostas quando possível."
+      },
+      {
+        "id": "error-handling",
+        "title": "Tratamento de Erros",
+        "content": "Sempre implemente tratamento de erros adequado em sua aplicação. Nossa API retorna códigos de status HTTP padrão e mensagens de erro detalhadas no corpo da resposta.",
+        "code": "try {\n  const response = await fetch(url, options);\n  if (!response.ok) {\n    throw new Error(`HTTP ${response.status}`);\n  }\n  const data = await response.json();\n} catch (error) {\n  console.error('Erro na API:', error);\n}"
+      },
+      {
+        "id": "pagination",
+        "title": "Paginação Eficiente",
+        "content": "Use o parâmetro page para navegar pelos resultados. A API retorna metadados incluindo current_page, last_page e total de itens para ajudar você a implementar paginação eficiente.",
+        "code": "// Requisitar página 2\nfetch('https://a2insights.com.br/api/picnode/places?page=2', {\n  headers: {\n    'Authorization': 'Bearer SEU_TOKEN'\n  }\n})"
+      },
+      {
+        "id": "media-optimization",
+        "title": "Otimização de Mídia",
+        "content": "Solicite conversões de mídia específicas usando o parâmetro media_conversions para obter tamanhos de imagem otimizados para seu caso de uso. Tamanhos disponíveis: xs, sm, md, lg, preview, thumbnail, webp.",
+        "code": "// Requisitar apenas conversões pequenas e médias\nfetch('https://a2insights.com.br/api/picnode/places?media_conversions=sm,md&has_media=1')"
+      },
+      {
+        "id": "caching",
+        "title": "Implementar Cache",
+        "content": "Faça cache das respostas da API para reduzir requisições redundantes e melhorar o desempenho da aplicação. Defina tempos de expiração de cache apropriados com base nos seus requisitos de atualização de dados."
+      },
+      {
+        "id": "search-optimization",
+        "title": "Otimização de Busca",
+        "content": "Use o parâmetro filter[search] de forma eficiente. Implemente debouncing no lado do cliente para evitar chamadas excessivas à API durante a entrada do usuário.",
+        "code": "// Implementação de busca com debounce\nconst debouncedSearch = useDebounce(searchTerm, 500);\n\nuseEffect(() => {\n  if (debouncedSearch) {\n    fetchResults(debouncedSearch);\n  }\n}, [debouncedSearch]);"
+      }
+    ]
+  },
+  "authentication": {
+    "title": "Autenticação",
+    "slug": "authentication",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Visão Geral da Autenticação",
+        "content": "A API PicNode usa autenticação via token Bearer. Você deve incluir seu token de autenticação no cabeçalho Authorization de cada requisição."
+      },
+      {
+        "id": "obtaining-token",
+        "title": "Obtendo Seu Token",
+        "content": "Você pode encontrar seu token de autenticação no seu painel, na seção Tokens. Mantenha seu token seguro e nunca o exponha em código do lado do cliente ou repositórios públicos."
+      },
+      {
+        "id": "token-scopes",
+        "title": "Escopos do Token",
+        "content": "Ao criar um token, você pode restringir seu acesso a APIs específicas. As APIs permitidas são: `thing-icos`, `places`, `football-clubs` e `companies`."
+      },
+      {
+        "id": "using-token",
+        "title": "Usando Seu Token",
+        "content": "Inclua seu token no cabeçalho Authorization com o esquema Bearer para cada requisição da API.",
+        "code": "fetch('https://a2insights.com.br/api/picnode/places', {\n  headers: {\n    'Authorization': 'Bearer SEU_TOKEN_AQUI',\n    'Content-Type': 'application/json'\n  }\n})"
+      },
+      {
+        "id": "security-best-practices",
+        "title": "Melhores Práticas de Segurança",
+        "content": "• Nunca faça commit de tokens no controle de versão\n• Armazene tokens em variáveis de ambiente\n• Rotacione tokens periodicamente\n• Use tokens diferentes para desenvolvimento e produção\n• Implemente mecanismos de atualização de token"
+      },
+      {
+        "id": "token-errors",
+        "title": "Tratando Erros de Autenticação",
+        "content": "Se seu token for inválido ou expirado, a API retornará uma resposta 401 Unauthorized. Sempre verifique este código de status e trate-o adequadamente em sua aplicação.",
+        "code": "if (response.status === 401) {\n  // Token inválido ou expirado\n  // Redirecionar para login ou atualizar token\n  console.error('Falha na autenticação');\n}"
+      },
+      {
+        "id": "server-side",
+        "title": "Requisições do Lado do Servidor",
+        "content": "Para aplicações do lado do servidor, armazene seu token em variáveis de ambiente e nunca o exponha ao lado do cliente. Faça chamadas de API do seu backend para manter os tokens seguros.",
+        "code": "// Exemplo Node.js\nconst token = process.env.PICNODE_API_TOKEN;\n\nconst response = await fetch(url, {\n  headers: {\n    'Authorization': `Bearer ${token}`\n  }\n});"
+      }
+    ]
+  }
+}

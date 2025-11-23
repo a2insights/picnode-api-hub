@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, Code2, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -28,6 +29,7 @@ interface ApiSearchProps {
 }
 
 export const ApiSearch = ({ apiSpec, onSelectEndpoint, value, onChange }: ApiSearchProps) => {
+  const { t } = useTranslation();
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -112,7 +114,7 @@ export const ApiSearch = ({ apiSpec, onSelectEndpoint, value, onChange }: ApiSea
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Search endpoints..."
+          placeholder={t('search.placeholder')}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => value && setIsOpen(true)}
@@ -171,7 +173,7 @@ export const ApiSearch = ({ apiSpec, onSelectEndpoint, value, onChange }: ApiSea
         <Card className="absolute top-full mt-2 w-full bg-background border shadow-lg z-50">
           <div className="px-4 py-6 text-center text-sm text-muted-foreground">
             <Zap className="h-8 w-8 mx-auto mb-2 opacity-50" />
-            No endpoints found for "{value}"
+            {t('search.noEndpoints', { query: value })}
           </div>
         </Card>
       )}

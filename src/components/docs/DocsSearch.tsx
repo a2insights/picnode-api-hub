@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, FileText } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import Fuse from 'fuse.js';
-import docsContent from '@/data/docsContent.json';
+import { useDocsContent } from '@/hooks/useDocsContent';
 
 interface SearchResult {
   page: string;
@@ -20,10 +20,11 @@ export const DocsSearch = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
+  const docsContent = useDocsContent();
 
   // Prepare search data
-  const searchData: SearchResult[] = Object.entries(docsContent).flatMap(
-    ([key, page]) => {
+  const fuse = useMemo(() => {
+    const searchData: SearchResult[] = Object.entries(docsContent).flatMap(([key, page]) => {
       const pageData = page as { title: string; slug: string; sections: any[] };
       return pageData.sections.map((section) => ({
         page: pageData.slug,
@@ -32,14 +33,14 @@ export const DocsSearch = () => {
         sectionTitle: section.title,
         content: section.content,
       }));
-    }
-  );
+    });
 
-  const fuse = new Fuse(searchData, {
-    keys: ['sectionTitle', 'content', 'pageTitle'],
-    threshold: 0.3,
-    includeScore: true,
-  });
+    return new Fuse(searchData, {
+      keys: ['sectionTitle', 'content', 'pageTitle'],
+      threshold: 0.3,
+      includeScore: true,
+    });
+  }, [docsContent]);
 
   useEffect(() => {
     if (query.trim()) {
@@ -96,12 +97,8 @@ export const DocsSearch = () => {
                 <div className="flex items-start gap-3">
                   <FileText className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-sm mb-1">
-                      {result.sectionTitle}
-                    </div>
-                    <div className="text-xs text-muted-foreground truncate">
-                      {result.pageTitle}
-                    </div>
+                    <div className="font-medium text-sm mb-1">{result.sectionTitle}</div>
+                    <div className="text-xs text-muted-foreground truncate">{result.pageTitle}</div>
                     <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
                       {result.content.substring(0, 100)}...
                     </div>

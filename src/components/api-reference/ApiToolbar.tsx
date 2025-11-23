@@ -1,5 +1,6 @@
 import { Search, Shield, Globe, Zap, Radio } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { useGlobalPlayground } from '@/contexts/GlobalPlaygroundContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -41,6 +42,7 @@ export const ApiToolbar = ({
   apiSpec,
   onSelectEndpoint,
 }: ApiToolbarProps) => {
+  const { t } = useTranslation();
   const {
     globalToken,
     setGlobalToken,
@@ -139,7 +141,7 @@ export const ApiToolbar = ({
             <>
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search APIs..."
+                placeholder={t('toolbar.searchApis')}
                 value={search}
                 onChange={(e) => onSearchChange(e.target.value)}
                 className="pl-9 h-9"
@@ -167,7 +169,7 @@ export const ApiToolbar = ({
             )}
           >
             {isLiveMode ? <Radio className="h-3 w-3 animate-pulse" /> : <Zap className="h-3 w-3" />}
-            {isLiveMode ? 'Live' : 'Mock'}
+            {isLiveMode ? t('toolbar.live') : t('toolbar.mock')}
           </Label>
         </div>
 
@@ -178,7 +180,7 @@ export const ApiToolbar = ({
           <Globe className="h-3 w-3 text-muted-foreground" />
           <Select value={selectedServerUrl} onValueChange={setSelectedServerUrl}>
             <SelectTrigger className="h-8 text-xs w-[220px]">
-              <SelectValue placeholder="Select server" />
+              <SelectValue placeholder={t('toolbar.selectServer')} />
             </SelectTrigger>
             <SelectContent>
               {servers.length > 0 ? (
@@ -189,7 +191,7 @@ export const ApiToolbar = ({
                 ))
               ) : (
                 <SelectItem value="default" disabled className="text-xs">
-                  No servers available
+                  {t('toolbar.noServers')}
                 </SelectItem>
               )}
             </SelectContent>
@@ -202,7 +204,7 @@ export const ApiToolbar = ({
         <div className="flex items-center gap-2 flex-1">
           <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
             <Shield className="h-3 w-3" />
-            <span className="whitespace-nowrap">Token</span>
+            <span className="whitespace-nowrap">{t('toolbar.token')}</span>
           </div>
 
           {isAuthenticated ? (
@@ -230,10 +232,12 @@ export const ApiToolbar = ({
                       );
                     })()
                   ) : selectedTokenValue === 'manual' ? (
-                    <span className="text-muted-foreground truncate">Manual Token</span>
+                    <span className="text-muted-foreground truncate">
+                      {t('toolbar.manualToken')}
+                    </span>
                   ) : (
                     <span className="text-muted-foreground truncate">
-                      {loadingTokens ? 'Loading...' : 'Select Global Token'}
+                      {loadingTokens ? t('toolbar.loading') : t('toolbar.selectGlobalToken')}
                     </span>
                   )}
                 </SelectTrigger>
@@ -269,14 +273,14 @@ export const ApiToolbar = ({
                     </SelectItem>
                   ))}
                   <SelectItem value="manual" className="text-xs font-medium border-t mt-1 pt-1">
-                    Enter token manually...
+                    {t('toolbar.enterTokenManually')}
                   </SelectItem>
                 </SelectContent>
               </Select>
 
               {isManualInput && (
                 <Input
-                  placeholder="Paste token..."
+                  placeholder={t('toolbar.pasteToken')}
                   value={globalToken}
                   onChange={handleManualInputChange}
                   className="h-8 text-xs font-mono w-[180px]"
@@ -287,7 +291,7 @@ export const ApiToolbar = ({
           ) : (
             <div className="flex-1 max-w-[200px]">
               <Input
-                placeholder="Paste Global Token..."
+                placeholder={t('toolbar.pasteGlobalToken')}
                 value={globalToken}
                 onChange={(e) => setGlobalToken(e.target.value)}
                 className="h-8 text-xs font-mono"

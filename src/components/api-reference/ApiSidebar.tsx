@@ -1,6 +1,7 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { Flag, Sparkles, MapPinCheck, Building2, Shield } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export interface ApiItem {
   id: number;
@@ -53,15 +54,20 @@ const iconMap: Record<string, any> = {
 };
 
 export const ApiSidebar = ({ apis, selectedApi, onSelectApi, search }: ApiSidebarProps) => {
+  const { t } = useTranslation();
   const filteredApis = apis.filter((api) => api.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-1">
-          <h3 className="font-semibold text-sm text-foreground mb-2">API Directory</h3>
+          <h3 className="font-semibold text-sm text-foreground mb-2">
+            {t('sidebar.apiDirectory')}
+          </h3>
           {filteredApis.length === 0 ? (
-            <div className="text-sm text-muted-foreground py-4 text-center">No APIs found.</div>
+            <div className="text-sm text-muted-foreground py-4 text-center">
+              {t('sidebar.noApisFound')}
+            </div>
           ) : (
             filteredApis.map((api) => {
               const Icon = iconMap[api.icon] || Flag;

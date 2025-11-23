@@ -7,11 +7,12 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Lock, Key, Shield, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import docsContent from '@/data/docsContent.json';
+import { useDocsContent } from '@/hooks/useDocsContent';
 
 export const Authentication = () => {
   const location = useLocation();
   const { i18n } = useTranslation();
+  const docsContent = useDocsContent();
   const { title, sections } = docsContent.authentication;
 
   useEffect(() => {

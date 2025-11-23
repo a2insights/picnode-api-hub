@@ -4,6 +4,7 @@ import { ApiContent } from '@/components/api-reference/ApiContent';
 import { ApiToolbar } from '@/components/api-reference/ApiToolbar';
 import { useAppContext } from '@/contexts/AppContext';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GlobalPlaygroundProvider } from '@/contexts/GlobalPlaygroundContext';
 
 export const ApiReference = () => {
@@ -13,12 +14,21 @@ export const ApiReference = () => {
   const [servers, setServers] = useState<{ url: string }[]>([]);
   const [apiSpec, setApiSpec] = useState<any>(null);
 
-  // Select the first API by default when apis are loaded
+  // Update selected API when apis list changes (e.g. language change)
   useEffect(() => {
-    if (apis.length > 0 && !selectedApi) {
-      setSelectedApi(apis[0] as unknown as ApiItem);
+    if (apis.length > 0) {
+      if (selectedApi) {
+        // Try to find the currently selected API in the new list
+        const updatedApi = apis.find((api: any) => api.id === selectedApi.id);
+        if (updatedApi) {
+          setSelectedApi(updatedApi as unknown as ApiItem);
+        }
+      } else {
+        // Select first API if none selected
+        setSelectedApi(apis[0] as unknown as ApiItem);
+      }
     }
-  }, [apis, selectedApi]);
+  }, [apis]);
 
   // Fetch servers and full spec from api.json
   useEffect(() => {
@@ -57,9 +67,12 @@ export const ApiReference = () => {
     }
   };
 
+  const { i18n } = useTranslation();
+
   return (
     <GlobalPlaygroundProvider>
       <DocsLayout
+        key={i18n.language}
         secondarySidebar={
           <ApiSidebar
             apis={apis as unknown as ApiItem[]}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -96,6 +97,7 @@ export const ApiPlayground = ({
   servers = [],
   responses = {},
 }: ApiPlaygroundProps) => {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const { isAuthenticated } = useAuth();
   const { globalToken, isLiveMode, setIsLiveMode, selectedServerUrl, setSelectedServerUrl } =
@@ -326,10 +328,10 @@ export const ApiPlayground = ({
         <div className="flex items-center gap-4">
           {/* Server Selection - Now Global */}
           <div className="flex items-center gap-2">
-            <Label className="text-xs text-muted-foreground">Server:</Label>
+            <Label className="text-xs text-muted-foreground">{t('playground.server')}:</Label>
             <Select value={selectedServerUrl} onValueChange={setSelectedServerUrl}>
               <SelectTrigger className="h-8 text-xs w-[200px]">
-                <SelectValue placeholder="Select server" />
+                <SelectValue placeholder={t('playground.selectServer')} />
               </SelectTrigger>
               <SelectContent>
                 {servers.map((server) => (
@@ -352,7 +354,7 @@ export const ApiPlayground = ({
               className={cn(isLiveMode && 'data-[state=checked]:bg-emerald-500')}
             />
             <Label htmlFor="mock-mode" className="text-xs font-medium cursor-pointer">
-              {isLiveMode ? 'Live Mode' : 'Mock Mode'}
+              {isLiveMode ? t('playground.liveMode') : t('playground.mockMode')}
             </Label>
           </div>
         </div>
@@ -372,7 +374,7 @@ export const ApiPlayground = ({
             {/* Token Selection */}
             {isAuthenticated ? (
               <div className="space-y-3">
-                <Label className="text-xs font-mono">Authorization</Label>
+                <Label className="text-xs font-mono">{t('playground.authorization')}</Label>
                 <div className="flex flex-col gap-2">
                   <Select
                     value={isManualToken ? 'manual' : selectedToken}
@@ -387,7 +389,11 @@ export const ApiPlayground = ({
                       )}
                     >
                       <SelectValue
-                        placeholder={loadingTokens ? 'Loading tokens...' : 'Select a token'}
+                        placeholder={
+                          loadingTokens
+                            ? t('playground.loadingTokens')
+                            : t('playground.selectToken')
+                        }
                       />
                     </SelectTrigger>
                     <SelectContent>
@@ -396,7 +402,7 @@ export const ApiPlayground = ({
                           value={globalToken}
                           className="text-xs font-medium border-b mb-1 pb-1"
                         >
-                          <span className="font-bold mr-2">Global Token</span>
+                          <span className="font-bold mr-2">{t('playground.globalToken')}</span>
                           <span className="text-muted-foreground">
                             ({globalToken.substring(0, 8)}...)
                           </span>
@@ -420,14 +426,14 @@ export const ApiPlayground = ({
                         </SelectItem>
                       ))}
                       <SelectItem value="manual" className="text-xs font-medium border-t mt-1 pt-1">
-                        Enter token manually...
+                        {t('playground.enterTokenManually')}
                       </SelectItem>
                     </SelectContent>
                   </Select>
 
                   {isManualToken && (
                     <Input
-                      placeholder="Paste your token here"
+                      placeholder={t('playground.pasteToken')}
                       value={manualToken}
                       onChange={handleManualTokenChange}
                       className={cn(
@@ -440,7 +446,7 @@ export const ApiPlayground = ({
               </div>
             ) : (
               <div className="space-y-3">
-                <Label className="text-xs font-mono">Authorization</Label>
+                <Label className="text-xs font-mono">{t('playground.authorization')}</Label>
                 <div className="flex items-center gap-2">
                   <Lock
                     className={cn(
@@ -450,7 +456,7 @@ export const ApiPlayground = ({
                   />
                   <div className="flex-1">
                     <Input
-                      placeholder="Paste Global Token..."
+                      placeholder={t('playground.pasteGlobalToken')}
                       value={manualToken || selectedToken}
                       onChange={handleManualTokenChange}
                       className={cn(
@@ -466,7 +472,7 @@ export const ApiPlayground = ({
             {pathParams.length > 0 && (
               <div className="space-y-3">
                 <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                  Path Parameters
+                  {t('playground.pathParameters')}
                 </h4>
                 {pathParams.map((param) => (
                   <div key={param.name} className="space-y-1">
@@ -488,7 +494,7 @@ export const ApiPlayground = ({
             {queryParams.length > 0 && (
               <div className="space-y-3">
                 <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                  Query Parameters
+                  {t('playground.queryParameters')}
                 </h4>
                 {queryParams.map((param) => (
                   <div key={param.name} className="space-y-1">
@@ -510,7 +516,7 @@ export const ApiPlayground = ({
             {headerParams.length > 0 && (
               <div className="space-y-3">
                 <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                  Headers
+                  {t('playground.headers')}
                 </h4>
                 {headerParams.map((param) => (
                   <div key={param.name} className="space-y-1">
@@ -531,7 +537,7 @@ export const ApiPlayground = ({
 
             {parameters.length === 0 && (
               <div className="text-sm text-muted-foreground italic py-4 text-center">
-                No parameters required for this endpoint.
+                {t('playground.noParameters')}
               </div>
             )}
           </div>
@@ -540,12 +546,12 @@ export const ApiPlayground = ({
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Sending Request...
+                {t('playground.sendingRequest')}
               </>
             ) : (
               <>
                 <Play className="mr-2 h-4 w-4" />
-                Send Request
+                {t('playground.sendRequest')}
               </>
             )}
           </Button>
@@ -558,7 +564,7 @@ export const ApiPlayground = ({
               <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4">
                 <Play className="h-6 w-6 opacity-50" />
               </div>
-              <p>Configure parameters and click "Send Request" to see the response.</p>
+              <p>{t('playground.configureAndSend')}</p>
             </div>
           )}
 
@@ -567,7 +573,7 @@ export const ApiPlayground = ({
               <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive flex items-start gap-3">
                 <AlertCircle className="h-5 w-5 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold">Request Failed</h4>
+                  <h4 className="font-semibold">{t('playground.requestFailed')}</h4>
                   <p className="text-sm mt-1">{error}</p>
                 </div>
               </div>
@@ -601,13 +607,13 @@ export const ApiPlayground = ({
                       value="body"
                       className="h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 text-xs uppercase tracking-wider"
                     >
-                      Response Body
+                      {t('playground.responseBody')}
                     </TabsTrigger>
                     <TabsTrigger
                       value="headers"
                       className="h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 text-xs uppercase tracking-wider"
                     >
-                      Headers
+                      {t('playground.headers')}
                     </TabsTrigger>
                   </TabsList>
                 </div>

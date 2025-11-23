@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { DocsLayout } from '@/components/docs/DocsLayout';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import docsContent from '@/data/docsContent.json';
+import { useDocsContent } from '@/hooks/useDocsContent';
 
 export const GettingStarted = () => {
   const location = useLocation();
   const { i18n } = useTranslation();
+  const docsContent = useDocsContent();
   const { title, sections } = docsContent.gettingStarted;
 
   useEffect(() => {

@@ -6,40 +6,42 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { DocsSearch } from './DocsSearch';
 import { ThemeSwitcher } from '../ThemeSwitcher';
 import { LanguageSwitcher } from '../LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 interface DocsLayoutProps {
   children: ReactNode;
   secondarySidebar?: ReactNode;
 }
 
-const menuItems = [
-  {
-    icon: Code,
-    title: 'Getting Started',
-    href: '/docs/getting-started',
-  },
-  {
-    icon: Zap,
-    title: 'Best Practices',
-    href: '/docs/best-practices',
-  },
-  {
-    icon: Shield,
-    title: 'Authentication',
-    href: '/docs/authentication',
-  },
-  {
-    icon: Book,
-    title: 'API Reference',
-    href: '/docs/api-reference',
-  },
-] as const;
-
 export const DocsLayout = ({ children, secondarySidebar }: DocsLayoutProps) => {
+  const { t } = useTranslation();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  const menuItems = [
+    {
+      icon: Code,
+      title: t('docs.menu.gettingStarted'),
+      href: '/docs/getting-started',
+    },
+    {
+      icon: Zap,
+      title: t('docs.menu.bestPractices'),
+      href: '/docs/best-practices',
+    },
+    {
+      icon: Shield,
+      title: t('docs.menu.authentication'),
+      href: '/docs/authentication',
+    },
+    {
+      icon: Book,
+      title: t('docs.menu.apiReference'),
+      href: '/docs/api-reference',
+    },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
