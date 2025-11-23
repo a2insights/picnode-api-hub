@@ -208,8 +208,16 @@ export const ApiPlayground = ({
         .map((param) => `${param.name}=${encodeURIComponent(paramValues[param.name])}`)
         .join('&');
 
-      if (queryString) {
-        url += `?${queryString}`;
+      // Check if endpoint supports lang parameter and add current language
+      const hasLangParam = parameters.some((p) => p.name === 'lang' && p.in === 'query');
+      const currentLang = localStorage.getItem('language') || 'pt';
+      const langParam = hasLangParam ? `lang=${currentLang}` : '';
+
+      // Combine query params
+      const allParams = [queryString, langParam].filter(Boolean).join('&');
+
+      if (allParams) {
+        url += `?${allParams}`;
       }
 
       // Prepare headers
@@ -352,7 +360,14 @@ export const ApiPlayground = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-5 divide-y lg:divide-y-0 lg:divide-x">
         {/* Request Configuration Panel */}
-        <div className="lg:col-span-2 p-4 space-y-6 bg-muted/10">
+        <div
+          className={cn(
+            'lg:col-span-2 p-4 space-y-6 transition-colors',
+            isLiveMode
+              ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-l-4 border-l-emerald-500'
+              : 'bg-muted/10',
+          )}
+        >
           <div className="space-y-4">
             {/* Token Selection */}
             {isAuthenticated ? (

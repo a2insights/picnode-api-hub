@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { DocsLayout } from '@/components/docs/DocsLayout';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle } from 'lucide-react';
+import { Lock, Key, Shield, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import docsContent from '@/data/docsContent.json';
 
 export const Authentication = () => {
   const location = useLocation();
+  const { i18n } = useTranslation();
   const { title, sections } = docsContent.authentication;
 
   useEffect(() => {
@@ -25,10 +27,12 @@ export const Authentication = () => {
   }, [location]);
 
   return (
-    <DocsLayout>
+    <DocsLayout key={i18n.language}>
       <div className="space-y-8">
         <div>
-          <Badge variant="destructive" className="mb-4">Security</Badge>
+          <Badge variant="destructive" className="mb-4">
+            Security
+          </Badge>
           <h1 className="text-4xl font-bold tracking-tight mb-2">{title}</h1>
           <p className="text-lg text-muted-foreground">
             Learn how to securely authenticate your API requests
@@ -39,8 +43,8 @@ export const Authentication = () => {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Important</AlertTitle>
           <AlertDescription>
-            Never expose your API token in client-side code or public repositories. 
-            Always make authenticated requests from your backend.
+            Never expose your API token in client-side code or public repositories. Always make
+            authenticated requests from your backend.
           </AlertDescription>
         </Alert>
 
@@ -53,7 +57,7 @@ export const Authentication = () => {
                 <span className="w-1 h-6 bg-primary rounded-full" />
                 {section.title}
               </h2>
-              
+
               <div className="space-y-4">
                 <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                   {section.content}

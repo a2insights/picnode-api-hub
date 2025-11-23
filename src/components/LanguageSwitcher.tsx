@@ -22,6 +22,9 @@ export const LanguageSwitcher = () => {
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
     localStorage.setItem('language', lng);
+
+    // Dispatch custom event to notify App.tsx
+    window.dispatchEvent(new CustomEvent('languageChange', { detail: { language: lng } }));
   };
 
   const currentLang = languages.find((lang) => lang.code === i18n.language);

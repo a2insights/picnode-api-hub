@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles, Globe } from 'lucide-react';
 import { ImagePickerDemo } from '@/components/hero/ImagePickerDemo';
@@ -54,13 +55,8 @@ export const HeroSection = () => {
                 Get API Key
                 <ArrowRight className="h-4 w-4" />
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="gap-2 h-12 px-8 text-base"
-                onClick={scrollToCalculator}
-              >
-                View Documentation
+              <Button size="lg" variant="outline" className="gap-2 h-12 px-8 text-base" asChild>
+                <Link to="/docs/getting-started">View Documentation</Link>
               </Button>
             </div>
 

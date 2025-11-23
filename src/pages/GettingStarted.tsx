@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { DocsLayout } from '@/components/docs/DocsLayout';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -7,6 +8,7 @@ import docsContent from '@/data/docsContent.json';
 
 export const GettingStarted = () => {
   const location = useLocation();
+  const { i18n } = useTranslation();
   const { title, sections } = docsContent.gettingStarted;
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export const GettingStarted = () => {
   }, [location]);
 
   return (
-    <DocsLayout>
+    <DocsLayout key={i18n.language}>
       <div className="space-y-8">
         <div>
           <h1 className="text-4xl font-bold tracking-tight mb-2">{title}</h1>
@@ -41,7 +43,7 @@ export const GettingStarted = () => {
                 <span className="w-1 h-6 bg-primary rounded-full" />
                 {section.title}
               </h2>
-              
+
               <div className="space-y-4">
                 <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                   {section.content}
