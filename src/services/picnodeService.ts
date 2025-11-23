@@ -120,6 +120,7 @@ export const picnodeService = {
         'filter[search]': params?.search,
         page: params?.page,
         media_conversions: params?.media_conversions || 'sm,md,lg',
+        lang: localStorage.getItem('language') || 'pt',
       },
     });
     return response.data;

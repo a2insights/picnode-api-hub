@@ -98,7 +98,7 @@ export const DocsLayout = ({ children, secondarySidebar }: DocsLayoutProps) => {
             <LanguageSwitcher />
             <Link to="/dashboard">
               <Button variant="outline" size="sm">
-                Dashboard
+                {t('nav.dashboard')}
               </Button>
             </Link>
           </div>

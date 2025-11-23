@@ -17,7 +17,19 @@
       "bestPractices": "Best Practices",
       "authentication": "Authentication",
       "apiReference": "API Reference"
-    }
+    },
+    "onThisPage": "On this page",
+    "recommended": "Recommended",
+    "security": "Security",
+    "important": "Important",
+    "securityWarning": "Never expose your API token in client-side code or public repositories. Always make authenticated requests from your backend.",
+    "subtitles": {
+      "gettingStarted": "Learn how to integrate PicNode API into your application",
+      "bestPractices": "Follow these best practices to optimize your API integration",
+      "authentication": "Learn how to securely authenticate your API requests"
+    },
+    "selectApi": "Select an API to view documentation",
+    "searchPlaceholder": "Search documentation..."
   },
   "hero": {
     "title": "All the images you need, in one API.",
@@ -222,6 +234,7 @@
     "noEndpoints": "No endpoints found for \"{{query}}\""
   },
   "sidebar": {
+    "apiDirectory": "API Directory",
     "noApisFound": "No APIs found."
   },
   "apiContent": {

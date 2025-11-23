@@ -67,7 +67,7 @@ export const ApiReference = () => {
     }
   };
 
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <GlobalPlaygroundProvider>
@@ -94,7 +94,7 @@ export const ApiReference = () => {
             <ApiContent api={selectedApi} />
           ) : (
             <div className="flex items-center justify-center h-full text-muted-foreground p-8">
-              Select an API to view documentation
+              {t('docs.selectApi')}
             </div>
           )}
         </div>

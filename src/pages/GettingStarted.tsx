@@ -8,7 +8,7 @@ import { useDocsContent } from '@/hooks/useDocsContent';
 
 export const GettingStarted = () => {
   const location = useLocation();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const docsContent = useDocsContent();
   const { title, sections } = docsContent.gettingStarted;
 
@@ -30,9 +30,7 @@ export const GettingStarted = () => {
       <div className="space-y-8">
         <div>
           <h1 className="text-4xl font-bold tracking-tight mb-2">{title}</h1>
-          <p className="text-lg text-muted-foreground">
-            Learn how to integrate PicNode API into your application
-          </p>
+          <p className="text-lg text-muted-foreground">{t('docs.subtitles.gettingStarted')}</p>
         </div>
 
         <Separator />
@@ -64,7 +62,7 @@ export const GettingStarted = () => {
 
         {/* Table of Contents */}
         <Card className="p-6 bg-accent/5 border-primary/20">
-          <h3 className="font-semibold mb-3">On this page</h3>
+          <h3 className="font-semibold mb-3">{t('docs.onThisPage')}</h3>
           <nav className="space-y-2">
             {sections.map((section) => (
               <a

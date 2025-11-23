@@ -11,7 +11,7 @@ import { useDocsContent } from '@/hooks/useDocsContent';
 
 export const Authentication = () => {
   const location = useLocation();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const docsContent = useDocsContent();
   const { title, sections } = docsContent.authentication;
 
@@ -32,21 +32,16 @@ export const Authentication = () => {
       <div className="space-y-8">
         <div>
           <Badge variant="destructive" className="mb-4">
-            Security
+            {t('docs.security')}
           </Badge>
           <h1 className="text-4xl font-bold tracking-tight mb-2">{title}</h1>
-          <p className="text-lg text-muted-foreground">
-            Learn how to securely authenticate your API requests
-          </p>
+          <p className="text-lg text-muted-foreground">{t('docs.subtitles.authentication')}</p>
         </div>
 
         <Alert>
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Important</AlertTitle>
-          <AlertDescription>
-            Never expose your API token in client-side code or public repositories. Always make
-            authenticated requests from your backend.
-          </AlertDescription>
+          <AlertTitle>{t('docs.important')}</AlertTitle>
+          <AlertDescription>{t('docs.securityWarning')}</AlertDescription>
         </Alert>
 
         <Separator />
@@ -77,7 +72,7 @@ export const Authentication = () => {
         </div>
 
         <Card className="p-6 bg-accent/5 border-primary/20">
-          <h3 className="font-semibold mb-3">On this page</h3>
+          <h3 className="font-semibold mb-3">{t('docs.onThisPage')}</h3>
           <nav className="space-y-2">
             {sections.map((section) => (
               <a

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import Fuse from 'fuse.js';
 import { useDocsContent } from '@/hooks/useDocsContent';
+import { useTranslation } from 'react-i18next';
 
 interface SearchResult {
   page: string;
@@ -21,6 +22,7 @@ export const DocsSearch = () => {
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
   const docsContent = useDocsContent();
+  const { t } = useTranslation();
 
   // Prepare search data
   const fuse = useMemo(() => {
@@ -77,7 +79,7 @@ export const DocsSearch = () => {
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Search documentation..."
+          placeholder={t('docs.searchPlaceholder')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query && setIsOpen(true)}
