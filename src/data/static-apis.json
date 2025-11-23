@@ -1,0 +1,226 @@
+{
+  "active": [
+    {
+      "id": "flags",
+      "name": "Flags",
+      "slug": "flags",
+      "description": "World flags in high quality",
+      "category": "Geography",
+      "icon": "Flag",
+      "color": "from-blue-500 to-cyan-500",
+      "status": "active"
+    },
+    {
+      "id": "places",
+      "name": "Places",
+      "slug": "places",
+      "description": "Cities and locations worldwide",
+      "category": "Geography",
+      "icon": "MapPin",
+      "color": "from-green-500 to-emerald-500",
+      "status": "active"
+    },
+    {
+      "id": "thing-icos",
+      "name": "Thing ICOs",
+      "slug": "thing-icos",
+      "description": "Icon collections for various objects",
+      "category": "Icons",
+      "icon": "Sparkles",
+      "color": "from-purple-500 to-pink-500",
+      "status": "active"
+    },
+    {
+      "id": "companies",
+      "name": "Companies",
+      "slug": "companies",
+      "description": "Company logos and brands",
+      "category": "Business",
+      "icon": "Building2",
+      "color": "from-orange-500 to-red-500",
+      "status": "active"
+    }
+  ],
+  "inDevelopment": [
+    {
+      "id": "monuments",
+      "name": "Monuments",
+      "slug": "monuments",
+      "description": "Famous monuments and landmarks",
+      "category": "Geography",
+      "icon": "Landmark",
+      "color": "from-amber-500 to-yellow-500",
+      "status": "in_development",
+      "progress": 78,
+      "estimatedCompletion": "2025-02"
+    },
+    {
+      "id": "currencies",
+      "name": "Currencies",
+      "slug": "currencies",
+      "description": "Currency symbols and banknotes",
+      "category": "Finance",
+      "icon": "DollarSign",
+      "color": "from-green-600 to-teal-500",
+      "status": "in_development",
+      "progress": 65,
+      "estimatedCompletion": "2025-03"
+    },
+    {
+      "id": "sport-teams",
+      "name": "Sport Teams",
+      "slug": "sport-teams",
+      "description": "Team logos and emblems",
+      "category": "Sports",
+      "icon": "Trophy",
+      "color": "from-red-500 to-orange-500",
+      "status": "in_development",
+      "progress": 82,
+      "estimatedCompletion": "2025-02"
+    },
+    {
+      "id": "universities",
+      "name": "Universities",
+      "slug": "universities",
+      "description": "University logos and seals",
+      "category": "Education",
+      "icon": "GraduationCap",
+      "color": "from-indigo-500 to-blue-500",
+      "status": "in_development",
+      "progress": 45,
+      "estimatedCompletion": "2025-04"
+    },
+    {
+      "id": "food-brands",
+      "name": "Food & Beverage",
+      "slug": "food-brands",
+      "description": "Food and beverage brand logos",
+      "category": "Food",
+      "icon": "Coffee",
+      "color": "from-rose-500 to-pink-500",
+      "status": "in_development",
+      "progress": 38,
+      "estimatedCompletion": "2025-05"
+    },
+    {
+      "id": "tech-products",
+      "name": "Tech Products",
+      "slug": "tech-products",
+      "description": "Technology product images",
+      "category": "Technology",
+      "icon": "Smartphone",
+      "color": "from-slate-500 to-gray-600",
+      "status": "in_development",
+      "progress": 92,
+      "estimatedCompletion": "2025-01"
+    },
+    {
+      "id": "airlines",
+      "name": "Airlines",
+      "slug": "airlines",
+      "description": "Airline logos and liveries",
+      "category": "Travel",
+      "icon": "Plane",
+      "color": "from-sky-500 to-blue-600",
+      "status": "in_development",
+      "progress": 71,
+      "estimatedCompletion": "2025-03"
+    },
+    {
+      "id": "automotive",
+      "name": "Automotive",
+      "slug": "automotive",
+      "description": "Car manufacturer logos",
+      "category": "Automotive",
+      "icon": "Car",
+      "color": "from-zinc-600 to-slate-700",
+      "status": "in_development",
+      "progress": 55,
+      "estimatedCompletion": "2025-04"
+    },
+    {
+      "id": "emblems",
+      "name": "National Emblems",
+      "slug": "emblems",
+      "description": "National coats of arms",
+      "category": "Geography",
+      "icon": "Shield",
+      "color": "from-yellow-600 to-amber-700",
+      "status": "in_development",
+      "progress": 88,
+      "estimatedCompletion": "2025-02"
+    },
+    {
+      "id": "awards",
+      "name": "Awards & Medals",
+      "slug": "awards",
+      "description": "Award and medal designs",
+      "category": "Recognition",
+      "icon": "Award",
+      "color": "from-yellow-500 to-orange-600",
+      "status": "in_development",
+      "progress": 29,
+      "estimatedCompletion": "2025-06"
+    },
+    {
+      "id": "fashion",
+      "name": "Fashion Brands",
+      "slug": "fashion",
+      "description": "Fashion and luxury brand logos",
+      "category": "Fashion",
+      "icon": "Sparkles",
+      "color": "from-fuchsia-500 to-purple-600",
+      "status": "in_development",
+      "progress": 41,
+      "estimatedCompletion": "2025-05"
+    },
+    {
+      "id": "streaming",
+      "name": "Streaming Services",
+      "slug": "streaming",
+      "description": "Streaming platform logos",
+      "category": "Entertainment",
+      "icon": "Tv",
+      "color": "from-red-600 to-rose-700",
+      "status": "in_development",
+      "progress": 96,
+      "estimatedCompletion": "2025-01"
+    },
+    {
+      "id": "social-media",
+      "name": "Social Media",
+      "slug": "social-media",
+      "description": "Social network icons and logos",
+      "category": "Technology",
+      "icon": "Share2",
+      "color": "from-blue-500 to-indigo-600",
+      "status": "in_development",
+      "progress": 84,
+      "estimatedCompletion": "2025-02"
+    },
+    {
+      "id": "crypto",
+      "name": "Cryptocurrencies",
+      "slug": "crypto",
+      "description": "Cryptocurrency logos and symbols",
+      "category": "Finance",
+      "icon": "Bitcoin",
+      "color": "from-orange-500 to-yellow-600",
+      "status": "in_development",
+      "progress": 67,
+      "estimatedCompletion": "2025-03"
+    },
+    {
+      "id": "weather",
+      "name": "Weather Icons",
+      "slug": "weather",
+      "description": "Weather condition illustrations",
+      "category": "Climate",
+      "icon": "Cloud",
+      "color": "from-sky-400 to-blue-500",
+      "status": "in_development",
+      "progress": 73,
+      "estimatedCompletion": "2025-03"
+    }
+  ]
+}
