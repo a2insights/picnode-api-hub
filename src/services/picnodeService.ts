@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-// const API_BASE_URL = "https://a2insights.com.br/api/picnode";
-// const BEARER_TOKEN = "28|JHFYyuuwowfMc4cH7D53TM0RNfnjkQACa6taAP8X69805c5a";
-const API_BASE_URL = 'http://localhost/api/picnode';
-const BEARER_TOKEN = '4|05hIVEsXha7CGN24sJxMYwKPrfRyz3QLDz62hLU0b6f79ce8';
+const API_BASE_URL = 'https://a2insights.com.br/api/picnode';
+const BEARER_TOKEN = '28|JHFYyuuwowfMc4cH7D53TM0RNfnjkQACa6taAP8X69805c5a';
+// const API_BASE_URL = 'http://localhost/api/picnode';
+// const BEARER_TOKEN = '4|05hIVEsXha7CGN24sJxMYwKPrfRyz3QLDz62hLU0b6f79ce8';
 
 const picnodeApi = axios.create({
   baseURL: API_BASE_URL,
@@ -87,9 +87,7 @@ export const picnodeService = {
       params: {
         'filter[search]': params?.search,
         page: params?.page,
-        has_media: params?.has_media ? 1 : undefined,
         media_conversions: params?.media_conversions || 'sm,md,lg',
-        include: 'media',
       },
     });
     return response.data;
@@ -105,9 +103,7 @@ export const picnodeService = {
       params: {
         'filter[search]': params?.search,
         page: params?.page,
-        has_media: params?.has_media ? 1 : undefined,
         media_conversions: params?.media_conversions || 'sm,md,lg',
-        include: 'media',
       },
     });
     return response.data;
@@ -123,9 +119,7 @@ export const picnodeService = {
       params: {
         'filter[search]': params?.search,
         page: params?.page,
-        has_media: params?.has_media ? 1 : undefined,
         media_conversions: params?.media_conversions || 'sm,md,lg',
-        include: 'media',
       },
     });
     return response.data;
@@ -141,9 +135,7 @@ export const picnodeService = {
       params: {
         'filter[search]': params?.search,
         page: params?.page,
-        has_media: params?.has_media ? 1 : undefined,
         media_conversions: params?.media_conversions || 'sm,md,lg',
-        include: 'media',
       },
     });
     return response.data;
