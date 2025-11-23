@@ -11,6 +11,7 @@ export const ApiReference = () => {
   const [selectedApi, setSelectedApi] = useState<ApiItem | null>(null);
   const [search, setSearch] = useState('');
   const [servers, setServers] = useState<{ url: string }[]>([]);
+  const [apiSpec, setApiSpec] = useState<any>(null);
 
   // Select the first API by default when apis are loaded
   useEffect(() => {
@@ -19,12 +20,13 @@ export const ApiReference = () => {
     }
   }, [apis, selectedApi]);
 
-  // Fetch servers from api.json
+  // Fetch servers and full spec from api.json
   useEffect(() => {
     const fetchSpec = async () => {
       try {
         const response = await fetch('/api.json');
         const data = await response.json();
+        setApiSpec(data);
         if (data.servers && Array.isArray(data.servers)) {
           setServers(data.servers);
         }
@@ -34,6 +36,26 @@ export const ApiReference = () => {
     };
     fetchSpec();
   }, []);
+
+  const handleSelectEndpoint = (path: string, method: string) => {
+    // Find the API that contains this endpoint
+    const matchingApi = apis.find((api: any) => {
+      // Check if this API's endpoints include this path
+      return api.slug === path.split('/')[2]; // Extract API slug from path like /picnode/companies
+    });
+
+    if (matchingApi) {
+      setSelectedApi(matchingApi as unknown as ApiItem);
+      // Scroll to the endpoint after a short delay to allow the content to render
+      setTimeout(() => {
+        const endpointId = `${method.toLowerCase()}-${path.replace(/\//g, '-')}`;
+        const element = document.getElementById(endpointId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  };
 
   return (
     <GlobalPlaygroundProvider>
@@ -48,7 +70,13 @@ export const ApiReference = () => {
         }
       >
         <div className="flex flex-col h-full">
-          <ApiToolbar search={search} onSearchChange={setSearch} servers={servers} />
+          <ApiToolbar
+            search={search}
+            onSearchChange={setSearch}
+            servers={servers}
+            apiSpec={apiSpec}
+            onSelectEndpoint={handleSelectEndpoint}
+          />
           {selectedApi ? (
             <ApiContent api={selectedApi} />
           ) : (

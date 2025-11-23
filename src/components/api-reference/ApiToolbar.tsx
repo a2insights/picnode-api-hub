@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { ApiSearch } from './ApiSearch';
 
 interface Token {
   id: number | string;
@@ -29,9 +30,17 @@ interface ApiToolbarProps {
   search: string;
   onSearchChange: (value: string) => void;
   servers?: { url: string }[];
+  apiSpec?: any;
+  onSelectEndpoint?: (path: string, method: string) => void;
 }
 
-export const ApiToolbar = ({ search, onSearchChange, servers = [] }: ApiToolbarProps) => {
+export const ApiToolbar = ({
+  search,
+  onSearchChange,
+  servers = [],
+  apiSpec,
+  onSelectEndpoint,
+}: ApiToolbarProps) => {
   const {
     globalToken,
     setGlobalToken,
@@ -119,13 +128,24 @@ export const ApiToolbar = ({ search, onSearchChange, servers = [] }: ApiToolbarP
       {/* First Row: Search */}
       <div className="flex items-center gap-3 px-4 py-2 border-b">
         <div className="relative flex-1 max-w-2xl">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search APIs..."
-            value={search}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-9 h-9"
-          />
+          {apiSpec && onSelectEndpoint ? (
+            <ApiSearch
+              apiSpec={apiSpec}
+              onSelectEndpoint={onSelectEndpoint}
+              value={search}
+              onChange={onSearchChange}
+            />
+          ) : (
+            <>
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search APIs..."
+                value={search}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="pl-9 h-9"
+              />
+            </>
+          )}
         </div>
       </div>
 
