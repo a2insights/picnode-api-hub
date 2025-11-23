@@ -19,6 +19,7 @@ import {
 import { useEffect, useState } from 'react';
 import * as SwaggerParser from '@readme/openapi-parser';
 import { ResponseViewer } from './ResponseViewer';
+import { ApiPlayground } from './ApiPlayground';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 
@@ -206,59 +207,90 @@ export const ApiContent = ({ api }: ApiContentProps) => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-6 space-y-6">
-                      {/* Parameters */}
-                      {details.parameters && details.parameters.length > 0 && (
-                        <div>
-                          <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                            Parameters
-                          </h3>
-                          <div className="rounded-md border overflow-hidden">
-                            <table className="w-full text-sm text-left">
-                              <thead className="bg-muted/50 text-muted-foreground">
-                                <tr>
-                                  <th className="p-3 font-medium">Name</th>
-                                  <th className="p-3 font-medium">In</th>
-                                  <th className="p-3 font-medium">Type</th>
-                                  <th className="p-3 font-medium">Description</th>
-                                </tr>
-                              </thead>
-                              <tbody className="divide-y">
-                                {details.parameters.map((param: any, idx: number) => (
-                                  <tr key={idx} className="hover:bg-muted/30">
-                                    <td className="p-3 font-mono text-primary font-medium">
-                                      {param.name}
-                                      {param.required && (
-                                        <span className="text-destructive ml-1">*</span>
-                                      )}
-                                    </td>
-                                    <td className="p-3 text-muted-foreground">{param.in}</td>
-                                    <td className="p-3 text-muted-foreground">
-                                      {param.schema?.type || 'string'}
-                                    </td>
-                                    <td className="p-3">{param.description || '-'}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
+                      <Tabs defaultValue="docs" className="w-full">
+                        <div className="flex items-center justify-between border-b pb-2 mb-4">
+                          <TabsList className="h-9 bg-muted/50 p-1">
+                            <TabsTrigger
+                              value="docs"
+                              className="text-xs uppercase tracking-wider data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                            >
+                              Documentation
+                            </TabsTrigger>
+                            <TabsTrigger
+                              value="playground"
+                              className="text-xs uppercase tracking-wider data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                            >
+                              Try it out
+                            </TabsTrigger>
+                          </TabsList>
                         </div>
-                      )}
 
-                      {/* Responses */}
-                      {details.responses && (
-                        <div>
-                          <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-                            Responses
-                          </h3>
-                          <div className="space-y-4">
-                            {Object.entries(details.responses).map(
-                              ([code, response]: [string, any]) => (
-                                <ResponseViewer key={code} code={code} response={response} />
-                              ),
-                            )}
-                          </div>
-                        </div>
-                      )}
+                        <TabsContent value="docs" className="space-y-6 mt-0">
+                          {/* Parameters */}
+                          {details.parameters && details.parameters.length > 0 && (
+                            <div>
+                              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
+                                Parameters
+                              </h3>
+                              <div className="rounded-md border overflow-hidden">
+                                <table className="w-full text-sm text-left">
+                                  <thead className="bg-muted/50 text-muted-foreground">
+                                    <tr>
+                                      <th className="p-3 font-medium">Name</th>
+                                      <th className="p-3 font-medium">In</th>
+                                      <th className="p-3 font-medium">Type</th>
+                                      <th className="p-3 font-medium">Description</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody className="divide-y">
+                                    {details.parameters.map((param: any, idx: number) => (
+                                      <tr key={idx} className="hover:bg-muted/30">
+                                        <td className="p-3 font-mono text-primary font-medium">
+                                          {param.name}
+                                          {param.required && (
+                                            <span className="text-destructive ml-1">*</span>
+                                          )}
+                                        </td>
+                                        <td className="p-3 text-muted-foreground">{param.in}</td>
+                                        <td className="p-3 text-muted-foreground">
+                                          {param.schema?.type || 'string'}
+                                        </td>
+                                        <td className="p-3">{param.description || '-'}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Responses */}
+                          {details.responses && (
+                            <div>
+                              <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
+                                Responses
+                              </h3>
+                              <div className="space-y-4">
+                                {Object.entries(details.responses).map(
+                                  ([code, response]: [string, any]) => (
+                                    <ResponseViewer key={code} code={code} response={response} />
+                                  ),
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </TabsContent>
+
+                        <TabsContent value="playground" className="mt-0">
+                          <ApiPlayground
+                            path={path}
+                            method={method}
+                            parameters={details.parameters}
+                            servers={spec?.servers}
+                            responses={details.responses}
+                          />
+                        </TabsContent>
+                      </Tabs>
                     </CardContent>
                   </Card>
                 ))}

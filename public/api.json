@@ -1,12 +1,12 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "A2insights",
+    "title": "Laravel",
     "version": "0.0.1"
   },
   "servers": [
     {
-      "url": "http://localhost/api"
+      "url": "http:\/\/localhost\/api"
     }
   ],
   "security": [
@@ -15,38 +15,56 @@
     }
   ],
   "paths": {
-    "/picnode/companies": {
+    "\/picnode\/companies": {
       "get": {
         "operationId": "companies",
         "tags": ["Company"],
         "parameters": [
           {
+            "name": "filter[search]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
             "name": "per_page",
             "in": "query",
             "schema": {
-              "type": "string",
-              "default": 10
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
             }
           },
           {
             "name": "media_conversions",
             "in": "query",
             "description": "Request specific media conversions (e.g., xs,sm,md,lg,preview,thumbnail,webp).",
-            "schema": {}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Paginated set of `CompanyResource`",
             "content": {
-              "application/json": {
+              "application\/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/CompanyResource"
+                        "$ref": "#\/components\/schemas\/CompanyResource"
                       }
                     },
                     "links": {
@@ -133,15 +151,15 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/AuthenticationException"
+            "$ref": "#\/components\/responses\/AuthenticationException"
           },
           "422": {
-            "$ref": "#/components/responses/ValidationException"
+            "$ref": "#\/components\/responses\/ValidationException"
           }
         }
       }
     },
-    "/picnode/companies/{id}": {
+    "\/picnode\/companies\/{id}": {
       "get": {
         "operationId": "companies.show",
         "tags": ["Company"],
@@ -159,12 +177,12 @@
           "200": {
             "description": "`CompanyResource`",
             "content": {
-              "application/json": {
+              "application\/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/CompanyResource"
+                      "$ref": "#\/components\/schemas\/CompanyResource"
                     }
                   },
                   "required": ["data"]
@@ -173,12 +191,12 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/AuthenticationException"
+            "$ref": "#\/components\/responses\/AuthenticationException"
           }
         }
       }
     },
-    "/picnode/football-clubs": {
+    "\/picnode\/football-clubs": {
       "get": {
         "operationId": "football-clubs",
         "tags": ["FootballClub"],
@@ -191,18 +209,20 @@
             }
           },
           {
-            "name": "include",
+            "name": "page",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "minimum": 1
             }
           },
           {
             "name": "per_page",
             "in": "query",
             "schema": {
-              "type": "string",
-              "default": 10
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
             }
           },
           {
@@ -218,14 +238,14 @@
           "200": {
             "description": "Paginated set of `FootballClubResource`",
             "content": {
-              "application/json": {
+              "application\/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/FootballClubResource"
+                        "$ref": "#\/components\/schemas\/FootballClubResource"
                       }
                     },
                     "links": {
@@ -312,19 +332,26 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/AuthenticationException"
+            "$ref": "#\/components\/responses\/AuthenticationException"
           },
           "422": {
-            "$ref": "#/components/responses/ValidationException"
+            "$ref": "#\/components\/responses\/ValidationException"
           }
         }
       }
     },
-    "/picnode/places": {
+    "\/picnode\/places": {
       "get": {
         "operationId": "places",
         "tags": ["Place"],
         "parameters": [
+          {
+            "name": "filter[search]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "filter[type]",
             "in": "query",
@@ -354,39 +381,20 @@
             }
           },
           {
-            "name": "filter[search]",
+            "name": "page",
             "in": "query",
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "filter[parent_code]",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "filter[children_code]",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "include",
-            "in": "query",
-            "schema": {
-              "type": "string"
+              "type": "integer",
+              "minimum": 1
             }
           },
           {
             "name": "per_page",
             "in": "query",
             "schema": {
-              "type": "string",
-              "default": 10
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
             }
           },
           {
@@ -402,14 +410,14 @@
           "200": {
             "description": "Paginated set of `PlaceResource`",
             "content": {
-              "application/json": {
+              "application\/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/PlaceResource"
+                        "$ref": "#\/components\/schemas\/PlaceResource"
                       }
                     },
                     "links": {
@@ -496,15 +504,15 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/AuthenticationException"
+            "$ref": "#\/components\/responses\/AuthenticationException"
           },
           "422": {
-            "$ref": "#/components/responses/ValidationException"
+            "$ref": "#\/components\/responses\/ValidationException"
           }
         }
       }
     },
-    "/picnode/places/types": {
+    "\/picnode\/places\/types": {
       "get": {
         "operationId": "places.types",
         "tags": ["Place"],
@@ -512,14 +520,14 @@
           "200": {
             "description": "Array of `PlaceTypeResource`",
             "content": {
-              "application/json": {
+              "application\/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/PlaceTypeResource"
+                        "$ref": "#\/components\/schemas\/PlaceTypeResource"
                       }
                     }
                   },
@@ -529,12 +537,12 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/AuthenticationException"
+            "$ref": "#\/components\/responses\/AuthenticationException"
           }
         }
       }
     },
-    "/picnode/thing-icos": {
+    "\/picnode\/thing-icos": {
       "get": {
         "operationId": "thing-icos",
         "tags": ["ThingIco"],
@@ -547,18 +555,20 @@
             }
           },
           {
-            "name": "include",
+            "name": "page",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "minimum": 1
             }
           },
           {
             "name": "per_page",
             "in": "query",
             "schema": {
-              "type": "string",
-              "default": 10
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
             }
           },
           {
@@ -580,14 +590,14 @@
           "200": {
             "description": "Paginated set of `ThingIcoResource`",
             "content": {
-              "application/json": {
+              "application\/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/ThingIcoResource"
+                        "$ref": "#\/components\/schemas\/ThingIcoResource"
                       }
                     },
                     "links": {
@@ -674,10 +684,10 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/AuthenticationException"
+            "$ref": "#\/components\/responses\/AuthenticationException"
           },
           "422": {
-            "$ref": "#/components/responses/ValidationException"
+            "$ref": "#\/components\/responses\/ValidationException"
           }
         }
       }
@@ -706,11 +716,8 @@
           "media": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/MediaResource"
+              "$ref": "#\/components\/schemas\/MediaResource"
             }
-          },
-          "media_count": {
-            "type": "integer"
           },
           "created_at": {
             "type": ["string", "null"],
@@ -736,7 +743,7 @@
           "media": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/MediaResource"
+                "$ref": "#\/components\/schemas\/MediaResource"
               },
               {
                 "type": "null"
@@ -793,7 +800,7 @@
             "type": ["string", "null"]
           },
           "type": {
-            "$ref": "#/components/schemas/PlaceType"
+            "$ref": "#\/components\/schemas\/PlaceType"
           },
           "parent_id": {
             "type": ["integer", "null"]
@@ -801,13 +808,13 @@
           "children": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PlaceResource"
+              "$ref": "#\/components\/schemas\/PlaceResource"
             }
           },
           "media": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/MediaResource"
+              "$ref": "#\/components\/schemas\/MediaResource"
             }
           },
           "media_count": {
@@ -853,7 +860,7 @@
           "media": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/MediaResource"
+                "$ref": "#\/components\/schemas\/MediaResource"
               },
               {
                 "type": "null"
@@ -877,7 +884,7 @@
       "AuthenticationException": {
         "description": "Unauthenticated",
         "content": {
-          "application/json": {
+          "application\/json": {
             "schema": {
               "type": "object",
               "properties": {
@@ -894,7 +901,7 @@
       "ValidationException": {
         "description": "Validation error",
         "content": {
-          "application/json": {
+          "application\/json": {
             "schema": {
               "type": "object",
               "properties": {
