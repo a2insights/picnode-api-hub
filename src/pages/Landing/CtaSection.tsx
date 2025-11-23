@@ -119,7 +119,7 @@ export const CtaSection = () => {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
           >
-            Comece agora mesmo com 100 requisições grátis por 7 dias. Sem cartão de crédito
+            Comece agora mesmo com 1000 requisições grátis por 7 dias. Sem cartão de crédito
             necessário.
           </motion.p>
 

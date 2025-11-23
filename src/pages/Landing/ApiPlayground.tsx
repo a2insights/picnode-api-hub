@@ -199,6 +199,7 @@ const ApiPlayground = () => {
             {apis.map((api) => {
               const Icon = getApiIcon(api.slug);
               const isSelected = selectedApi === api.slug;
+              const isMultilingual = api.features?.languages;
 
               return (
                 <Button
@@ -212,6 +213,12 @@ const ApiPlayground = () => {
                   />
                   <Icon className="w-4 h-4 mr-2" />
                   {api.name}
+                  {isMultilingual && (
+                    <MultilingualBadge
+                      className={`relative ${isSelected ? 'text-white' : 'text-black'}`}
+                      languages={api.features.languages}
+                    />
+                  )}
                 </Button>
               );
             })}

@@ -1,19 +1,27 @@
 import { Globe } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 interface MultilingualBadgeProps {
   languages: string;
 }
 
-export const MultilingualBadge = ({ languages }: MultilingualBadgeProps) => {
+interface MultilingualBadgeProps {
+  className?: string;
+}
+
+export const MultilingualBadge = ({ languages, className }: MultilingualBadgeProps) => {
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
           <Badge
             variant="outline"
-            className="text-xs gap-1 border-primary/20 text-primary bg-primary/5 cursor-help"
+            className={cn(
+              'text-xs gap-1 border-primary/20 text-primary bg-primary/5 cursor-help',
+              className,
+            )}
           >
             <Globe className="h-3 w-3" />
             Multilingual

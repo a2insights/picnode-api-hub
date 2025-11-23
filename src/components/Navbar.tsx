@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { ThemeSwitcher } from './ThemeSwitcher';
+import { LampSwitch } from './LampSwitch';
 import { Button } from './ui/button';
 import { Code2, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -24,6 +24,9 @@ export const Navbar = () => {
   return (
     <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-lg">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div>
+          <LampSwitch />
+        </div>
         <Link to="/" className="flex items-center gap-2 group">
           <div className="bg-gradient-to-br from-primary to-accent p-2 rounded-lg group-hover:scale-110 transition-transform">
             <Code2 className="h-5 w-5 text-primary-foreground" />
@@ -61,7 +64,6 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <ThemeSwitcher />
           <LanguageSwitcher />
           {isAuthenticated ? (
             <>
