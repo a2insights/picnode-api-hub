@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import download from 'downloadjs';
 import JSZip from 'jszip';
 import { toast } from 'sonner';
+import { Lightbox } from '@/components/Lightbox';
 
 interface Asset {
   id: string;
@@ -27,6 +28,7 @@ export const AssetDetailModal = ({ asset, open, onOpenChange }: AssetDetailModal
   const [selectedFormat, setSelectedFormat] = useState<string>('');
   const [downloading, setDownloading] = useState(false);
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   // Get media array or single object
   const getMediaArray = () => {
@@ -270,7 +272,7 @@ export const AssetDetailModal = ({ asset, open, onOpenChange }: AssetDetailModal
                       size="icon"
                       variant="secondary"
                       className="absolute top-2 right-2"
-                      onClick={() => window.open(media?.url || asset.image, '_blank')}
+                      onClick={() => setLightboxOpen(true)}
                     >
                       <Maximize2 className="w-4 h-4" />
                     </Button>
@@ -379,6 +381,14 @@ export const AssetDetailModal = ({ asset, open, onOpenChange }: AssetDetailModal
           </>
         )}
       </DialogContent>
+
+      {/* Lightbox */}
+      <Lightbox
+        src={media?.url || asset?.image || ''}
+        alt={asset?.name || 'Asset'}
+        open={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </Dialog>
   );
 };
