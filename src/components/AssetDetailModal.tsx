@@ -24,7 +24,7 @@ interface AssetDetailModalProps {
 }
 
 export const AssetDetailModal = ({ asset, open, onOpenChange }: AssetDetailModalProps) => {
-  const [selectedFormat, setSelectedFormat] = useState<string>('original');
+  const [selectedFormat, setSelectedFormat] = useState<string>('');
   const [downloading, setDownloading] = useState(false);
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
 
@@ -120,6 +120,11 @@ export const AssetDetailModal = ({ asset, open, onOpenChange }: AssetDetailModal
 
   const formats = getAvailableFormats();
   const sizes = getAvailableSizes();
+
+  // Auto-select first format when formats change or modal opens
+  if (formats.length > 0 && (!selectedFormat || !formats.find(f => f.id === selectedFormat))) {
+    setSelectedFormat(formats[0].id);
+  }
 
   const handleDownload = async (format: string, sizeId: string) => {
     if (!asset) return;

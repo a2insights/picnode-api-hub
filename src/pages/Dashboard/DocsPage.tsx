@@ -65,22 +65,8 @@ export const DocsPage = () => {
                 </Card>
               );
 
-              if (section.external) {
-                return (
-                  <a
-                    key={index}
-                    href={section.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block"
-                  >
-                    {content}
-                  </a>
-                );
-              }
-
               return (
-                <Link key={index} to={section.url!} className="block">
+                <Link key={index} to={section.url} className="block">
                   {content}
                 </Link>
               );
