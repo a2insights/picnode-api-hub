@@ -1,6 +1,6 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ZoomIn, ZoomOut, RotateCw, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ZoomIn, ZoomOut, RotateCw, ChevronLeft, ChevronRight, Move } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -20,13 +20,19 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [scale, setScale] = useState(1);
   const [rotation, setRotation] = useState(0);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const imageRef = useRef<HTMLDivElement>(null);
 
   const currentImage = images[currentIndex];
   const hasMultiple = images.length > 1;
+  const canDrag = scale > 1;
 
   const resetTransforms = () => {
     setScale(1);
     setRotation(0);
+    setPosition({ x: 0, y: 0 });
   };
 
   const goNext = useCallback(() => {
@@ -43,44 +49,98 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
     }
   }, [currentIndex]);
 
+  const handleZoom = useCallback((delta: number) => {
+    setScale((s) => {
+      const newScale = Math.min(Math.max(s + delta, 0.5), 4);
+      // Reset position if zooming back to 1 or less
+      if (newScale <= 1) {
+        setPosition({ x: 0, y: 0 });
+      }
+      return newScale;
+    });
+  }, []);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-      if (e.key === '+' || e.key === '=') setScale((s) => Math.min(s + 0.25, 3));
-      if (e.key === '-') setScale((s) => Math.max(s - 0.25, 0.5));
+      if (e.key === '+' || e.key === '=') handleZoom(0.25);
+      if (e.key === '-') handleZoom(-0.25);
       if (e.key === 'r') setRotation((r) => r + 90);
       if (e.key === 'ArrowRight') goNext();
       if (e.key === 'ArrowLeft') goPrev();
+      if (e.key === '0') resetTransforms();
     },
-    [onClose, goNext, goPrev]
+    [onClose, goNext, goPrev, handleZoom]
+  );
+
+  // Ctrl + Wheel zoom
+  const handleWheel = useCallback(
+    (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.15 : 0.15;
+        handleZoom(delta);
+      }
+    },
+    [handleZoom]
   );
 
   useEffect(() => {
     if (open) {
       document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener('wheel', handleWheel, { passive: false });
       document.body.style.overflow = 'hidden';
       setCurrentIndex(initialIndex);
       resetTransforms();
     }
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('wheel', handleWheel);
       document.body.style.overflow = '';
     };
-  }, [open, handleKeyDown, initialIndex]);
+  }, [open, handleKeyDown, handleWheel, initialIndex]);
+
+  // Drag handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!canDrag) return;
+    e.preventDefault();
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !canDrag) return;
+    setPosition({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y,
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
 
   const zoomIn = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setScale((s) => Math.min(s + 0.25, 3));
+    handleZoom(0.25);
   };
 
   const zoomOut = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setScale((s) => Math.max(s - 0.25, 0.5));
+    handleZoom(-0.25);
   };
 
   const rotate = (e: React.MouseEvent) => {
     e.stopPropagation();
     setRotation((r) => r + 90);
+  };
+
+  const handleReset = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    resetTransforms();
   };
 
   return (
@@ -93,6 +153,9 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[100] flex items-center justify-center"
           onClick={onClose}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
         >
           {/* Backdrop */}
           <div className="absolute inset-0 bg-black/95 backdrop-blur-sm" />
@@ -126,6 +189,17 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
             >
               <RotateCw className="w-5 h-5" />
             </Button>
+            {(scale !== 1 || rotation !== 0 || position.x !== 0 || position.y !== 0) && (
+              <Button
+                size="icon"
+                variant="ghost"
+                className="text-white hover:bg-white/20"
+                onClick={handleReset}
+                title="Reset (0)"
+              >
+                <Move className="w-5 h-5" />
+              </Button>
+            )}
             <Button
               size="icon"
               variant="ghost"
@@ -187,21 +261,27 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
           {/* Main Image */}
           <motion.div
             key={currentIndex}
+            ref={imageRef}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.2 }}
-            className="relative max-w-[85vw] max-h-[75vh] flex items-center justify-center"
+            className={cn(
+              "relative max-w-[85vw] max-h-[75vh] flex items-center justify-center",
+              canDrag ? "cursor-grab" : "cursor-default",
+              isDragging && "cursor-grabbing"
+            )}
             onClick={(e) => e.stopPropagation()}
+            onMouseDown={handleMouseDown}
           >
             <img
               src={currentImage.src}
               alt={currentImage.alt || 'Image'}
               style={{
-                transform: `scale(${scale}) rotate(${rotation}deg)`,
-                transition: 'transform 0.2s ease-out',
+                transform: `translate(${position.x}px, ${position.y}px) scale(${scale}) rotate(${rotation}deg)`,
+                transition: isDragging ? 'none' : 'transform 0.2s ease-out',
               }}
-              className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
+              className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl select-none"
               draggable={false}
             />
           </motion.div>
@@ -246,8 +326,10 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
 
           {/* Keyboard hints */}
           <div className="absolute bottom-4 right-4 z-10 text-white/40 text-xs space-y-0.5 hidden md:block">
-            <p>ESC close • +/- zoom • R rotate</p>
+            <p>ESC close • Ctrl+scroll zoom</p>
+            <p>+/- zoom • R rotate • 0 reset</p>
             {hasMultiple && <p>← → navigate</p>}
+            {canDrag && <p>Drag to pan</p>}
           </div>
         </motion.div>
       )}
