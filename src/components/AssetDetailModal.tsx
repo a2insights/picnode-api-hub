@@ -384,8 +384,14 @@ export const AssetDetailModal = ({ asset, open, onOpenChange }: AssetDetailModal
 
       {/* Lightbox */}
       <Lightbox
-        src={media?.url || asset?.image || ''}
-        alt={asset?.name || 'Asset'}
+        images={mediaArray.length > 0 
+          ? mediaArray.map((m, i) => ({ 
+              src: m.url || asset?.image || '', 
+              alt: `${asset?.name || 'Asset'} - ${m.type?.replace(/_/g, ' ') || `Image ${i + 1}`}` 
+            }))
+          : [{ src: asset?.image || '', alt: asset?.name || 'Asset' }]
+        }
+        initialIndex={selectedMediaIndex}
         open={lightboxOpen}
         onClose={() => setLightboxOpen(false)}
       />
