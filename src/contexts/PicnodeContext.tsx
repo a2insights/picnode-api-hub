@@ -169,7 +169,8 @@ export const PicnodeProvider = ({
           response = await picnodeService.getCompanies(params);
           transformedAssets = response.data.flatMap(
             (company: CompanyResource) => {
-              return company.media.map((media, index) => ({
+              const mediaArray = Array.isArray(company.media) ? company.media : [company.media];
+              return mediaArray.map((media, index) => ({
                 id: `${company.id}-${index}`,
                 name: company.name || company.slug,
                 image: getMediaUrl(media),
