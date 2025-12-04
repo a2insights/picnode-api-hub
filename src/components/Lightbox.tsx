@@ -24,6 +24,10 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const imageRef = useRef<HTMLDivElement>(null);
+  
+  // Touch gesture state
+  const [lastTouchDistance, setLastTouchDistance] = useState<number | null>(null);
+  const [lastTouchCenter, setLastTouchCenter] = useState<{ x: number; y: number } | null>(null);
 
   const currentImage = images[currentIndex];
   const hasMultiple = images.length > 1;
@@ -52,7 +56,6 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
   const handleZoom = useCallback((delta: number) => {
     setScale((s) => {
       const newScale = Math.min(Math.max(s + delta, 0.5), 4);
-      // Reset position if zooming back to 1 or less
       if (newScale <= 1) {
         setPosition({ x: 0, y: 0 });
       }
@@ -85,6 +88,77 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
     [handleZoom]
   );
 
+  // Touch gesture handlers
+  const getTouchDistance = (touches: React.TouchList) => {
+    if (touches.length < 2) return null;
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const getTouchCenter = (touches: React.TouchList) => {
+    if (touches.length < 2) return null;
+    return {
+      x: (touches[0].clientX + touches[1].clientX) / 2,
+      y: (touches[0].clientY + touches[1].clientY) / 2,
+    };
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      setLastTouchDistance(getTouchDistance(e.touches));
+      setLastTouchCenter(getTouchCenter(e.touches));
+    } else if (e.touches.length === 1 && canDrag) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.touches[0].clientX - position.x,
+        y: e.touches[0].clientY - position.y,
+      });
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      
+      // Pinch to zoom
+      const newDistance = getTouchDistance(e.touches);
+      if (newDistance && lastTouchDistance) {
+        const delta = (newDistance - lastTouchDistance) * 0.01;
+        setScale((s) => {
+          const newScale = Math.min(Math.max(s + delta, 0.5), 4);
+          if (newScale <= 1) {
+            setPosition({ x: 0, y: 0 });
+          }
+          return newScale;
+        });
+        setLastTouchDistance(newDistance);
+      }
+      
+      // Two-finger pan
+      const newCenter = getTouchCenter(e.touches);
+      if (newCenter && lastTouchCenter && scale > 1) {
+        setPosition((p) => ({
+          x: p.x + (newCenter.x - lastTouchCenter.x),
+          y: p.y + (newCenter.y - lastTouchCenter.y),
+        }));
+        setLastTouchCenter(newCenter);
+      }
+    } else if (e.touches.length === 1 && isDragging && canDrag) {
+      setPosition({
+        x: e.touches[0].clientX - dragStart.x,
+        y: e.touches[0].clientY - dragStart.y,
+      });
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    setLastTouchDistance(null);
+    setLastTouchCenter(null);
+  };
+
   useEffect(() => {
     if (open) {
       document.addEventListener('keydown', handleKeyDown);
@@ -100,7 +174,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
     };
   }, [open, handleKeyDown, handleWheel, initialIndex]);
 
-  // Drag handlers
+  // Mouse drag handlers
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!canDrag) return;
     e.preventDefault();
@@ -151,9 +225,12 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center"
+          className="fixed inset-0 z-[100] flex items-center justify-center touch-none"
           onClick={onClose}
           onMouseMove={handleMouseMove}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
         >
@@ -324,12 +401,18 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
             </div>
           )}
 
-          {/* Keyboard hints */}
+          {/* Keyboard hints - Desktop */}
           <div className="absolute bottom-4 right-4 z-10 text-white/40 text-xs space-y-0.5 hidden md:block">
             <p>ESC close • Ctrl+scroll zoom</p>
             <p>+/- zoom • R rotate • 0 reset</p>
             {hasMultiple && <p>← → navigate</p>}
             {canDrag && <p>Drag to pan</p>}
+          </div>
+          
+          {/* Touch hints - Mobile */}
+          <div className="absolute bottom-4 right-4 z-10 text-white/40 text-xs space-y-0.5 md:hidden">
+            <p>Pinch to zoom</p>
+            {canDrag && <p>Two fingers to pan</p>}
           </div>
         </motion.div>
       )}
