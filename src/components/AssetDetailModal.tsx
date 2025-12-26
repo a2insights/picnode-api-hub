@@ -233,156 +233,158 @@ export const AssetDetailModal = ({ asset, open, onOpenChange }: AssetDetailModal
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        {asset && (
-          <>
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-bold">{asset.name}</DialogTitle>
-            </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {asset && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">{asset.name}</DialogTitle>
+              </DialogHeader>
 
-            {/* Media Type Selector */}
-            {hasMultipleMedia && (
-              <div className="flex gap-2 flex-wrap">
-                {mediaArray.map((mediaItem, index) => (
-                  <Button
-                    key={index}
-                    variant={selectedMediaIndex === index ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedMediaIndex(index)}
-                    className="capitalize"
-                  >
-                    {mediaItem.type?.replace(/_/g, ' ') || `Media ${index + 1}`}
-                  </Button>
-                ))}
-              </div>
-            )}
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Image Preview Section */}
-              <div className="space-y-4">
-                <Card className="p-4 bg-muted/20">
-                  <div className="relative aspect-square bg-background rounded-lg overflow-hidden flex items-center justify-center">
-                    <img
-                      src={media?.url || asset.image}
-                      alt={asset.name}
-                      className="max-w-full max-h-full object-contain"
-                    />
+              {/* Media Type Selector */}
+              {hasMultipleMedia && (
+                <div className="flex gap-2 flex-wrap">
+                  {mediaArray.map((mediaItem, index) => (
                     <Button
-                      size="icon"
-                      variant="secondary"
-                      className="absolute top-2 right-2"
-                      onClick={() => setLightboxOpen(true)}
+                      key={index}
+                      variant={selectedMediaIndex === index ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setSelectedMediaIndex(index)}
+                      className="capitalize"
                     >
-                      <Maximize2 className="w-4 h-4" />
+                      {mediaItem.type?.replace(/_/g, ' ') || `Media ${index + 1}`}
                     </Button>
-                  </div>
-                </Card>
+                  ))}
+                </div>
+              )}
 
-                {/* Media Information */}
-                <Card className="p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Info className="w-4 h-4 text-primary" />
-                    <h3 className="font-semibold">Media Information</h3>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Type:</span>
-                      <Badge variant="outline">{asset.type}</Badge>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">ID:</span>
-                      <span className="font-mono text-xs">{asset.id}</span>
-                    </div>
-                    {asset.raw?.country && (
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Country:</span>
-                        <span>{asset.raw.country}</span>
-                      </div>
-                    )}
-                  </div>
-                </Card>
-              </div>
-
-              {/* Download Options Section */}
-              <div className="space-y-4">
-                {/* Format Selection */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <ImageIcon className="w-4 h-4 text-primary" />
-                    <h3 className="font-semibold">Format</h3>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {formats.map((format) => (
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Image Preview Section */}
+                <div className="space-y-4">
+                  <Card className="p-4 bg-muted/20">
+                    <div className="relative aspect-square bg-background rounded-lg overflow-hidden flex items-center justify-center">
+                      <img
+                        src={media?.url || asset.image}
+                        alt={asset.name}
+                        className="max-w-full max-h-full object-contain"
+                      />
                       <Button
-                        key={format.id}
-                        variant={selectedFormat === format.id ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setSelectedFormat(format.id)}
-                        className="justify-start"
+                        size="icon"
+                        variant="secondary"
+                        className="absolute top-2 right-2"
+                        onClick={() => setLightboxOpen(true)}
                       >
-                        {format.label}
+                        <Maximize2 className="w-4 h-4" />
                       </Button>
-                    ))}
-                  </div>
-                </div>
+                    </div>
+                  </Card>
 
-                <Separator />
-
-                {/* Size Selection & Download */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <Download className="w-4 h-4 text-primary" />
-                    <h3 className="font-semibold">Download Options</h3>
-                  </div>
-                  <div className="space-y-2">
-                    {sizes.map((size) => (
-                      <div
-                        key={size.id}
-                        className="flex items-center justify-between p-2 rounded-lg border border-border hover:bg-muted/50 transition-colors"
-                      >
-                        <div>
-                          <p className="font-medium text-sm">{size.label}</p>
-                          <p className="text-xs text-muted-foreground">{size.dimensions}</p>
-                        </div>
-                        <Button size="sm" onClick={() => handleDownload(selectedFormat, size.id)}>
-                          <Download className="w-3 h-3 mr-1" />
-                          Download
-                        </Button>
+                  {/* Media Information */}
+                  <Card className="p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Info className="w-4 h-4 text-primary" />
+                      <h3 className="font-semibold">Media Information</h3>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Type:</span>
+                        <Badge variant="outline">{asset.type}</Badge>
                       </div>
-                    ))}
-                  </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">ID:</span>
+                        <span className="font-mono text-xs">{asset.id}</span>
+                      </div>
+                      {asset.raw?.country && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Country:</span>
+                          <span>{asset.raw.country}</span>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
                 </div>
 
-                <Separator />
+                {/* Download Options Section */}
+                <div className="space-y-4">
+                  {/* Format Selection */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <ImageIcon className="w-4 h-4 text-primary" />
+                      <h3 className="font-semibold">Format</h3>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {formats.map((format) => (
+                        <Button
+                          key={format.id}
+                          variant={selectedFormat === format.id ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setSelectedFormat(format.id)}
+                          className="justify-start"
+                        >
+                          {format.label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
 
-                {/* Download All as ZIP */}
-                <Button
-                  className="w-full"
-                  size="lg"
-                  variant="default"
-                  onClick={handleDownloadAll}
-                  disabled={downloading}
-                >
-                  {downloading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Creating ZIP...
-                    </>
-                  ) : (
-                    <>
-                      <FileArchive className="w-4 h-4 mr-2" />
-                      Download All Formats (ZIP)
-                    </>
-                  )}
-                </Button>
+                  <Separator />
+
+                  {/* Size Selection & Download */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Download className="w-4 h-4 text-primary" />
+                      <h3 className="font-semibold">Download Options</h3>
+                    </div>
+                    <div className="space-y-2">
+                      {sizes.map((size) => (
+                        <div
+                          key={size.id}
+                          className="flex items-center justify-between p-2 rounded-lg border border-border hover:bg-muted/50 transition-colors"
+                        >
+                          <div>
+                            <p className="font-medium text-sm">{size.label}</p>
+                            <p className="text-xs text-muted-foreground">{size.dimensions}</p>
+                          </div>
+                          <Button size="sm" onClick={() => handleDownload(selectedFormat, size.id)}>
+                            <Download className="w-3 h-3 mr-1" />
+                            Download
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  {/* Download All as ZIP */}
+                  <Button
+                    className="w-full"
+                    size="lg"
+                    variant="default"
+                    onClick={handleDownloadAll}
+                    disabled={downloading}
+                  >
+                    {downloading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Creating ZIP...
+                      </>
+                    ) : (
+                      <>
+                        <FileArchive className="w-4 h-4 mr-2" />
+                        Download All Formats (ZIP)
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
-            </div>
-          </>
-        )}
-      </DialogContent>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
-      {/* Lightbox */}
+      {/* Lightbox - renderizado fora do Dialog para evitar problemas de z-index */}
       <Lightbox
         images={mediaArray.length > 0 
           ? mediaArray.map((m, i) => ({ 
@@ -395,6 +397,6 @@ export const AssetDetailModal = ({ asset, open, onOpenChange }: AssetDetailModal
         open={lightboxOpen}
         onClose={() => setLightboxOpen(false)}
       />
-    </Dialog>
+    </>
   );
 };
