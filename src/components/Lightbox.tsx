@@ -1,9 +1,9 @@
 import { useEffect, useCallback, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn, ZoomOut, RotateCw, ChevronLeft, ChevronRight, Move } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-
 interface LightboxImage {
   src: string;
   alt?: string;
@@ -217,7 +217,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
     resetTransforms();
   };
 
-  return (
+  const lightboxNode = (
     <AnimatePresence>
       {open && currentImage && (
         <motion.div
@@ -408,7 +408,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
             {hasMultiple && <p>← → navigate</p>}
             {canDrag && <p>Drag to pan</p>}
           </div>
-          
+
           {/* Touch hints - Mobile */}
           <div className="absolute bottom-4 right-4 z-10 text-white/40 text-xs space-y-0.5 md:hidden">
             <p>Pinch to zoom</p>
@@ -418,4 +418,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
       )}
     </AnimatePresence>
   );
+
+  if (typeof document === 'undefined') return null;
+  return createPortal(lightboxNode, document.body);
 };
