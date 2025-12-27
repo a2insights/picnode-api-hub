@@ -28,10 +28,16 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
   // Touch gesture state
   const [lastTouchDistance, setLastTouchDistance] = useState<number | null>(null);
   const [lastTouchCenter, setLastTouchCenter] = useState<{ x: number; y: number } | null>(null);
+  
+  // Swipe navigation state
+  const [swipeStartX, setSwipeStartX] = useState<number | null>(null);
+  const [swipeOffsetX, setSwipeOffsetX] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
 
   const currentImage = images[currentIndex];
   const hasMultiple = images.length > 1;
   const canDrag = scale > 1;
+  const canSwipe = scale === 1 && hasMultiple;
 
   const resetTransforms = () => {
     setScale(1);
@@ -109,12 +115,22 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
       e.preventDefault();
       setLastTouchDistance(getTouchDistance(e.touches));
       setLastTouchCenter(getTouchCenter(e.touches));
-    } else if (e.touches.length === 1 && canDrag) {
-      setIsDragging(true);
-      setDragStart({
-        x: e.touches[0].clientX - position.x,
-        y: e.touches[0].clientY - position.y,
-      });
+      // Cancel swipe if user switches to two fingers
+      setIsSwiping(false);
+      setSwipeStartX(null);
+      setSwipeOffsetX(0);
+    } else if (e.touches.length === 1) {
+      if (canDrag) {
+        setIsDragging(true);
+        setDragStart({
+          x: e.touches[0].clientX - position.x,
+          y: e.touches[0].clientY - position.y,
+        });
+      } else if (canSwipe) {
+        // Start swipe tracking
+        setSwipeStartX(e.touches[0].clientX);
+        setIsSwiping(true);
+      }
     }
   };
 
@@ -145,18 +161,51 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
         }));
         setLastTouchCenter(newCenter);
       }
-    } else if (e.touches.length === 1 && isDragging && canDrag) {
-      setPosition({
-        x: e.touches[0].clientX - dragStart.x,
-        y: e.touches[0].clientY - dragStart.y,
-      });
+    } else if (e.touches.length === 1) {
+      if (isDragging && canDrag) {
+        setPosition({
+          x: e.touches[0].clientX - dragStart.x,
+          y: e.touches[0].clientY - dragStart.y,
+        });
+      } else if (isSwiping && swipeStartX !== null && canSwipe) {
+        const currentX = e.touches[0].clientX;
+        let deltaX = currentX - swipeStartX;
+        
+        // Apply resistance at edges
+        const isAtStart = currentIndex === 0 && deltaX > 0;
+        const isAtEnd = currentIndex === images.length - 1 && deltaX < 0;
+        
+        if (isAtStart || isAtEnd) {
+          // Apply resistance factor (0.3 = 30% of actual movement)
+          deltaX = deltaX * 0.3;
+        }
+        
+        setSwipeOffsetX(deltaX);
+      }
     }
   };
 
   const handleTouchEnd = () => {
+    // Handle swipe navigation
+    if (isSwiping && swipeOffsetX !== 0) {
+      const threshold = 80; // Minimum swipe distance to trigger navigation
+      
+      if (swipeOffsetX < -threshold && currentIndex < images.length - 1) {
+        // Swiped left - go to next
+        goNext();
+      } else if (swipeOffsetX > threshold && currentIndex > 0) {
+        // Swiped right - go to previous
+        goPrev();
+      }
+    }
+    
+    // Reset all touch states
     setIsDragging(false);
     setLastTouchDistance(null);
     setLastTouchCenter(null);
+    setSwipeStartX(null);
+    setSwipeOffsetX(0);
+    setIsSwiping(false);
   };
 
   useEffect(() => {
@@ -355,8 +404,8 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
               src={currentImage.src}
               alt={currentImage.alt || 'Image'}
               style={{
-                transform: `translate(${position.x}px, ${position.y}px) scale(${scale}) rotate(${rotation}deg)`,
-                transition: isDragging ? 'none' : 'transform 0.2s ease-out',
+                transform: `translate(${position.x + swipeOffsetX}px, ${position.y}px) scale(${scale}) rotate(${rotation}deg)`,
+                transition: isDragging || isSwiping ? 'none' : 'transform 0.2s ease-out',
               }}
               className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl select-none"
               draggable={false}
@@ -412,6 +461,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
           {/* Touch hints - Mobile */}
           <div className="absolute bottom-4 right-4 z-10 text-white/40 text-xs space-y-0.5 md:hidden">
             <p>Pinch to zoom</p>
+            {hasMultiple && !canDrag && <p>Swipe to navigate</p>}
             {canDrag && <p>Two fingers to pan</p>}
           </div>
         </motion.div>
