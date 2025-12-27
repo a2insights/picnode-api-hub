@@ -35,24 +35,24 @@
   "apis": {
     "title": "API Disponibili",
     "flags": {
-      "title": "FootBall Clubs API",
-      "description": "Stemmi e blasoni di club calcistici di tutto il mondo."
+      "title": "Football Clubs API",
+      "description": "Collezione completa di stemmi e blasoni di club calcistici mondiali."
     },
     "places": {
       "title": "Places API",
-      "description": "Bandiere e blasoni di luoghi di tutto il mondo."
+      "description": "Bandiere, stemmi e identità visive di paesi, stati e città."
     },
     "logos": {
       "title": "Logos API",
-      "description": "Loghi di aziende, marchi e organizzazioni in formato vettoriale."
+      "description": "Loghi vettoriali di alta qualità di marchi e organizzazioni globali."
     },
     "icons": {
       "title": "ThingIco API",
-      "description": "Libreria con migliaia di icone per qualsiasi tipo di interfaccia."
+      "description": "Libreria completa con migliaia di icone ottimizzate per interfacce digitali."
     },
     "companies": {
       "title": "Companies API",
-      "description": "Loghi e informazioni di aziende di tutto il mondo."
+      "description": "Dati aziendali e identità visive di imprese di tutto il mondo."
     }
   },
   "calculator": {
