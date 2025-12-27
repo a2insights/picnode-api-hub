@@ -36,7 +36,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
 
   const currentImage = images[currentIndex];
   const hasMultiple = images.length > 1;
-  const canDrag = scale > 1;
+  const canDrag = true; // Always allow drag
   const canSwipe = scale === 1 && hasMultiple;
 
   const resetTransforms = () => {
