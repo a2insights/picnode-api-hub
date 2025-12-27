@@ -121,12 +121,15 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
       setSwipeOffsetX(0);
     } else if (e.touches.length === 1) {
       if (canDrag) {
+        // Prevent browser pan/selection while dragging
+        e.preventDefault();
         setIsDragging(true);
         setDragStart({
           x: e.touches[0].clientX - position.x,
           y: e.touches[0].clientY - position.y,
         });
       } else if (canSwipe) {
+        e.preventDefault();
         // Start swipe tracking
         setSwipeStartX(e.touches[0].clientX);
         setIsSwiping(true);
@@ -137,7 +140,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
   const handleTouchMove = (e: React.TouchEvent) => {
     if (e.touches.length === 2) {
       e.preventDefault();
-      
+
       // Pinch to zoom
       const newDistance = getTouchDistance(e.touches);
       if (newDistance && lastTouchDistance) {
@@ -151,7 +154,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
         });
         setLastTouchDistance(newDistance);
       }
-      
+
       // Two-finger pan
       const newCenter = getTouchCenter(e.touches);
       if (newCenter && lastTouchCenter && scale > 1) {
@@ -163,23 +166,25 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
       }
     } else if (e.touches.length === 1) {
       if (isDragging && canDrag) {
+        e.preventDefault();
         setPosition({
           x: e.touches[0].clientX - dragStart.x,
           y: e.touches[0].clientY - dragStart.y,
         });
       } else if (isSwiping && swipeStartX !== null && canSwipe) {
+        e.preventDefault();
         const currentX = e.touches[0].clientX;
         let deltaX = currentX - swipeStartX;
-        
+
         // Apply resistance at edges
         const isAtStart = currentIndex === 0 && deltaX > 0;
         const isAtEnd = currentIndex === images.length - 1 && deltaX < 0;
-        
+
         if (isAtStart || isAtEnd) {
           // Apply resistance factor (0.3 = 30% of actual movement)
           deltaX = deltaX * 0.3;
         }
-        
+
         setSwipeOffsetX(deltaX);
       }
     }
@@ -393,7 +398,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              "relative max-w-[85vw] max-h-[75vh] flex items-center justify-center",
+              "relative max-w-[85vw] max-h-[75vh] flex items-center justify-center touch-none",
               canDrag ? "cursor-grab" : "cursor-default",
               isDragging && "cursor-grabbing"
             )}
@@ -406,8 +411,9 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
               style={{
                 transform: `translate(${position.x + swipeOffsetX}px, ${position.y}px) scale(${scale}) rotate(${rotation}deg)`,
                 transition: isDragging || isSwiping ? 'none' : 'transform 0.2s ease-out',
+                touchAction: 'none',
               }}
-              className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl select-none"
+              className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl select-none touch-none"
               draggable={false}
             />
           </motion.div>
