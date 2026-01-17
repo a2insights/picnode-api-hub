@@ -271,6 +271,14 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
     resetTransforms();
   };
 
+  // Handle backdrop click separately to avoid conflicts with button clicks
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    // Only close if clicking directly on the backdrop
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   const lightboxNode = (
     <AnimatePresence>
       {open && currentImage && (
@@ -280,7 +288,6 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[9999] flex items-center justify-center touch-none"
-          onClick={onClose}
           onMouseMove={handleMouseMove}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
@@ -288,8 +295,11 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
         >
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/95 backdrop-blur-sm" />
+          {/* Backdrop - Click here closes the lightbox */}
+          <div 
+            className="absolute inset-0 bg-black/95 backdrop-blur-sm cursor-pointer" 
+            onClick={handleBackdropClick}
+          />
 
           {/* Controls */}
           <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
@@ -354,10 +364,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
                   "absolute left-4 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-white/20 w-12 h-12",
                   currentIndex === 0 && "opacity-30 cursor-not-allowed"
                 )}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goPrev();
-                }}
+                onClick={goPrev}
                 disabled={currentIndex === 0}
               >
                 <ChevronLeft className="w-8 h-8" />
@@ -369,10 +376,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
                   "absolute right-4 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-white/20 w-12 h-12",
                   currentIndex === images.length - 1 && "opacity-30 cursor-not-allowed"
                 )}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goNext();
-                }}
+                onClick={goNext}
                 disabled={currentIndex === images.length - 1}
               >
                 <ChevronRight className="w-8 h-8" />
@@ -402,7 +406,6 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
               canDrag ? "cursor-grab" : "cursor-default",
               isDragging && "cursor-grabbing"
             )}
-            onClick={(e) => e.stopPropagation()}
             onMouseDown={handleMouseDown}
           >
             <img
@@ -433,8 +436,7 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
               {images.map((img, index) => (
                 <button
                   key={index}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
                     setCurrentIndex(index);
                     resetTransforms();
                   }}
