@@ -39,25 +39,21 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
   const canDrag = true; // Always allow drag
   const canSwipe = scale === 1 && hasMultiple;
 
-  const resetTransforms = () => {
+  const resetTransforms = useCallback(() => {
     setScale(1);
     setRotation(0);
     setPosition({ x: 0, y: 0 });
-  };
+  }, []);
 
   const goNext = useCallback(() => {
-    if (currentIndex < images.length - 1) {
-      setCurrentIndex((i) => i + 1);
-      resetTransforms();
-    }
-  }, [currentIndex, images.length]);
+    setCurrentIndex((i) => (i < images.length - 1 ? i + 1 : i));
+    resetTransforms();
+  }, [images.length, resetTransforms]);
 
   const goPrev = useCallback(() => {
-    if (currentIndex > 0) {
-      setCurrentIndex((i) => i - 1);
-      resetTransforms();
-    }
-  }, [currentIndex]);
+    setCurrentIndex((i) => (i > 0 ? i - 1 : i));
+    resetTransforms();
+  }, [resetTransforms]);
 
   const handleZoom = useCallback((delta: number) => {
     setScale((s) => {
@@ -213,20 +209,26 @@ export const Lightbox = ({ images, initialIndex = 0, open, onClose }: LightboxPr
     setIsSwiping(false);
   };
 
+  // Attach global listeners only while open
   useEffect(() => {
-    if (open) {
-      document.addEventListener('keydown', handleKeyDown);
-      document.addEventListener('wheel', handleWheel, { passive: false });
-      document.body.style.overflow = 'hidden';
-      setCurrentIndex(initialIndex);
-      resetTransforms();
-    }
+    if (!open) return;
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('wheel', handleWheel, { passive: false });
+    document.body.style.overflow = 'hidden';
+
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('wheel', handleWheel);
       document.body.style.overflow = '';
     };
-  }, [open, handleKeyDown, handleWheel, initialIndex]);
+  }, [open, handleKeyDown, handleWheel]);
+
+  // Reset image when opening (or when caller changes initial index)
+  useEffect(() => {
+    if (!open) return;
+    setCurrentIndex(initialIndex);
+    resetTransforms();
+  }, [open, initialIndex, resetTransforms]);
 
   // Mouse drag handlers
   const handleMouseDown = (e: React.MouseEvent) => {
