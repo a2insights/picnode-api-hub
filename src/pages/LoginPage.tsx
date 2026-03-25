@@ -40,8 +40,16 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="container mx-auto flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-md">
+    <div className="container mx-auto flex flex-col items-center justify-center min-h-screen py-12">
+      <Link to="/" className="mb-8 flex flex-col items-center gap-2 group">
+        <div className="p-2 rounded-2xl bg-primary/5 group-hover:scale-105 transition-transform duration-300">
+          <img src="/favicon.png" alt="PicNode Logo" className="h-16 w-16 object-contain" />
+        </div>
+        <span className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          PicNode
+        </span>
+      </Link>
+      <Card className="w-full max-w-md shadow-xl border-primary/10">
         <CardHeader>
           <CardTitle>{t('checkout.auth.loginTitle')}</CardTitle>
           <CardDescription>

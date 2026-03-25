@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { LampSwitch } from './LampSwitch';
 import { Button } from './ui/button';
-import { Code2, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 export const Navbar = () => {
@@ -28,8 +28,8 @@ export const Navbar = () => {
           <LampSwitch />
         </div>
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="bg-gradient-to-br from-primary to-accent p-2 rounded-lg group-hover:scale-110 transition-transform">
-            <Code2 className="h-5 w-5 text-primary-foreground" />
+          <div className="p-1 rounded-lg group-hover:scale-110 transition-transform">
+            <img src="/favicon.png" alt="PicNode Logo" className="h-8 w-8 object-contain" />
           </div>
           <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             PicNode

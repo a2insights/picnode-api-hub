@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -29,6 +29,25 @@ export const AssetDetailModal = ({ asset, open, onOpenChange }: AssetDetailModal
   const [downloading, setDownloading] = useState(false);
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  // Sync selectedMediaIndex with asset when modal opens
+  useEffect(() => {
+    if (open && asset) {
+      // Reset format selection
+      setSelectedFormat('');
+      
+      // Try to extract index from ID if it matches the pattern "baseId-index"
+      const idParts = asset.id.split('-');
+      if (idParts.length > 1) {
+        const index = parseInt(idParts[idParts.length - 1], 10);
+        if (!isNaN(index)) {
+          setSelectedMediaIndex(index);
+          return;
+        }
+      }
+      setSelectedMediaIndex(0);
+    }
+  }, [asset, open]);
 
   // Get media array or single object
   const getMediaArray = () => {
