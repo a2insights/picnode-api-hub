@@ -1,5 +1,6 @@
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,18 +10,17 @@ import { useState } from 'react';
 import { Lightbox } from '@/components/Lightbox';
 
 const BASE_URL = 'https://api.a2insights.com/api/picnode/places/assets';
-
 const CONVERSIONS = ['xs', 'sm', 'md', 'lg', 'preview', 'thumbnail', 'webp', 'svg', 'png', 'jpg'];
 
-const EXAMPLES = [
-  { label: 'Por ID', path: '/api/picnode/places/assets/15' },
-  { label: 'Por Código', path: '/api/picnode/places/assets/BR-SP' },
-  { label: 'Por Slug', path: '/api/picnode/places/assets/rio-de-janeiro' },
-  { label: 'Hierárquico', path: '/api/picnode/places/assets/brasil/sao-paulo/campinas' },
-  { label: 'WebP', path: '/api/picnode/places/assets/brasil/sao-paulo/webp' },
-  { label: 'Thumbnail', path: '/api/picnode/places/assets/BR-RJ/thumbnail' },
-  { label: 'Tamanho LG', path: '/api/picnode/places/assets/15/lg' },
-  { label: 'Preview', path: '/api/picnode/places/assets/foz-do-iguacu/preview' },
+const EXAMPLES_KEYS = [
+  { labelKey: 'placesApi.byId', path: '/api/picnode/places/assets/15' },
+  { labelKey: 'placesApi.byCode', path: '/api/picnode/places/assets/BR-SP' },
+  { labelKey: 'placesApi.bySlug', path: '/api/picnode/places/assets/rio-de-janeiro' },
+  { labelKey: 'placesApi.hierarchicalLabel', path: '/api/picnode/places/assets/brasil/sao-paulo/campinas' },
+  { labelKey: 'placesApi.webpLabel', path: '/api/picnode/places/assets/brasil/sao-paulo/webp' },
+  { labelKey: 'placesApi.thumbnailLabel', path: '/api/picnode/places/assets/BR-RJ/thumbnail' },
+  { labelKey: 'placesApi.sizeLg', path: '/api/picnode/places/assets/15/lg' },
+  { labelKey: 'placesApi.previewLabel', path: '/api/picnode/places/assets/foz-do-iguacu/preview' },
 ];
 
 const SHOWCASE_ITEMS = [
@@ -38,7 +38,7 @@ const SHOWCASE_ITEMS = [
   { name: 'Goiás', path: 'brasil/goias' },
 ];
 
-const CodeBlock = ({ code, language = 'bash' }: { code: string; language?: string }) => {
+const CodeBlock = ({ code, language = 'bash', t }: { code: string; language?: string; t: (key: string) => string }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -53,7 +53,7 @@ const CodeBlock = ({ code, language = 'bash' }: { code: string; language?: strin
         <span className="text-xs text-muted-foreground font-mono">{language}</span>
         <Button variant="ghost" size="sm" onClick={handleCopy} className="h-7 px-2 text-xs">
           {copied ? <Check className="w-3 h-3 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
-          {copied ? 'Copiado!' : 'Copiar'}
+          {copied ? t('placesApi.copied') : t('placesApi.copy')}
         </Button>
       </div>
       <pre className="p-4 overflow-x-auto text-sm">
@@ -64,6 +64,7 @@ const CodeBlock = ({ code, language = 'bash' }: { code: string; language?: strin
 };
 
 const PlacesApiPage = () => {
+  const { t } = useTranslation();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
@@ -94,10 +95,10 @@ const PlacesApiPage = () => {
               <Badge variant="secondary" className="text-xs">Assets Endpoint</Badge>
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              API de Assets <span className="text-primary">(Places)</span>
+              {t('placesApi.heroTitle')} <span className="text-primary">{t('placesApi.heroTitleHighlight')}</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-6">
-              Endpoint de entrega de mídias de lugares. Bandeiras, brasões e identidades visuais via URL direta, servido por CDN.
+              {t('placesApi.heroDescription')}
             </p>
 
             <div className="bg-card border border-border rounded-xl p-4 font-mono text-sm">
@@ -113,7 +114,7 @@ const PlacesApiPage = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
             <Globe className="w-6 h-6 text-primary" />
-            Bandeiras dos Estados Brasileiros
+            {t('placesApi.showcaseTitle')}
           </h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 mb-6">
             {SHOWCASE_ITEMS.map((item, index) => (
@@ -146,24 +147,23 @@ const PlacesApiPage = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
             <Code className="w-6 h-6 text-primary" />
-            Como usar o parâmetro <code className="text-primary ml-1">{'{path}'}</code>
+            {t('placesApi.howToUseParam')} <code className="text-primary ml-1">{'{path}'}</code>
           </h2>
 
           <div className="space-y-8">
-            {/* Direct identification */}
             <Card className="border-border">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   <ChevronRight className="w-4 h-4 text-primary" />
-                  Identificação Direta
+                  {t('placesApi.directId')}
                 </h3>
                 <p className="text-muted-foreground mb-4 text-sm">
-                  Busque um asset usando o identificador único do lugar:
+                  {t('placesApi.directIdDesc')}
                 </p>
                 <div className="space-y-2">
-                  {EXAMPLES.slice(0, 3).map((ex) => (
+                  {EXAMPLES_KEYS.slice(0, 3).map((ex) => (
                     <div key={ex.path} className="flex items-center gap-3 bg-muted/30 rounded-lg p-3">
-                      <Badge variant="secondary" className="text-xs whitespace-nowrap">{ex.label}</Badge>
+                      <Badge variant="secondary" className="text-xs whitespace-nowrap">{t(ex.labelKey)}</Badge>
                       <code className="text-xs font-mono text-primary">{ex.path}</code>
                     </div>
                   ))}
@@ -171,39 +171,37 @@ const PlacesApiPage = () => {
               </CardContent>
             </Card>
 
-            {/* Hierarchical path */}
             <Card className="border-border">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   <ChevronRight className="w-4 h-4 text-primary" />
-                  Caminho Hierárquico (SEO Friendly)
+                  {t('placesApi.hierarchical')}
                 </h3>
                 <p className="text-muted-foreground mb-4 text-sm">
-                  Para evitar conflitos de nomes, use a hierarquia completa:
+                  {t('placesApi.hierarchicalDesc')}
                 </p>
                 <div className="bg-muted/30 rounded-lg p-3">
-                  <code className="text-xs font-mono text-primary">{EXAMPLES[3].path}</code>
+                  <code className="text-xs font-mono text-primary">{EXAMPLES_KEYS[3].path}</code>
                 </div>
                 <p className="text-xs text-muted-foreground mt-3 bg-accent/10 rounded-lg p-3 border border-accent/20">
-                  💡 A busca recursiva garante que você está pegando o asset do lugar exato dentro da árvore geográfica.
+                  💡 {t('placesApi.hierarchicalTip')}
                 </p>
               </CardContent>
             </Card>
 
-            {/* Conversions */}
             <Card className="border-border">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   <ChevronRight className="w-4 h-4 text-primary" />
-                  Conversões e Formatos
+                  {t('placesApi.conversions')}
                 </h3>
                 <p className="text-muted-foreground mb-4 text-sm">
-                  Solicite uma versão específica adicionando o nome da conversão ao final:
+                  {t('placesApi.conversionsDesc')}
                 </p>
                 <div className="space-y-2 mb-4">
-                  {EXAMPLES.slice(4).map((ex) => (
+                  {EXAMPLES_KEYS.slice(4).map((ex) => (
                     <div key={ex.path} className="flex items-center gap-3 bg-muted/30 rounded-lg p-3">
-                      <Badge variant="secondary" className="text-xs whitespace-nowrap">{ex.label}</Badge>
+                      <Badge variant="secondary" className="text-xs whitespace-nowrap">{t(ex.labelKey)}</Badge>
                       <code className="text-xs font-mono text-primary">{ex.path}</code>
                     </div>
                   ))}
@@ -224,13 +222,14 @@ const PlacesApiPage = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
             <Zap className="w-6 h-6 text-primary" />
-            Exemplos de Código
+            {t('placesApi.codeExamples')}
           </h2>
 
           <div className="space-y-6">
             <div>
               <h3 className="text-sm font-semibold mb-2 text-muted-foreground">HTML / Image Tag</h3>
               <CodeBlock
+                t={t}
                 language="html"
                 code={`<img src="https://api.a2insights.com/api/picnode/places/assets/brasil/parana/curitiba/webp" 
      alt="Curitiba" 
@@ -241,6 +240,7 @@ const PlacesApiPage = () => {
             <div>
               <h3 className="text-sm font-semibold mb-2 text-muted-foreground">JavaScript (Fetch)</h3>
               <CodeBlock
+                t={t}
                 language="javascript"
                 code={`const response = await fetch(
   'https://api.a2insights.com/api/picnode/places/assets/BR-MG/preview'
@@ -262,24 +262,24 @@ if (response.ok) {
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
             <Shield className="w-6 h-6 text-primary" />
-            Detalhes Técnicos
+            {t('placesApi.technicalDetails')}
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="border-border">
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-3">Cache & Performance</h3>
+                <h3 className="text-lg font-semibold mb-3">{t('placesApi.cacheTitle')}</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Projetada para consumo via CDN (Cloudflare).
+                  {t('placesApi.cacheDesc')}
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">•</span>
-                    <span><strong>Headers:</strong> Cache-Control: public, max-age=31536000, immutable</span>
+                    <span><strong>Headers:</strong> {t('placesApi.cacheHeaders')}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">•</span>
-                    <span><strong>Streaming:</strong> Entrega via stream pipeline, URL S3 oculta</span>
+                    <span><strong>Streaming:</strong> {t('placesApi.cacheStreaming')}</span>
                   </li>
                 </ul>
               </CardContent>
@@ -287,15 +287,15 @@ if (response.ok) {
 
             <Card className="border-border">
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-3">Status de Resposta</h3>
+                <h3 className="text-lg font-semibold mb-3">{t('placesApi.responseTitle')}</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 bg-primary/10 rounded-lg p-3">
                     <Badge className="bg-primary text-primary-foreground text-xs">200</Badge>
-                    <span className="text-sm text-muted-foreground">Sucesso. Corpo = binário da imagem.</span>
+                    <span className="text-sm text-muted-foreground">{t('placesApi.response200')}</span>
                   </div>
                   <div className="flex items-center gap-3 bg-destructive/10 rounded-lg p-3">
                     <Badge variant="destructive" className="text-xs">404</Badge>
-                    <span className="text-sm text-muted-foreground">Caminho inválido ou sem imagem vinculada.</span>
+                    <span className="text-sm text-muted-foreground">{t('placesApi.response404')}</span>
                   </div>
                 </div>
               </CardContent>
@@ -303,7 +303,7 @@ if (response.ok) {
           </div>
 
           <div className="mt-6 bg-accent/10 border border-accent/20 rounded-xl p-4 text-sm text-muted-foreground">
-            💡 <strong>Dica:</strong> Use sempre slugs em minúsculo e substitua espaços por hífens. A API faz essa normalização automaticamente ao buscar por nome.
+            💡 <strong>{t('placesApi.tipLabel')}:</strong> {t('placesApi.tip')}
           </div>
         </div>
       </section>
