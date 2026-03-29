@@ -80,6 +80,7 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Landing />} />
+              <Route path="/places-api" element={<PlacesApiPage />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<LoginPage />} />
 
