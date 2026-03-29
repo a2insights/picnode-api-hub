@@ -52,8 +52,8 @@ export const PlacesShowcase = () => {
   };
 
   const lightboxImages = items.map((item) => ({
-    url: getImageUrl(item, 'lg'),
-    title: item.name,
+    src: getImageUrl(item, 'lg'),
+    alt: item.name,
   }));
 
   const openLightbox = (index: number) => {
