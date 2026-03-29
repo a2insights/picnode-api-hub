@@ -68,8 +68,8 @@ const PlacesApiPage = () => {
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const lightboxImages = SHOWCASE_ITEMS.map((item) => ({
-    url: `${BASE_URL}/${item.path}/lg`,
-    title: item.name,
+    src: `${BASE_URL}/${item.path}/lg`,
+    alt: item.name,
   }));
 
   return (
