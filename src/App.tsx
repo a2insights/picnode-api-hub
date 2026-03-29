@@ -18,6 +18,7 @@ import { ApiReference } from './pages/ApiReference';
 import { GettingStarted } from './pages/GettingStarted';
 import { BestPractices } from './pages/BestPractices';
 import { Authentication } from './pages/Authentication';
+import PlacesApiPage from './pages/PlacesApiPage';
 import { useEffect, useState } from 'react';
 import { useAppContext } from './contexts/AppContext';
 import apiService from './services/apiService';
