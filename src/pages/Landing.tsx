@@ -2,6 +2,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { HeroSection } from './Landing/HeroSection';
 import ApiPlayground from './Landing/ApiPlayground';
+import { PlacesShowcase } from './Landing/PlacesShowcase';
 import { AboutSection } from './Landing/AboutSection';
 import { ApisSection } from './Landing/ApisSection';
 import { ApisInDevelopment } from './Landing/ApisInDevelopment';
@@ -15,6 +16,7 @@ const Landing = () => {
       <Navbar />
       <HeroSection />
       <ApiPlayground />
+      <PlacesShowcase />
       <AboutSection />
       <ApisSection />
       <ApisInDevelopment />
