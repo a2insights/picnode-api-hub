@@ -289,8 +289,8 @@ if (response.ok) {
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold mb-3">Status de Resposta</h3>
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 bg-green-500/10 rounded-lg p-3">
-                    <Badge className="bg-green-600 text-white text-xs">200</Badge>
+                  <div className="flex items-center gap-3 bg-primary/10 rounded-lg p-3">
+                    <Badge className="bg-primary text-primary-foreground text-xs">200</Badge>
                     <span className="text-sm text-muted-foreground">Sucesso. Corpo = binário da imagem.</span>
                   </div>
                   <div className="flex items-center gap-3 bg-destructive/10 rounded-lg p-3">
