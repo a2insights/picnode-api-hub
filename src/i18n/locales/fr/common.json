@@ -304,6 +304,10 @@
     "flags": "Drapeaux",
     "coats": "Blasons",
     "howToUse": "Comment utiliser",
+    "exCountryState": "pays/état",
+    "exCountryStateCity": "pays/état/ville",
+    "exWithConversion": "pays/état/ville/conversion",
+    "exByCode": "par code + conversion",
     "cdnNote": "Servi via CDN Cloudflare • Cache immuable • Streaming direct",
     "viewDocs": "Voir la documentation complète"
   },
