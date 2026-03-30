@@ -7,7 +7,7 @@ import { ArrowRight, MapPin, Globe, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Lightbox } from '@/components/Lightbox';
 
-const BASE_URL = 'https://api.a2insights.com/api/picnode/places/assets';
+const BASE_URL = 'https://a2insights.com.br/api/picnode/places/assets';
 
 interface PlaceItem {
   name: string;
