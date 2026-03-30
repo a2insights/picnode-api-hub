@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,63 +43,67 @@ const Register = () => {
   };
 
   return (
-    <div className="container mx-auto flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>{t('checkout.auth.signupTitle')}</CardTitle>
-          <CardDescription>{t('checkout.auth.signupDescription')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSignup} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="signup-name">{t('checkout.auth.name')}</Label>
-              <Input
-                id="signup-name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name[0]}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="signup-email">{t('checkout.auth.email')}</Label>
-              <Input
-                id="signup-email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email[0]}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="signup-password">{t('checkout.auth.password')}</Label>
-              <Input
-                id="signup-password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="signup-password-confirmation">Confirm Password</Label>
-              <Input
-                id="signup-password-confirmation"
-                type="password"
-                value={passwordConfirmation}
-                onChange={(e) => setPasswordConfirmation(e.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Loading...' : t('checkout.auth.signupButton')}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="container mx-auto flex items-center justify-center flex-1 py-20">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>{t('checkout.auth.signupTitle')}</CardTitle>
+            <CardDescription>{t('checkout.auth.signupDescription')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSignup} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="signup-name">{t('checkout.auth.name')}</Label>
+                <Input
+                  id="signup-name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+                {errors.name && <p className="text-destructive text-sm mt-1">{errors.name[0]}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-email">{t('checkout.auth.email')}</Label>
+                <Input
+                  id="signup-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                {errors.email && <p className="text-destructive text-sm mt-1">{errors.email[0]}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-password">{t('checkout.auth.password')}</Label>
+                <Input
+                  id="signup-password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                {errors.password && <p className="text-destructive text-sm mt-1">{errors.password[0]}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-password-confirmation">Confirm Password</Label>
+                <Input
+                  id="signup-password-confirmation"
+                  type="password"
+                  value={passwordConfirmation}
+                  onChange={(e) => setPasswordConfirmation(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? 'Loading...' : t('checkout.auth.signupButton')}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+      <Footer />
     </div>
   );
 };
