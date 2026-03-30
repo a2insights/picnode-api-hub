@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Lightbox } from '@/components/Lightbox';
 
-const BASE_URL = 'https://api.a2insights.com/api/picnode/places/assets';
+const BASE_URL = 'https://a2insights.com.br/api/picnode/places/assets';
 const CONVERSIONS = ['xs', 'sm', 'md', 'lg', 'preview', 'thumbnail', 'webp', 'svg', 'png', 'jpg'];
 
 const EXAMPLES_KEYS = [
@@ -231,7 +231,7 @@ const PlacesApiPage = () => {
               <CodeBlock
                 t={t}
                 language="html"
-                code={`<img src="https://api.a2insights.com/api/picnode/places/assets/brasil/parana/curitiba/webp" 
+                code={`<img src="https://a2insights.com.br/api/picnode/places/assets/brasil/parana/curitiba/webp" 
      alt="Curitiba" 
      loading="lazy">`}
               />
@@ -243,7 +243,7 @@ const PlacesApiPage = () => {
                 t={t}
                 language="javascript"
                 code={`const response = await fetch(
-  'https://api.a2insights.com/api/picnode/places/assets/BR-MG/preview'
+  'https://a2insights.com.br/api/picnode/places/assets/BR-MG/preview'
 );
 
 if (response.ok) {
