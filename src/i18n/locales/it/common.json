@@ -304,6 +304,10 @@
     "flags": "Bandiere",
     "coats": "Stemmi",
     "howToUse": "Come usare",
+    "exCountryState": "paese/stato",
+    "exCountryStateCity": "paese/stato/città",
+    "exWithConversion": "paese/stato/città/conversione",
+    "exByCode": "per codice + conversione",
     "cdnNote": "Servito via CDN Cloudflare • Cache immutabile • Streaming diretto",
     "viewDocs": "Vedi documentazione completa"
   },
