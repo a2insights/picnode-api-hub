@@ -405,6 +405,10 @@
     "flags": "Flags",
     "coats": "Coats of Arms",
     "howToUse": "How to use",
+    "exCountryState": "country/state",
+    "exCountryStateCity": "country/state/city",
+    "exWithConversion": "country/state/city/conversion",
+    "exByCode": "by code + conversion",
     "cdnNote": "Served via Cloudflare CDN • Immutable cache • Direct streaming",
     "viewDocs": "View full documentation"
   },
