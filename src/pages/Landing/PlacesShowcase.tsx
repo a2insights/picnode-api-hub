@@ -152,14 +152,22 @@ export const PlacesShowcase = () => {
             <div className="bg-muted/50 rounded-lg p-3 font-mono text-xs overflow-x-auto">
               <span className="text-muted-foreground">GET</span>{' '}
               <span className="text-primary">/api/picnode/places/assets/brasil/sao-paulo</span>
+              <span className="text-muted-foreground ml-2">— {t('placesShowcase.exCountryState', 'país/estado')}</span>
             </div>
             <div className="bg-muted/50 rounded-lg p-3 font-mono text-xs overflow-x-auto">
               <span className="text-muted-foreground">GET</span>{' '}
-              <span className="text-primary">/api/picnode/places/assets/BR-SP/webp</span>
+              <span className="text-primary">/api/picnode/places/assets/brasil/sao-paulo/campinas</span>
+              <span className="text-muted-foreground ml-2">— {t('placesShowcase.exCountryStateCity', 'país/estado/cidade')}</span>
             </div>
             <div className="bg-muted/50 rounded-lg p-3 font-mono text-xs overflow-x-auto">
               <span className="text-muted-foreground">GET</span>{' '}
-              <span className="text-primary">/api/picnode/places/assets/rio-de-janeiro/thumbnail</span>
+              <span className="text-primary">/api/picnode/places/assets/brasil/parana/curitiba/webp</span>
+              <span className="text-muted-foreground ml-2">— {t('placesShowcase.exWithConversion', 'país/estado/cidade/conversão')}</span>
+            </div>
+            <div className="bg-muted/50 rounded-lg p-3 font-mono text-xs overflow-x-auto">
+              <span className="text-muted-foreground">GET</span>{' '}
+              <span className="text-primary">/api/picnode/places/assets/BR-SP/thumbnail</span>
+              <span className="text-muted-foreground ml-2">— {t('placesShowcase.exByCode', 'por código + conversão')}</span>
             </div>
           </div>
           <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">
