@@ -19,16 +19,36 @@ const CONVERSIONS = ['xs', 'sm', 'md', 'lg', 'preview', 'thumbnail', 'webp', 'sv
 
 const EXAMPLES_KEYS = [
   {
+    labelKey: 'placesApi.byId',
+    path: '/api/picnode/places/assets/1234',
+  },
+  {
+    labelKey: 'placesApi.byCode',
+    path: '/api/picnode/places/assets/3550308',
+  },
+  {
+    labelKey: 'placesApi.bySlug',
+    path: '/api/picnode/places/assets/sao-paulo',
+  },
+  {
+    labelKey: 'placesApi.hierarchicalLabel',
+    path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo',
+  },
+  {
     labelKey: 'placesApi.collectionLabel',
     path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo/brasao',
   },
   {
     labelKey: 'placesApi.webpLabel',
-    path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo/bandeira/preview',
+    path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo/bandeira/webp',
   },
   {
-    labelKey: 'placesApi.fullPathLabel',
-    path: '/api/picnode/places/assets/brasil/minas-gerais/belo-horizonte/brasao/lg',
+    labelKey: 'placesApi.thumbnailLabel',
+    path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo/brasao/thumbnail',
+  },
+  {
+    labelKey: 'placesApi.sizeLg',
+    path: '/api/picnode/places/assets/brasil/minas-gerais/belo-horizonte/bandeira/lg',
   },
 ];
 
