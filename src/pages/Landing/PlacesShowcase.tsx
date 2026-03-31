@@ -20,7 +20,6 @@ interface PlaceItem {
 }
 
 const BRAZIL_STATES: PlaceItem[] = [
-  { name: 'Brasil', path: 'brasil/bandeira', type: 'flag' },
   { name: 'Aracaju', path: 'brasil/sergipe/aracaju/bandeira', type: 'flag' },
   { name: 'Belém', path: 'brasil/para/belem/bandeira', type: 'flag' },
   { name: 'Belo Horizonte', path: 'brasil/minas-gerais/belo-horizonte/bandeira', type: 'flag' },
@@ -94,7 +93,7 @@ export const PlacesShowcase = () => {
   };
 
   const lightboxImages = items.map((item) => ({
-    src: getImageUrl(item, 'lg'),
+    src: getImageUrl(item, 'preview'),
     alt: item.name,
   }));
 

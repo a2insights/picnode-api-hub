@@ -25,7 +25,7 @@ import { useAppContext } from '@/contexts/AppContext';
 import { usePicnodeContext } from '@/contexts/PicnodeContext';
 import useEmblaCarousel from 'embla-carousel-react';
 
-import PlaceCard from '@/components/PlaceCard';
+import { PlaceCard } from '@/components/PlaceCard';
 import DefaultCard from '@/components/DefaultCard';
 import ImageModal from '@/components/ImageModal';
 import { MultilingualBadge } from '@/components/MultilingualBadge';

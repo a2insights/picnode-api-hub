@@ -18,9 +18,6 @@ const COLLECTIONS = ['brasao', 'bandeira', 'logo', 'cover', 'default'];
 const CONVERSIONS = ['xs', 'sm', 'md', 'lg', 'preview', 'thumbnail', 'webp', 'svg', 'png', 'jpg'];
 
 const EXAMPLES_KEYS = [
-  { labelKey: 'placesApi.byId', path: '/api/picnode/places/assets/15' },
-  { labelKey: 'placesApi.byCode', path: '/api/picnode/places/assets/BR-SP' },
-  { labelKey: 'placesApi.bySlug', path: '/api/picnode/places/assets/rio-de-janeiro' },
   {
     labelKey: 'placesApi.hierarchicalLabel',
     path: '/api/picnode/places/assets/brasil/ceara/fortaleza/bandeira',
@@ -31,7 +28,7 @@ const EXAMPLES_KEYS = [
   },
   {
     labelKey: 'placesApi.webpLabel',
-    path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo/bandeira/webp',
+    path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo/bandeira/preview',
   },
   {
     labelKey: 'placesApi.fullPathLabel',
@@ -109,7 +106,7 @@ const PlacesApiPage = () => {
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const lightboxImages = SHOWCASE_ITEMS.map((item) => ({
-    src: `${BASE_URL}/${item.path}/lg`,
+    src: `${BASE_URL}/${item.path}/preview`,
     alt: item.name,
   }));
 
