@@ -19,10 +19,6 @@ const CONVERSIONS = ['xs', 'sm', 'md', 'lg', 'preview', 'thumbnail', 'webp', 'sv
 
 const EXAMPLES_KEYS = [
   {
-    labelKey: 'placesApi.hierarchicalLabel',
-    path: '/api/picnode/places/assets/brasil/ceara/fortaleza/bandeira',
-  },
-  {
     labelKey: 'placesApi.collectionLabel',
     path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo/brasao',
   },
@@ -37,7 +33,6 @@ const EXAMPLES_KEYS = [
 ];
 
 const SHOWCASE_ITEMS = [
-  { name: 'Brasil', path: 'brasil/bandeira' },
   { name: 'Aracaju', path: 'brasil/sergipe/aracaju/bandeira' },
   { name: 'Belém', path: 'brasil/para/belem/bandeira' },
   { name: 'Belo Horizonte', path: 'brasil/minas-gerais/belo-horizonte/bandeira' },
