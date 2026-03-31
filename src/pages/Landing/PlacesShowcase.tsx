@@ -7,7 +7,8 @@ import { ArrowRight, MapPin, Globe, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Lightbox } from '@/components/Lightbox';
 
-const BASE_URL = 'https://a2insights.com.br/api/picnode/places/assets';
+// const BASE_URL = 'https://a2insights.com.br/api/picnode/places/assets';
+const BASE_URL = 'http://localhost/api/picnode/places/assets';
 
 interface PlaceItem {
   name: string;
@@ -17,26 +18,34 @@ interface PlaceItem {
 
 const BRAZIL_STATES: PlaceItem[] = [
   { name: 'Brasil', path: 'brasil', type: 'flag' },
-  { name: 'São Paulo', path: 'brasil/sao-paulo', type: 'flag' },
-  { name: 'Rio de Janeiro', path: 'brasil/rio-de-janeiro', type: 'flag' },
-  { name: 'Minas Gerais', path: 'brasil/minas-gerais', type: 'flag' },
-  { name: 'Bahia', path: 'brasil/bahia', type: 'flag' },
-  { name: 'Paraná', path: 'brasil/parana', type: 'flag' },
-  { name: 'Rio Grande do Sul', path: 'brasil/rio-grande-do-sul', type: 'flag' },
-  { name: 'Pernambuco', path: 'brasil/pernambuco', type: 'flag' },
-  { name: 'Ceará', path: 'brasil/ceara', type: 'flag' },
-  { name: 'Santa Catarina', path: 'brasil/santa-catarina', type: 'flag' },
-  { name: 'Goiás', path: 'brasil/goias', type: 'flag' },
-  { name: 'Amazonas', path: 'brasil/amazonas', type: 'flag' },
+  { name: 'São Paulo', path: 'brasil/sao-paulo/sao-paulo/bandeira', type: 'flag' },
+  { name: 'Rio de Janeiro', path: 'brasil/rio-de-janeiro/rio-de-janeiro/bandeira', type: 'flag' },
+  { name: 'Belo Horizonte', path: 'brasil/minas-gerais/belo-horizonte/bandeira', type: 'flag' },
+  { name: 'Fortaleza', path: 'brasil/ceara/fortaleza/bandeira', type: 'flag' },
+  { name: 'Salvador', path: 'brasil/bahia/salvador/bandeira', type: 'flag' },
+  { name: 'Curitiba', path: 'brasil/parana/curitiba/bandeira', type: 'flag' },
+  { name: 'Porto Alegre', path: 'brasil/rio-grande-do-sul/porto-alegre/bandeira', type: 'flag' },
+  { name: 'Recife', path: 'brasil/pernambuco/recife/bandeira', type: 'flag' },
+  { name: 'Manaus', path: 'brasil/amazonas/manaus/bandeira', type: 'flag' },
+  { name: 'Florianópolis', path: 'brasil/santa-catarina/florianopolis/bandeira', type: 'flag' },
+  { name: 'Goiânia', path: 'brasil/goias/goiania/bandeira', type: 'flag' },
+  { name: 'Belém', path: 'brasil/para/belem/bandeira', type: 'flag' },
 ];
 
 const BRAZIL_COATS: PlaceItem[] = [
-  { name: 'Brasil', path: 'brasil', type: 'coat' },
-  { name: 'São Paulo', path: 'brasil/sao-paulo', type: 'coat' },
-  { name: 'Rio de Janeiro', path: 'brasil/rio-de-janeiro', type: 'coat' },
-  { name: 'Minas Gerais', path: 'brasil/minas-gerais', type: 'coat' },
-  { name: 'Bahia', path: 'brasil/bahia', type: 'coat' },
-  { name: 'Paraná', path: 'brasil/parana', type: 'coat' },
+  { name: 'Brasil', path: 'brasil/brasao', type: 'coat' },
+  { name: 'São Paulo', path: 'brasil/sao-paulo/sao-paulo/brasao', type: 'coat' },
+  { name: 'Rio de Janeiro', path: 'brasil/rio-de-janeiro/rio-de-janeiro/brasao', type: 'coat' },
+  { name: 'Belo Horizonte', path: 'brasil/minas-gerais/belo-horizonte/brasao', type: 'coat' },
+  { name: 'Fortaleza', path: 'brasil/ceara/fortaleza/brasao', type: 'coat' },
+  { name: 'Salvador', path: 'brasil/bahia/salvador/brasao', type: 'coat' },
+  { name: 'Curitiba', path: 'brasil/parana/curitiba/brasao', type: 'coat' },
+  { name: 'Porto Alegre', path: 'brasil/rio-grande-do-sul/porto-alegre/brasao', type: 'coat' },
+  { name: 'Recife', path: 'brasil/pernambuco/recife/brasao', type: 'coat' },
+  { name: 'Manaus', path: 'brasil/amazonas/manaus/brasao', type: 'coat' },
+  { name: 'Florianópolis', path: 'brasil/santa-catarina/florianopolis/brasao', type: 'coat' },
+  { name: 'Goiânia', path: 'brasil/goias/goiania/brasao', type: 'coat' },
+  { name: 'Belém', path: 'brasil/para/belem/brasao', type: 'coat' },
 ];
 
 export const PlacesShowcase = () => {
@@ -82,7 +91,10 @@ export const PlacesShowcase = () => {
             {t('placesShowcase.title', 'Bandeiras & Brasões do Brasil')}
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            {t('placesShowcase.description', 'Acesse bandeiras, brasões e identidades visuais de países, estados e cidades via URL direta. Sem autenticação, pronto para CDN.')}
+            {t(
+              'placesShowcase.description',
+              'Acesse bandeiras, brasões e identidades visuais de países, estados e cidades via URL direta. Sem autenticação, pronto para CDN.',
+            )}
           </p>
         </motion.div>
 
@@ -146,25 +158,47 @@ export const PlacesShowcase = () => {
         >
           <div className="flex items-center gap-2 mb-3">
             <Zap className="w-4 h-4 text-primary" />
-            <span className="text-sm font-semibold">{t('placesShowcase.howToUse', 'Como usar')}</span>
+            <span className="text-sm font-semibold">
+              {t('placesShowcase.howToUse', 'Como usar')}
+            </span>
           </div>
-          <div className="space-y-2">
-            <div className="bg-muted/50 rounded-lg p-3 font-mono text-xs overflow-x-auto">
-              <span className="text-muted-foreground">GET</span>{' '}
-              <span className="text-primary">/api/picnode/places/assets/brasil/sao-paulo</span>
+          <div className="space-y-6">
+            <div className="bg-muted/50 rounded-xl p-4 md:p-6 font-mono text-xs md:text-sm border border-border/50">
+              <div className="flex items-center gap-2 mb-4 text-muted-foreground border-b border-border pb-2">
+                <Globe className="w-3 h-3" />
+                <span className="uppercase tracking-wider font-semibold text-[10px]">Endpoint Structure</span>
+              </div>
+              <code className="text-primary font-bold break-all leading-relaxed">
+                /api/picnode/places/assets
+                <span className="text-muted-foreground">/{'{país}'}</span>
+                <span className="text-muted-foreground">/{'{estado}'}</span>
+                <span className="text-muted-foreground">/{'{cidade}'}</span>
+                <span className="text-primary/70">/{'{coleção}'}</span>
+                <span className="text-primary/50">/{'{conversão}'}</span>
+              </code>
             </div>
-            <div className="bg-muted/50 rounded-lg p-3 font-mono text-xs overflow-x-auto">
-              <span className="text-muted-foreground">GET</span>{' '}
-              <span className="text-primary">/api/picnode/places/assets/BR-SP/webp</span>
-            </div>
-            <div className="bg-muted/50 rounded-lg p-3 font-mono text-xs overflow-x-auto">
-              <span className="text-muted-foreground">GET</span>{' '}
-              <span className="text-primary">/api/picnode/places/assets/rio-de-janeiro/thumbnail</span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+              <div className="space-y-1">
+                <span className="font-bold block uppercase text-[10px] text-muted-foreground">Localização</span>
+                <p className="text-muted-foreground leading-relaxed">Caminho hierárquico amigável para SEO ou ID/Código.</p>
+              </div>
+              <div className="space-y-1">
+                <span className="font-bold block uppercase text-[10px] text-muted-foreground">Coleções</span>
+                <p className="text-muted-foreground leading-relaxed">brasao, bandeira, logo, cover ou default.</p>
+              </div>
+              <div className="space-y-1">
+                <span className="font-bold block uppercase text-[10px] text-muted-foreground">Conversões</span>
+                <p className="text-muted-foreground leading-relaxed">webp, svg, png, preview, lg, sm, xs.</p>
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">
             <Globe className="w-3 h-3" />
-            {t('placesShowcase.cdnNote', 'Servido via CDN Cloudflare • Cache imutável • Streaming direto')}
+            {t(
+              'placesShowcase.cdnNote',
+              'Servido via CDN Cloudflare • Cache imutável • Streaming direto',
+            )}
           </div>
         </motion.div>
 

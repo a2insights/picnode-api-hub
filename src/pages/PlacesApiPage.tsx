@@ -10,32 +10,32 @@ import { useState } from 'react';
 import { Lightbox } from '@/components/Lightbox';
 
 const BASE_URL = 'https://a2insights.com.br/api/picnode/places/assets';
+const COLLECTIONS = ['brasao', 'bandeira', 'logo', 'cover', 'default'];
 const CONVERSIONS = ['xs', 'sm', 'md', 'lg', 'preview', 'thumbnail', 'webp', 'svg', 'png', 'jpg'];
 
 const EXAMPLES_KEYS = [
   { labelKey: 'placesApi.byId', path: '/api/picnode/places/assets/15' },
   { labelKey: 'placesApi.byCode', path: '/api/picnode/places/assets/BR-SP' },
   { labelKey: 'placesApi.bySlug', path: '/api/picnode/places/assets/rio-de-janeiro' },
-  { labelKey: 'placesApi.hierarchicalLabel', path: '/api/picnode/places/assets/brasil/sao-paulo/campinas' },
-  { labelKey: 'placesApi.webpLabel', path: '/api/picnode/places/assets/brasil/sao-paulo/webp' },
-  { labelKey: 'placesApi.thumbnailLabel', path: '/api/picnode/places/assets/BR-RJ/thumbnail' },
-  { labelKey: 'placesApi.sizeLg', path: '/api/picnode/places/assets/15/lg' },
-  { labelKey: 'placesApi.previewLabel', path: '/api/picnode/places/assets/foz-do-iguacu/preview' },
+  { labelKey: 'placesApi.hierarchicalLabel', path: '/api/picnode/places/assets/brasil/ceara/fortaleza' },
+  { labelKey: 'placesApi.collectionLabel', path: '/api/picnode/places/assets/brasil/sao-paulo/saopaulo/brasao' },
+  { labelKey: 'placesApi.webpLabel', path: '/api/picnode/places/assets/brasil/sao-paulo/saopaulo/webp' },
+  { labelKey: 'placesApi.fullPathLabel', path: '/api/picnode/places/assets/brasil/minas-gerais/belo-horizonte/brasao/lg' },
 ];
 
 const SHOWCASE_ITEMS = [
   { name: 'Brasil', path: 'brasil' },
-  { name: 'São Paulo', path: 'brasil/sao-paulo' },
-  { name: 'Rio de Janeiro', path: 'brasil/rio-de-janeiro' },
-  { name: 'Minas Gerais', path: 'brasil/minas-gerais' },
-  { name: 'Bahia', path: 'brasil/bahia' },
-  { name: 'Paraná', path: 'brasil/parana' },
-  { name: 'Rio Grande do Sul', path: 'brasil/rio-grande-do-sul' },
-  { name: 'Ceará', path: 'brasil/ceara' },
-  { name: 'Santa Catarina', path: 'brasil/santa-catarina' },
-  { name: 'Amazonas', path: 'brasil/amazonas' },
-  { name: 'Pernambuco', path: 'brasil/pernambuco' },
-  { name: 'Goiás', path: 'brasil/goias' },
+  { name: 'São Paulo', path: 'brasil/sao-paulo/saopaulo' },
+  { name: 'Rio de Janeiro', path: 'brasil/rio-de-janeiro/rio-de-janeiro' },
+  { name: 'Belo Horizonte', path: 'brasil/minas-gerais/belo-horizonte' },
+  { name: 'Salvador', path: 'brasil/bahia/salvador' },
+  { name: 'Curitiba', path: 'brasil/parana/curitiba' },
+  { name: 'Porto Alegre', path: 'brasil/rio-grande-do-sul/porto-alegre' },
+  { name: 'Fortaleza', path: 'brasil/ceara/fortaleza' },
+  { name: 'Recife', path: 'brasil/pernambuco/recife' },
+  { name: 'Manaus', path: 'brasil/amazonas/manaus' },
+  { name: 'Florianópolis', path: 'brasil/santa-catarina/florianopolis' },
+  { name: 'Belém', path: 'brasil/para/belem' },
 ];
 
 const CodeBlock = ({ code, language = 'bash', t }: { code: string; language?: string; t: (key: string) => string }) => {
@@ -180,12 +180,46 @@ const PlacesApiPage = () => {
                 <p className="text-muted-foreground mb-4 text-sm">
                   {t('placesApi.hierarchicalDesc')}
                 </p>
-                <div className="bg-muted/30 rounded-lg p-3">
-                  <code className="text-xs font-mono text-primary">{EXAMPLES_KEYS[3].path}</code>
+                <div className="bg-muted/30 rounded-lg overflow-hidden border border-border">
+                  <div className="bg-muted/50 px-3 py-1.5 border-b border-border text-[10px] uppercase font-bold text-muted-foreground">URL Structure</div>
+                  <div className="p-3">
+                    <code className="text-xs font-mono text-primary break-all">/assets/{'{path}'}/{'{collection?}'}/{'{conversion?}'}</code>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground mt-3 bg-accent/10 rounded-lg p-3 border border-accent/20">
+                <div className="mt-4 space-y-2">
+                  {EXAMPLES_KEYS.slice(3, 5).map((ex) => (
+                    <div key={ex.path} className="flex items-center gap-3 bg-muted/30 rounded-lg p-3">
+                      <Badge variant="secondary" className="text-xs whitespace-nowrap">{t(ex.labelKey)}</Badge>
+                      <code className="text-xs font-mono text-primary">{ex.path}</code>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-4 bg-accent/10 rounded-lg p-3 border border-accent/20">
                   💡 {t('placesApi.hierarchicalTip')}
                 </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <ChevronRight className="w-4 h-4 text-primary" />
+                  {t('placesApi.collections')}
+                </h3>
+                <p className="text-muted-foreground mb-4 text-sm">
+                  {t('placesApi.collectionsDesc')}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {COLLECTIONS.map((c) => (
+                    <Badge key={c} variant="secondary" className="font-mono text-xs">{c}</Badge>
+                  ))}
+                </div>
+                <div className="bg-muted/30 rounded-lg p-3">
+                   <div className="flex items-center gap-3">
+                      <Badge variant="outline" className="text-xs whitespace-nowrap">Exemplo</Badge>
+                      <code className="text-xs font-mono text-primary">{EXAMPLES_KEYS[4].path}</code>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -198,17 +232,17 @@ const PlacesApiPage = () => {
                 <p className="text-muted-foreground mb-4 text-sm">
                   {t('placesApi.conversionsDesc')}
                 </p>
-                <div className="space-y-2 mb-4">
-                  {EXAMPLES_KEYS.slice(4).map((ex) => (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {CONVERSIONS.map((c) => (
+                    <Badge key={c} variant="outline" className="font-mono text-xs">{c}</Badge>
+                  ))}
+                </div>
+                <div className="space-y-2">
+                  {EXAMPLES_KEYS.slice(5).map((ex) => (
                     <div key={ex.path} className="flex items-center gap-3 bg-muted/30 rounded-lg p-3">
                       <Badge variant="secondary" className="text-xs whitespace-nowrap">{t(ex.labelKey)}</Badge>
                       <code className="text-xs font-mono text-primary">{ex.path}</code>
                     </div>
-                  ))}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {CONVERSIONS.map((c) => (
-                    <Badge key={c} variant="outline" className="font-mono text-xs">{c}</Badge>
                   ))}
                 </div>
               </CardContent>

@@ -412,7 +412,7 @@
     "heroTitle": "API de Assets",
     "heroTitleHighlight": "(Places)",
     "heroDescription": "Endpoint de entrega de mídias de lugares. Bandeiras, brasões e identidades visuais via URL direta, servido por CDN.",
-    "showcaseTitle": "Bandeiras dos Estados Brasileiros",
+    "showcaseTitle": "Bandeiras e Brasões de Lugares",
     "howToUseParam": "Como usar o parâmetro",
     "directId": "Identificação Direta",
     "directIdDesc": "Busque um asset usando o identificador único do lugar:",
@@ -420,7 +420,9 @@
     "hierarchicalDesc": "Para evitar conflitos de nomes, use a hierarquia completa:",
     "hierarchicalTip": "A busca recursiva garante que você está pegando o asset do lugar exato dentro da árvore geográfica.",
     "conversions": "Conversões e Formatos",
-    "conversionsDesc": "Solicite uma versão específica adicionando o nome da conversão ao final:",
+    "conversionsDesc": "Solicite uma versão específica adicionando o nome da conversão ao final da URL:",
+    "collections": "Coleções de Ativos",
+    "collectionsDesc": "Você pode especificar qual tipo de asset deseja buscar (brasão, bandeira, logo, etc.) adicionando o nome da coleção antes da conversão:",
     "codeExamples": "Exemplos de Código",
     "technicalDetails": "Detalhes Técnicos",
     "cacheTitle": "Cache & Performance",
@@ -441,6 +443,8 @@
     "webpLabel": "WebP",
     "thumbnailLabel": "Thumbnail",
     "sizeLg": "Tamanho LG",
-    "previewLabel": "Preview"
+    "previewLabel": "Preview",
+    "collectionLabel": "Por Coleção",
+    "fullPathLabel": "Caminho Completo"
   }
 }
