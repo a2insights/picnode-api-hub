@@ -1,9 +1,14 @@
 import axios from 'axios';
 
-// const API_BASE_URL = 'https://a2insights.com.br/api/picnode';
-// const BEARER_TOKEN = '28|JHFYyuuwowfMc4cH7D53TM0RNfnjkQACa6taAP8X69805c5a';
-const API_BASE_URL = 'http://localhost/api/picnode';
-const BEARER_TOKEN = '4|05hIVEsXha7CGN24sJxMYwKPrfRyz3QLDz62hLU0b6f79ce8';
+const isLocal = window.location.hostname === 'localhost';
+
+const API_BASE_URL = isLocal
+  ? 'http://localhost/api/picnode'
+  : 'https://a2insights.com.br/api/picnode';
+
+const BEARER_TOKEN = isLocal
+  ? '4|05hIVEsXha7CGN24sJxMYwKPrfRyz3QLDz62hLU0b6f79ce8'
+  : '28|JHFYyuuwowfMc4cH7D53TM0RNfnjkQACa6taAP8X69805c5a';
 
 const picnodeApi = axios.create({
   baseURL: API_BASE_URL,
