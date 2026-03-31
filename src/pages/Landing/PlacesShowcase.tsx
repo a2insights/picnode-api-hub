@@ -50,7 +50,6 @@ const BRAZIL_STATES: PlaceItem[] = [
 ];
 
 const BRAZIL_COATS: PlaceItem[] = [
-  { name: 'Brasil', path: 'brasil/brasao', type: 'coat' },
   { name: 'Aracaju', path: 'brasil/sergipe/aracaju/brasao', type: 'coat' },
   { name: 'Belém', path: 'brasil/para/belem/brasao', type: 'coat' },
   { name: 'Belo Horizonte', path: 'brasil/minas-gerais/belo-horizonte/brasao', type: 'coat' },
