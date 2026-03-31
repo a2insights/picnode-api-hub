@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowRight, MapPin, Globe, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Lightbox } from '@/components/Lightbox';
+import { PlaceCard } from '@/components/PlaceCard';
 
 const BASE_URL =
   window.location.hostname === 'localhost'
@@ -157,29 +158,13 @@ export const PlacesShowcase = () => {
           className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-10 gap-2 md:gap-3 mb-10"
         >
           {items.map((item, index) => (
-            <motion.div
+            <PlaceCard
               key={item.path}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: (index % 10) * 0.03, duration: 0.4 }}
-              className="group cursor-pointer"
-              onClick={() => openLightbox(index)}
-            >
-              <div className="relative aspect-[3/2] rounded-md border border-border bg-card/20 overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
-                <img
-                  src={getImageUrl(item, 'md')}
-                  alt={item.name}
-                  loading="lazy"
-                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2 pt-4 transition-all duration-300 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0">
-                  <p className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wider text-center truncate italic leading-none drop-shadow-sm">
-                    {item.name}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+              item={item}
+              index={index}
+              baseUrl={BASE_URL}
+              onClick={openLightbox}
+            />
           ))}
         </motion.div>
 

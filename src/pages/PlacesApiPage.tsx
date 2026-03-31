@@ -8,6 +8,7 @@ import { MapPin, Zap, Shield, Globe, Code, Copy, Check, ChevronRight } from 'luc
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Lightbox } from '@/components/Lightbox';
+import { PlaceCard } from '@/components/PlaceCard';
 
 const BASE_URL =
   window.location.hostname === 'localhost'
@@ -158,30 +159,18 @@ const PlacesApiPage = () => {
             <Globe className="w-6 h-6 text-primary" />
             {t('placesApi.showcaseTitle')}
           </h2>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 mb-6">
+          <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-10 gap-2 md:gap-3 mb-10">
             {SHOWCASE_ITEMS.map((item, index) => (
-              <motion.div
+              <PlaceCard
                 key={item.path}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.04 }}
-                className="group cursor-pointer"
-                onClick={() => {
-                  setLightboxIndex(index);
+                item={item}
+                index={index}
+                baseUrl={BASE_URL}
+                onClick={(idx) => {
+                  setLightboxIndex(idx);
                   setLightboxOpen(true);
                 }}
-              >
-                <div className="aspect-square rounded-xl border border-border bg-card/50 overflow-hidden hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5">
-                  <img
-                    src={`${BASE_URL}/${item.path}/md`}
-                    alt={item.name}
-                    loading="lazy"
-                    className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                <p className="text-xs text-center mt-1 text-muted-foreground">{item.name}</p>
-              </motion.div>
+              />
             ))}
           </div>
         </div>

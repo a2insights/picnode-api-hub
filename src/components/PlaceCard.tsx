@@ -1,40 +1,42 @@
-// src/components/PlaceCard.tsx
-import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 
-interface Asset {
-  id: string;
+interface PlaceItem {
   name: string;
-  image: string;
-  type: string;
-  raw?: any;
+  path: string;
 }
 
-const PlaceCard = ({ asset, onOpen }: { asset: Asset; onOpen?: () => void }) => {
-  return (
-    <Card
-      className="overflow-hidden cursor-pointer border-border hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 h-full group select-none"
-      onClick={onOpen}
-    >
-        <div className="relative w-full bg-muted/20 flex items-center justify-center" style={{ height: '120px' }}>
-          <img
-            src={asset.image}
-            alt={asset.name}
-            className="w-full h-full object-contain block transition-transform duration-300 group-hover:scale-105"
-            loading="lazy"
-          />
+interface PlaceCardProps {
+  item: PlaceItem;
+  index: number;
+  baseUrl: string;
+  onClick: (index: number) => void;
+}
 
-        <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-background/95 via-background/60 to-transparent">
-          <h3 className="text-foreground font-semibold text-xs truncate">{asset.name}</h3>
-          {asset.type !== "company" && (
-            <p className="text-muted-foreground text-[10px] truncate">
-              {asset.type}
-            </p>
-          )}
+export const PlaceCard = ({ item, index, baseUrl, onClick }: PlaceCardProps) => {
+  const imageUrl = `${baseUrl}/${item.path}/md`;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay: (index % 10) * 0.03, duration: 0.4 }}
+      className="group cursor-pointer"
+      onClick={() => onClick(index)}
+    >
+      <div className="relative aspect-[3/2] rounded-md border border-border bg-card/20 overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+        <img
+          src={imageUrl}
+          alt={item.name}
+          loading="lazy"
+          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2 pt-4 transition-all duration-300 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0">
+          <p className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wider text-center truncate italic leading-none drop-shadow-sm">
+            {item.name}
+          </p>
         </div>
       </div>
-    </Card>
+    </motion.div>
   );
 };
-
-export default PlaceCard;
