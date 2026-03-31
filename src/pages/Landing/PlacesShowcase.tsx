@@ -7,8 +7,10 @@ import { ArrowRight, MapPin, Globe, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Lightbox } from '@/components/Lightbox';
 
-// const BASE_URL = 'https://a2insights.com.br/api/picnode/places/assets';
-const BASE_URL = 'http://localhost/api/picnode/places/assets';
+const BASE_URL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost/api/picnode/places/assets'
+    : 'https://a2insights.com.br/api/picnode/places/assets';
 
 interface PlaceItem {
   name: string;
@@ -198,7 +200,9 @@ export const PlacesShowcase = () => {
             <div className="bg-muted/50 rounded-xl p-4 md:p-6 font-mono text-xs md:text-sm border border-border/50">
               <div className="flex items-center gap-2 mb-4 text-muted-foreground border-b border-border pb-2">
                 <Globe className="w-3 h-3" />
-                <span className="uppercase tracking-wider font-semibold text-[10px]">Endpoint Structure</span>
+                <span className="uppercase tracking-wider font-semibold text-[10px]">
+                  Endpoint Structure
+                </span>
               </div>
               <code className="text-primary font-bold break-all leading-relaxed">
                 /api/picnode/places/assets
@@ -212,16 +216,28 @@ export const PlacesShowcase = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div className="space-y-1">
-                <span className="font-bold block uppercase text-[10px] text-muted-foreground">Localização</span>
-                <p className="text-muted-foreground leading-relaxed">Caminho hierárquico amigável para SEO ou ID/Código.</p>
+                <span className="font-bold block uppercase text-[10px] text-muted-foreground">
+                  Localização
+                </span>
+                <p className="text-muted-foreground leading-relaxed">
+                  Caminho hierárquico amigável para SEO ou ID/Código.
+                </p>
               </div>
               <div className="space-y-1">
-                <span className="font-bold block uppercase text-[10px] text-muted-foreground">Coleções</span>
-                <p className="text-muted-foreground leading-relaxed">brasao, bandeira, logo, cover ou default.</p>
+                <span className="font-bold block uppercase text-[10px] text-muted-foreground">
+                  Coleções
+                </span>
+                <p className="text-muted-foreground leading-relaxed">
+                  brasao, bandeira, logo, cover ou default.
+                </p>
               </div>
               <div className="space-y-1">
-                <span className="font-bold block uppercase text-[10px] text-muted-foreground">Conversões</span>
-                <p className="text-muted-foreground leading-relaxed">webp, svg, png, preview, lg, sm, xs.</p>
+                <span className="font-bold block uppercase text-[10px] text-muted-foreground">
+                  Conversões
+                </span>
+                <p className="text-muted-foreground leading-relaxed">
+                  webp, svg, png, preview, lg, sm, xs.
+                </p>
               </div>
             </div>
           </div>
