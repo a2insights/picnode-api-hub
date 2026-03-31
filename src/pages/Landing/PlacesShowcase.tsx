@@ -17,35 +17,65 @@ interface PlaceItem {
 }
 
 const BRAZIL_STATES: PlaceItem[] = [
-  { name: 'Brasil', path: 'brasil', type: 'flag' },
-  { name: 'São Paulo', path: 'brasil/sao-paulo/sao-paulo/bandeira', type: 'flag' },
-  { name: 'Rio de Janeiro', path: 'brasil/rio-de-janeiro/rio-de-janeiro/bandeira', type: 'flag' },
-  { name: 'Belo Horizonte', path: 'brasil/minas-gerais/belo-horizonte/bandeira', type: 'flag' },
-  { name: 'Fortaleza', path: 'brasil/ceara/fortaleza/bandeira', type: 'flag' },
-  { name: 'Salvador', path: 'brasil/bahia/salvador/bandeira', type: 'flag' },
-  { name: 'Curitiba', path: 'brasil/parana/curitiba/bandeira', type: 'flag' },
-  { name: 'Porto Alegre', path: 'brasil/rio-grande-do-sul/porto-alegre/bandeira', type: 'flag' },
-  { name: 'Recife', path: 'brasil/pernambuco/recife/bandeira', type: 'flag' },
-  { name: 'Manaus', path: 'brasil/amazonas/manaus/bandeira', type: 'flag' },
-  { name: 'Florianópolis', path: 'brasil/santa-catarina/florianopolis/bandeira', type: 'flag' },
-  { name: 'Goiânia', path: 'brasil/goias/goiania/bandeira', type: 'flag' },
+  { name: 'Brasil', path: 'brasil/bandeira', type: 'flag' },
+  { name: 'Aracaju', path: 'brasil/sergipe/aracaju/bandeira', type: 'flag' },
   { name: 'Belém', path: 'brasil/para/belem/bandeira', type: 'flag' },
+  { name: 'Belo Horizonte', path: 'brasil/minas-gerais/belo-horizonte/bandeira', type: 'flag' },
+  { name: 'Boa Vista', path: 'brasil/roraima/boa-vista/bandeira', type: 'flag' },
+  { name: 'Brasília', path: 'brasil/distrito-federal/brasilia/bandeira', type: 'flag' },
+  { name: 'Campo Grande', path: 'brasil/mato-grosso-do-sul/campo-grande/bandeira', type: 'flag' },
+  { name: 'Cuiabá', path: 'brasil/mato-grosso/cuiaba/bandeira', type: 'flag' },
+  { name: 'Curitiba', path: 'brasil/parana/curitiba/bandeira', type: 'flag' },
+  { name: 'Florianópolis', path: 'brasil/santa-catarina/florianopolis/bandeira', type: 'flag' },
+  { name: 'Fortaleza', path: 'brasil/ceara/fortaleza/bandeira', type: 'flag' },
+  { name: 'Goiânia', path: 'brasil/goias/goiania/bandeira', type: 'flag' },
+  { name: 'João Pessoa', path: 'brasil/paraiba/joao-pessoa/bandeira', type: 'flag' },
+  { name: 'Macapá', path: 'brasil/amapa/macapa/bandeira', type: 'flag' },
+  { name: 'Maceió', path: 'brasil/alagoas/maceio/bandeira', type: 'flag' },
+  { name: 'Manaus', path: 'brasil/amazonas/manaus/bandeira', type: 'flag' },
+  { name: 'Natal', path: 'brasil/rio-grande-do-norte/natal/bandeira', type: 'flag' },
+  { name: 'Palmas', path: 'brasil/tocantins/palmas/bandeira', type: 'flag' },
+  { name: 'Porto Alegre', path: 'brasil/rio-grande-do-sul/porto-alegre/bandeira', type: 'flag' },
+  { name: 'Porto Velho', path: 'brasil/rondonia/porto-velho/bandeira', type: 'flag' },
+  { name: 'Recife', path: 'brasil/pernambuco/recife/bandeira', type: 'flag' },
+  { name: 'Rio Branco', path: 'brasil/acre/rio-branco/bandeira', type: 'flag' },
+  { name: 'Rio de Janeiro', path: 'brasil/rio-de-janeiro/rio-de-janeiro/bandeira', type: 'flag' },
+  { name: 'Salvador', path: 'brasil/bahia/salvador/bandeira', type: 'flag' },
+  { name: 'São Luís', path: 'brasil/maranhao/sao-luis/bandeira', type: 'flag' },
+  { name: 'São Paulo', path: 'brasil/sao-paulo/sao-paulo/bandeira', type: 'flag' },
+  { name: 'Teresina', path: 'brasil/piaui/teresina/bandeira', type: 'flag' },
+  { name: 'Vitória', path: 'brasil/espirito-santo/vitoria/bandeira', type: 'flag' },
 ];
 
 const BRAZIL_COATS: PlaceItem[] = [
   { name: 'Brasil', path: 'brasil/brasao', type: 'coat' },
-  { name: 'São Paulo', path: 'brasil/sao-paulo/sao-paulo/brasao', type: 'coat' },
-  { name: 'Rio de Janeiro', path: 'brasil/rio-de-janeiro/rio-de-janeiro/brasao', type: 'coat' },
-  { name: 'Belo Horizonte', path: 'brasil/minas-gerais/belo-horizonte/brasao', type: 'coat' },
-  { name: 'Fortaleza', path: 'brasil/ceara/fortaleza/brasao', type: 'coat' },
-  { name: 'Salvador', path: 'brasil/bahia/salvador/brasao', type: 'coat' },
-  { name: 'Curitiba', path: 'brasil/parana/curitiba/brasao', type: 'coat' },
-  { name: 'Porto Alegre', path: 'brasil/rio-grande-do-sul/porto-alegre/brasao', type: 'coat' },
-  { name: 'Recife', path: 'brasil/pernambuco/recife/brasao', type: 'coat' },
-  { name: 'Manaus', path: 'brasil/amazonas/manaus/brasao', type: 'coat' },
-  { name: 'Florianópolis', path: 'brasil/santa-catarina/florianopolis/brasao', type: 'coat' },
-  { name: 'Goiânia', path: 'brasil/goias/goiania/brasao', type: 'coat' },
+  { name: 'Aracaju', path: 'brasil/sergipe/aracaju/brasao', type: 'coat' },
   { name: 'Belém', path: 'brasil/para/belem/brasao', type: 'coat' },
+  { name: 'Belo Horizonte', path: 'brasil/minas-gerais/belo-horizonte/brasao', type: 'coat' },
+  { name: 'Boa Vista', path: 'brasil/roraima/boa-vista/brasao', type: 'coat' },
+  { name: 'Brasília', path: 'brasil/distrito-federal/brasilia/brasao', type: 'coat' },
+  { name: 'Campo Grande', path: 'brasil/mato-grosso-do-sul/campo-grande/brasao', type: 'coat' },
+  { name: 'Cuiabá', path: 'brasil/mato-grosso/cuiaba/brasao', type: 'coat' },
+  { name: 'Curitiba', path: 'brasil/parana/curitiba/brasao', type: 'coat' },
+  { name: 'Florianópolis', path: 'brasil/santa-catarina/florianopolis/brasao', type: 'coat' },
+  { name: 'Fortaleza', path: 'brasil/ceara/fortaleza/brasao', type: 'coat' },
+  { name: 'Goiânia', path: 'brasil/goias/goiania/brasao', type: 'coat' },
+  { name: 'João Pessoa', path: 'brasil/paraiba/joao-pessoa/brasao', type: 'coat' },
+  { name: 'Macapá', path: 'brasil/amapa/macapa/brasao', type: 'coat' },
+  { name: 'Maceió', path: 'brasil/alagoas/maceio/brasao', type: 'coat' },
+  { name: 'Manaus', path: 'brasil/amazonas/manaus/brasao', type: 'coat' },
+  { name: 'Natal', path: 'brasil/rio-grande-do-norte/natal/brasao', type: 'coat' },
+  { name: 'Palmas', path: 'brasil/tocantins/palmas/brasao', type: 'coat' },
+  { name: 'Porto Alegre', path: 'brasil/rio-grande-do-sul/porto-alegre/brasao', type: 'coat' },
+  { name: 'Porto Velho', path: 'brasil/rondonia/porto-velho/brasao', type: 'coat' },
+  { name: 'Recife', path: 'brasil/pernambuco/recife/brasao', type: 'coat' },
+  { name: 'Rio Branco', path: 'brasil/acre/rio-branco/brasao', type: 'coat' },
+  { name: 'Rio de Janeiro', path: 'brasil/rio-de-janeiro/rio-de-janeiro/brasao', type: 'coat' },
+  { name: 'Salvador', path: 'brasil/bahia/salvador/brasao', type: 'coat' },
+  { name: 'São Luís', path: 'brasil/maranhao/sao-luis/brasao', type: 'coat' },
+  { name: 'São Paulo', path: 'brasil/sao-paulo/sao-paulo/brasao', type: 'coat' },
+  { name: 'Teresina', path: 'brasil/piaui/teresina/brasao', type: 'coat' },
+  { name: 'Vitória', path: 'brasil/espirito-santo/vitoria/brasao', type: 'coat' },
 ];
 
 export const PlacesShowcase = () => {
@@ -122,7 +152,7 @@ export const PlacesShowcase = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-10"
+          className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-10 gap-2 md:gap-3 mb-10"
         >
           {items.map((item, index) => (
             <motion.div
@@ -130,19 +160,21 @@ export const PlacesShowcase = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.05, duration: 0.4 }}
+              transition={{ delay: (index % 10) * 0.03, duration: 0.4 }}
               className="group cursor-pointer"
               onClick={() => openLightbox(index)}
             >
-              <div className="relative aspect-square rounded-xl border border-border bg-card/50 backdrop-blur-sm overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+              <div className="relative aspect-[3/2] rounded-md border border-border bg-card/20 overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
                 <img
                   src={getImageUrl(item, 'md')}
                   alt={item.name}
                   loading="lazy"
-                  className="w-full h-full object-contain p-3 group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/90 to-transparent p-2">
-                  <p className="text-xs font-medium text-center truncate">{item.name}</p>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2 pt-4 transition-all duration-300 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0">
+                  <p className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wider text-center truncate italic leading-none drop-shadow-sm">
+                    {item.name}
+                  </p>
                 </div>
               </div>
             </motion.div>
