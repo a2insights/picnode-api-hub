@@ -162,6 +162,7 @@ export const PlacesShowcase = () => {
               item={item}
               index={index}
               baseUrl={BASE_URL}
+              conversion="preview"
               onClick={openLightbox}
             />
           ))}

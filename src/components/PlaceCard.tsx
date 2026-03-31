@@ -15,14 +15,23 @@ interface PlaceCardProps {
   item?: PlaceItem;
   index?: number;
   baseUrl?: string;
+  conversion?: string;
   onClick?: (index: number) => void;
   asset?: Asset;
   onOpen?: () => void;
 }
 
-export const PlaceCard = ({ item, index = 0, baseUrl, onClick, asset, onOpen }: PlaceCardProps) => {
+export const PlaceCard = ({
+  item,
+  index = 0,
+  baseUrl,
+  conversion = 'md',
+  onClick,
+  asset,
+  onOpen,
+}: PlaceCardProps) => {
   const name = asset?.name || item?.name || '';
-  const imageUrl = asset?.image || (item && baseUrl ? `${baseUrl}/${item.path}/md` : '');
+  const imageUrl = asset?.image || (item && baseUrl ? `${baseUrl}/${item.path}/${conversion}` : '');
 
   const handleClick = () => {
     if (onOpen) onOpen();
