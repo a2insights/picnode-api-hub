@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { LampSwitch } from './LampSwitch';
 import { Button } from './ui/button';
@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 export const Navbar = () => {
   const { t } = useTranslation();
   const { isAuthenticated, logout, logoutLoading } = useAuth();
+  const location = useLocation();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -37,12 +38,21 @@ export const Navbar = () => {
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
-          <button
-            onClick={scrollToTop}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {t('nav.home')}
-          </button>
+          {location.pathname === '/' ? (
+            <button
+              onClick={scrollToTop}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {t('nav.home')}
+            </button>
+          ) : (
+            <Link
+              to="/"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {t('nav.home')}
+            </Link>
+          )}
           <Link
             to="/docs/getting-started"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"

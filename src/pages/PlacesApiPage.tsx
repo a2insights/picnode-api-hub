@@ -39,6 +39,10 @@ const EXAMPLES_KEYS = [
     path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo/brasao',
   },
   {
+    labelKey: 'placesApi.previewLabel',
+    path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo/bandeira/preview',
+  },
+  {
     labelKey: 'placesApi.webpLabel',
     path: '/api/picnode/places/assets/brasil/sao-paulo/sao-paulo/bandeira/webp',
   },
@@ -178,6 +182,7 @@ const PlacesApiPage = () => {
                 item={item}
                 index={index}
                 baseUrl={BASE_URL}
+                conversion="preview"
                 onClick={(idx) => {
                   setLightboxIndex(idx);
                   setLightboxOpen(true);
@@ -334,7 +339,7 @@ const PlacesApiPage = () => {
               <CodeBlock
                 t={t}
                 language="html"
-                code={`<img src="https://a2insights.com.br/api/picnode/places/assets/brasil/parana/curitiba/webp" 
+                code={`<img src="https://a2insights.com.br/api/picnode/places/assets/brasil/parana/curitiba/preview" 
      alt="Curitiba" 
      loading="lazy">`}
               />
